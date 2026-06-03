@@ -5,30 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kya Banaon — Family Meal Planner</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --red:     #C0392B;
       --red-dk:  #96281B;
-      --amber:   #E67E22;
-      --amber-lt:#F39C12;
-      --green:   #27AE60;
-      --green-dk:#1E8449;
-      --indigo:  #2C3E7A;
-      --violet:  #8E44AD;
+      --amber:   #D4700A;
+      --amber-lt:#E8900D;
+      --green:   #2D7A4F;
+      --green-dk:#1B5E35;
+      --indigo:  #4A3728;
+      --violet:  #7B3FA0;
       --teal:    #0097A7;
-      --bg:      #FEFCF9;
-      --card:    #FFFFFF;
-      --border:  #EDE0D4;
-      --text:    #2C1810;
-      --sub:     #7D5A50;
+      --bg:      #FDF6EC;
+      --card:    #FFFBF4;
+      --border:  #E8D5B7;
+      --text:    #3B1F0A;
+      --sub:     #8C5E3C;
       --r:       14px;
-      --sh:      0 2px 16px rgba(0,0,0,0.08);
-      --sh-lg:   0 8px 32px rgba(0,0,0,0.14);
+      --sh:      0 2px 16px rgba(90,40,0,0.10);
+      --sh-lg:   0 8px 32px rgba(90,40,0,0.16);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Hind Siliguri', 'Segoe UI', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -37,7 +37,7 @@
 
     /* ── HEADER ── */
     header {
-      background: linear-gradient(135deg, #C0392B 0%, #922B21 55%, #641E16 100%);
+      background: linear-gradient(135deg, #7B2D00 0%, #B84A00 45%, #D4700A 100%);
       color: white;
       padding: 18px 20px 14px;
       text-align: center;
@@ -45,22 +45,23 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.25);
     }
     header h1 {
-      font-family: 'Baloo 2', cursive;
-      font-size: clamp(1.5rem,5vw,2.1rem);
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(90deg, #FFD700, #FFA500, #FF6B6B, #FFD700);
+      font-family: 'Rozha One', serif;
+      font-size: clamp(1.6rem,5.5vw,2.3rem);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      background: linear-gradient(90deg, #FFE066, #FFB347, #FF8C42, #FFE066);
       background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: shimmerText 3s linear infinite;
+      animation: shimmerText 3.5s linear infinite;
+      text-shadow: none;
     }
     @keyframes shimmerText {
       0%   { background-position: 0% center; }
       100% { background-position: 200% center; }
     }
-    header p  { font-size: clamp(0.7rem,3vw,0.85rem); opacity: 0.85; margin-top: 2px; font-weight: 600; }
+    header p  { font-size: clamp(0.7rem,3vw,0.85rem); opacity: 0.88; margin-top: 3px; font-weight: 600; letter-spacing: 0.3px; }
 
     /* ── FILTER BAR ── */
     .filter-bar {
@@ -215,7 +216,7 @@
       gap: 6px; min-width: 760px;
     }
     .day-header {
-      background: linear-gradient(135deg, var(--red) 0%, var(--amber) 100%);
+      background: linear-gradient(135deg, #7B2D00 0%, #D4700A 100%);
       color: white; text-align: center;
       border-radius: 9px; padding: 7px 3px;
       font-weight: 800; font-size: 0.82rem;
@@ -350,7 +351,44 @@
     .modal-season-info { background:#E8F8F0; border-radius:10px; padding:12px 14px; font-size:0.82rem; color:var(--green-dk); }
     .modal-season-info strong { font-weight:800; }
 
-    /* ── ANIMATIONS ── */
+    /* ── TICKER ── */
+    .ticker-wrap {
+      background: linear-gradient(90deg, #7B2D00, #B84A00, #D4700A);
+      color: #FFE8C0;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      height: 34px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .ticker-label {
+      background: rgba(0,0,0,0.25);
+      padding: 0 12px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.3px;
+      flex-shrink: 0;
+    }
+    .ticker-track {
+      display: flex;
+      white-space: nowrap;
+      animation: tickerScroll 35s linear infinite;
+      padding-left: 100%;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes tickerScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item { padding: 0 32px; opacity: 0.95; }
+    .ticker-item::before { content: "✦"; margin-right: 10px; opacity: 0.6; }
+
+    /* ── SEASON STRIP ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -386,10 +424,10 @@
     .filter-bar .ftoggle:nth-child(3) { animation-delay: 0.19s; }
 
     .action-bar h2 {
-      font-family: 'Baloo 2', cursive;
-      font-size: clamp(1rem,4vw,1.25rem);
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--red), var(--amber));
+      font-family: 'Rozha One', serif;
+      font-size: clamp(1.1rem,4vw,1.35rem);
+      font-weight: 400;
+      background: linear-gradient(135deg, #7B2D00, #D4700A);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -428,13 +466,45 @@
       .desk-nav { display: none; }
       .mob-nav  { display: block; }
       main { padding: 10px; }
-      .week-grid { gap:5px; grid-template-columns:46px repeat(7,minmax(80px,1fr)); }
-      .day-header { font-size:0.75rem; padding:6px 2px; border-radius:7px; }
-      .meal-cell  { min-height:72px; padding:6px; border-radius:7px; }
-      .meal-name  { font-size:0.73rem; }
-      .random-grid { grid-template-columns:1fr; }
-      .rcard:hover { transform:none; }
-      .info-grid { grid-template-columns:1fr 1fr; }
+
+      /* weekly: horizontal scroll with larger cells */
+      .week-scroll { border-radius: 10px; }
+      .week-grid {
+        gap: 5px;
+        grid-template-columns: 40px repeat(7, minmax(86px, 1fr));
+        min-width: 660px;
+      }
+      .day-header { font-size: 0.72rem; padding: 6px 2px; border-radius: 7px; }
+      .row-lbl    { padding-right: 4px; }
+      .row-lbl-txt { font-size: 0.58rem; }
+      .meal-cell  { min-height: 76px; padding: 6px; border-radius: 7px; }
+      .meal-name  { font-size: 0.72rem; }
+      .meal-cell:hover { transform: none; }
+
+      /* random: full width single column */
+      .random-grid { grid-template-columns: 1fr; gap: 10px; }
+      .rcard:hover { transform: none; }
+
+      /* filter bar wraps nicely */
+      .filter-bar { gap: 6px; padding: 8px 10px; }
+      .ftoggle    { font-size: 0.78rem; padding: 6px 11px; }
+
+      /* modal full screen on mobile */
+      .modal { padding: 16px 16px 28px; }
+      .modal-title { font-size: 1.15rem; }
+      .info-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+
+      /* action bar compact */
+      .action-bar { margin-bottom: 10px; }
+      .btn { padding: 8px 14px; font-size: 0.82rem; }
+
+      /* season strip compact */
+      .season-strip { padding: 8px 10px; }
+      .season-label { font-size: 0.72rem; }
+      .veg-chip { font-size: 0.68rem; padding: 2px 8px; }
+
+      /* ticker smaller */
+      .ticker-wrap { height: 30px; font-size: 0.75rem; }
     }
   </style>
 </head>
@@ -468,6 +538,12 @@
     <div class="season-label" id="season-label">🌿 June Veggies:</div>
     <div class="veg-chips" id="season-chips"></div>
   </div>
+</div>
+
+<!-- MARQUEE TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-label">🍴 Tip</div>
+  <div class="ticker-track" id="ticker-track"></div>
 </div>
 
 <!-- DESKTOP TABS -->
@@ -889,7 +965,31 @@ function loadState() {
   generateWeekly();
 }
 
+// ─── TICKER ──────────────────────────────────────────────────────
+const SEASONAL_TIPS = {
+  1:  ["January: Use fresh Methi in parathas & sabzi for iron boost","Winter peas at peak — add to pulao, matar paneer & poha","Sarson ka Saag pairs beautifully with Makki ki Roti now","Gajar Halwa season! Fresh carrots are sweetest in Jan-Feb","Radish (Mooli) is crispiest — great in parathas & salads"],
+  2:  ["February: Last of the fresh Matar — make Matar Paneer while you can","Methi leaves are tender now — perfect for Methi Thepla","Gobi is at its best — try roasted cauliflower rice","Carrots are super sweet — add raw to salads & raita"],
+  3:  ["March: Spring greens at peak — load up on Palak & Bathua","Capsicum brightens up any stir-fry — add to pulao","Tomatoes are juicy & cheap — make fresh tomato dal","Peas season ending — freeze a batch for the summer months"],
+  4:  ["April: Kacchi Keri (raw mango) is here — make Panna & Chutney","Lauki (bottle gourd) is cooling — great for summer lunches","Beat the heat with Kakdi Raita & chilled Dahi Chawal","April heat: eat lighter meals — dal khichdi & curd rice"],
+  5:  ["May: Peak summer — eat cooling Lauki & Tinda daily","Raw mango in everything — dal, chutney, rice & drinks","Turai (ridge gourd) is at its softest now","Stay hydrated — add Kakdi & Pudina to all meals","Sabudana Khichdi is light & energising in the heat"],
+  6:  ["June: Monsoon approaching — Bhindi starts appearing in markets","Lauki at its best — very cooling for the pre-monsoon heat","Tinda sabzi is a monsoon classic — grab fresh ones now","Avoid heavy, oily meals before the rains — stick to khichdi","Kacchi Keri still available — make green mango dal today"],
+  7:  ["July: Monsoon in full swing — Bhindi & Arbi are at their freshest","Corn (Makki) season! Roast on the flame or make soup","Baingan is super fresh — perfect for Baingan Bharta","Arbi (colocasia) is best now — deep fry or make curry","Avoid leafy greens in heavy rains — stick to dal & gourds"],
+  8:  ["August: Cluster beans (Gavar) are tender — make stir-fry","Bhindi still going strong — Bhindi Masala is a must","Corn off the cob in pulao or Makki soup is comforting","Kaddu (pumpkin) is at peak — sweet & nutritious now","Post-rain season — light Moong Dal & Khichdi are ideal"],
+  9:  ["September: Arbi at its last — make Arbi Curry before it ends","Pumpkin (Kaddu) is still great — try Kaddu ki Sabzi","Sweet potato season begins — roast or add to curries","Baingan still fresh — make Ennegayi or Bharta","Post-monsoon: gut-healing meals like Dahi Rice & Khichdi"],
+  10: ["October: Early cauliflower is here — light & sweet now","Spinach (Palak) returns! Dal Palak & Palak Paneer time","Shakarkandi (sweet potato) is at its best now","Early Methi leaves — pick tender ones for Thepla","Festival season: light Sattvic meals are traditional"],
+  11: ["November: Winter vegetables are back in full force!","Fresh Matar (peas) just arrived — add to everything","Gajar & Mooli at their crispiest — great in parathas","Gobi season begins — Gobi Paratha & Aloo Gobi time","Cold mornings call for Suji Halwa & hot Puri"],
+  12: ["December: Peak winter produce — Palak, Methi, Matar all abundant","Gajar Halwa season — make a big batch for the week","Mooli Paratha with white butter is a winter morning treat","Sarson Saag with Makki Roti — the ultimate winter meal","Salgam (turnip) is sweet now — add to mixed veg curry"],
+};
+
+function initTicker() {
+  const tips = SEASONAL_TIPS[curMonth] || [];
+  const doubled = [...tips, ...tips]; // loop seamlessly
+  const track = document.getElementById("ticker-track");
+  track.innerHTML = doubled.map(t => `<span class="ticker-item">${t}</span>`).join("");
+}
+
 initSeasonStrip();
+initTicker();
 loadState();
 </script>
 </body>
