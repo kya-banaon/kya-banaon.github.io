@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kya Banaon — Family Meal Planner</title>
+  <style>
+    :root {
+      --red:     #C0392B;
+      --red-dk:  #96281B;
+      --amber:   #E67E22;
+      --amber-lt:#F39C12;
+      --green:   #27AE60;
+      --green-dk:#1E8449;
+      --indigo:  #2C3E7A;
+      --violet:  #8E44AD;
+      --teal:    #0097A7;
+      --bg:      #FEFCF9;
+      --card:    #FFFFFF;
+      --border:  #EDE0D4;
+      --text:    #2C1810;
+      --sub:     #7D5A50;
+      --r:       14px;
+      --sh:      0 2px 16px rgba(0,0,0,0.08);
+      --sh-lg:   0 8px 32px rgba(0,0,0,0.14);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #C0392B 0%, #922B21 55%, #641E16 100%);
+      color: white;
+      padding: 18px 20px 14px;
+      text-align: center;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    header h1 { font-size: clamp(1.25rem,5vw,1.8rem); font-weight: 800; }
+    header p  { font-size: clamp(0.7rem,3vw,0.85rem); opacity: 0.8; margin-top: 2px; }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+    }
+    .ftoggle {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 14px;
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.82rem; font-weight: 700;
+      color: var(--sub);
+      background: var(--bg);
+      transition: all 0.22s;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
+    }
+    .ftoggle:active { transform: scale(0.96); }
+    .ftoggle.sat.on  { border-color: var(--violet); background: #F5EEF8; color: var(--violet); }
+    .ftoggle.kids.on { border-color: var(--teal);   background: #E0F7FA; color: var(--teal); }
+    .ftoggle.seas.on { border-color: var(--green);  background: #E8F8F0; color: var(--green-dk); }
+    .pill { width: 34px; height: 19px; background: #CCC; border-radius: 10px; position: relative; transition: background 0.22s; flex-shrink: 0; }
+    .ftoggle.on .pill { }
+    .ftoggle.sat.on  .pill { background: var(--violet); }
+    .ftoggle.kids.on .pill { background: var(--teal); }
+    .ftoggle.seas.on .pill { background: var(--green); }
+    .pill::after { content:''; position:absolute; width:13px; height:13px; background:white; border-radius:50%; top:3px; left:3px; transition: left 0.22s; box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+    .ftoggle.on .pill::after { left:18px; }
+
+    /* ── SEASON STRIP ── */
+    .season-strip {
+      background: linear-gradient(135deg, #E8F8F0, #FFF9E6);
+      border-bottom: 1px solid #C8E6C9;
+      padding: 10px 16px;
+    }
+    .season-strip-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .season-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--green-dk);
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+    .veg-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .veg-chip {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: white;
+      border: 1px solid #A9DFBF;
+      color: var(--green-dk);
+      border-radius: 20px;
+      padding: 3px 10px;
+    }
+
+    /* ── DESKTOP TABS ── */
+    .desk-nav {
+      display: flex; justify-content: center; gap: 10px;
+      padding: 14px 16px 0;
+    }
+    .tab-btn {
+      padding: 9px 26px;
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      background: white; color: var(--sub);
+      font-size: 0.88rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--red); border-color: var(--red); color: white;
+      box-shadow: 0 4px 12px rgba(192,57,43,0.3);
+    }
+    .tab-btn:not(.active):hover { border-color: var(--red); color: var(--red); }
+
+    /* ── MOBILE NAV ── */
+    .mob-nav {
+      display: none;
+      position: fixed; bottom:0; left:0; right:0;
+      background: white;
+      border-top: 1px solid var(--border);
+      z-index: 200;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+    }
+    .mob-nav-row {
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+    }
+    .mnav {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 5px 20px;
+      border: none; background: transparent;
+      color: var(--sub); font-size: 0.68rem; font-weight: 700;
+      cursor: pointer; border-radius: 10px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mnav .ico { font-size: 1.35rem; line-height: 1; }
+    .mnav.active { color: var(--red); }
+
+    /* ── MAIN ── */
+    main { padding: 14px; max-width: 1140px; margin: 0 auto; }
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── ACTION BAR ── */
+    .action-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px; flex-wrap: wrap; gap: 10px;
+    }
+    .action-bar h2 { font-size: clamp(0.95rem,4vw,1.15rem); font-weight: 800; color: var(--red); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px;
+      border: none; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn:active { transform: scale(0.95); }
+    .btn-red   { background: var(--red);   color: white; box-shadow: 0 3px 10px rgba(192,57,43,0.28); }
+    .btn-amber { background: var(--amber); color: white; box-shadow: 0 3px 10px rgba(230,126,34,0.28); }
+    .btn-red:hover   { background: var(--red-dk); }
+    .btn-amber:hover { background: #CA6F1E; }
+    .btn-xs {
+      padding: 4px 9px; font-size: 0.72rem; border-radius: 7px;
+      border: none; cursor: pointer; font-weight: 700;
+      transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+    }
+    .btn-xs:active { transform: scale(0.92); }
+
+    /* ── WEEK GRID ── */
+    .week-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+    .week-grid {
+      display: grid;
+      grid-template-columns: 56px repeat(7, minmax(96px, 1fr));
+      gap: 6px; min-width: 760px;
+    }
+    .day-header {
+      background: linear-gradient(135deg, var(--red) 0%, var(--amber) 100%);
+      color: white; text-align: center;
+      border-radius: 9px; padding: 7px 3px;
+      font-weight: 800; font-size: 0.82rem;
+    }
+    .day-header span { display:block; font-size:0.66rem; opacity:0.85; font-weight:500; margin-top:1px; }
+    .row-lbl {
+      display:flex; align-items:center; justify-content:flex-end; padding-right:6px;
+    }
+    .row-lbl-txt {
+      writing-mode: vertical-rl; transform: rotate(180deg);
+      font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--sub);
+    }
+    .meal-cell {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 7px;
+      min-height: 82px;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 3px;
+      box-shadow: var(--sh);
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+    .meal-cell:hover  { border-color: var(--amber); box-shadow: var(--sh-lg); transform: translateY(-1px); }
+    .meal-cell:active { transform: scale(0.97); }
+    .meal-cell.type-breakfast { border-top: 3px solid var(--amber-lt); }
+    .meal-cell.type-lunch     { border-top: 3px solid var(--green); }
+    .meal-cell.type-dinner    { border-top: 3px solid var(--indigo); }
+    .meal-name { font-size: 0.78rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+    .cell-tags { display:flex; flex-wrap:wrap; gap:3px; }
+    .cell-bottom { display:flex; align-items:center; justify-content:space-between; gap:3px; }
+    .tag { font-size:0.58rem; font-weight:700; border-radius:20px; padding:2px 5px; }
+    .tag-sat  { background:#F5EEF8; color:var(--violet); }
+    .tag-kids { background:#E0F7FA; color:var(--teal); }
+    .tag-seas { background:#E8F8F0; color:var(--green-dk); }
+    .regen-btn { background:var(--border); color:var(--sub); }
+    .regen-btn:hover { background:var(--amber); color:white; }
+
+    /* ── RANDOM ── */
+    .random-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:18px; }
+    .styled-select {
+      padding: 9px 32px 9px 12px;
+      border: 2px solid var(--border); border-radius: 10px;
+      font-size: 0.85rem; background: white; color: var(--text); font-weight: 600;
+      cursor: pointer; outline: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237D5A50' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+    }
+    .styled-select:focus { border-color: var(--red); }
+    .random-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr)); gap:14px; }
+    .rcard {
+      background: var(--card); border-radius: var(--r);
+      overflow: hidden; box-shadow: var(--sh); border: 1px solid var(--border);
+      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .rcard:hover { transform: translateY(-4px); box-shadow: var(--sh-lg); }
+    .rcard-head { padding: 12px 14px 10px; display:flex; align-items:center; justify-content:space-between; }
+    .rcard-head.breakfast { background:linear-gradient(135deg,#FEF9E7,#FDEBD0); border-bottom:2px solid var(--amber-lt); }
+    .rcard-head.lunch     { background:linear-gradient(135deg,#EAFAF1,#D5F5E3); border-bottom:2px solid var(--green); }
+    .rcard-head.dinner    { background:linear-gradient(135deg,#EBF5FB,#D6EAF8); border-bottom:2px solid var(--indigo); }
+    .rcard-day  { font-size:0.67rem; font-weight:600; opacity:0.7; text-transform:uppercase; letter-spacing:0.4px; }
+    .rcard-type { font-size:0.88rem; font-weight:800; }
+    .rcard-head.breakfast .rcard-type { color:#B7770D; }
+    .rcard-head.lunch     .rcard-type { color:#1D6A3C; }
+    .rcard-head.dinner    .rcard-type { color:var(--indigo); }
+    .rcard-body { padding: 12px 14px 8px; }
+    .rcard-name { font-size:0.97rem; font-weight:800; color:var(--text); margin-bottom:4px; }
+    .rcard-desc { font-size:0.78rem; color:var(--sub); line-height:1.5; }
+    .rcard-foot { padding:9px 14px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:6px; flex-wrap:wrap; }
+    .rcard-tags { display:flex; gap:4px; flex-wrap:wrap; }
+    .change-btn { background:#FDEBD0; color:var(--amber); }
+    .change-btn:hover { background:var(--amber); color:white; }
+
+    /* ── EMPTY ── */
+    .empty { text-align:center; padding:50px 20px; color:var(--sub); grid-column:1/-1; }
+    .empty .ico { font-size:3rem; margin-bottom:10px; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 500;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 20px 20px 0 0;
+      width: 100%; max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.28s ease;
+      padding: 20px 22px 32px;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-drag { width:40px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 16px; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: var(--border); border: none; border-radius: 50%;
+      width: 32px; height: 32px; font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sub);
+    }
+    .modal-close:hover { background: #ddd; }
+    .modal-title { font-size: 1.3rem; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .modal-sub   { font-size: 0.85rem; color: var(--sub); line-height: 1.55; margin-bottom: 14px; }
+    .modal-tags  { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+    .modal-tag {
+      font-size: 0.75rem; font-weight: 700;
+      border-radius: 20px; padding: 4px 12px;
+    }
+    .modal-tag.sat  { background:#F5EEF8; color:var(--violet); }
+    .modal-tag.kids { background:#E0F7FA; color:var(--teal); }
+    .modal-tag.seas { background:#E8F8F0; color:var(--green-dk); }
+    .modal-tag.t-b  { background:#FEF9E7; color:#B7770D; }
+    .modal-tag.t-l  { background:#EAFAF1; color:#1D6A3C; }
+    .modal-tag.t-d  { background:#EBF5FB; color:var(--indigo); }
+    .info-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-bottom: 16px;
+    }
+    .info-box {
+      background: var(--bg); border-radius: 10px;
+      padding: 12px 14px; border: 1px solid var(--border);
+    }
+    .info-box-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--sub); margin-bottom: 4px; }
+    .info-box-val   { font-size: 1.1rem; font-weight: 800; color: var(--text); }
+    .info-box-sub   { font-size: 0.72rem; color: var(--sub); margin-top: 1px; }
+    .modal-season-info { background:#E8F8F0; border-radius:10px; padding:12px 14px; font-size:0.82rem; color:var(--green-dk); }
+    .modal-season-info strong { font-weight:800; }
+
+    /* ── FOOTER ── */
+    footer { text-align:center; padding:20px 16px; font-size:0.76rem; color:var(--sub); }
+
+    /* ── RESPONSIVE ── */
+    @media (min-width: 641px) {
+      .modal-overlay { align-items: center; }
+      .modal { border-radius: 20px; max-height: 80vh; }
+    }
+    @media (max-width: 640px) {
+      body { padding-bottom: 70px; }
+      .desk-nav { display: none; }
+      .mob-nav  { display: block; }
+      main { padding: 10px; }
+      .week-grid { gap:5px; grid-template-columns:46px repeat(7,minmax(80px,1fr)); }
+      .day-header { font-size:0.75rem; padding:6px 2px; border-radius:7px; }
+      .meal-cell  { min-height:72px; padding:6px; border-radius:7px; }
+      .meal-name  { font-size:0.73rem; }
+      .random-grid { grid-template-columns:1fr; }
+      .rcard:hover { transform:none; }
+      .info-grid { grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <h1>🍛 Kya Banaon?</h1>
+  <p>Hindu Veg Family Meal Planner &nbsp;·&nbsp; Breakfast · Lunch · Dinner</p>
+</header>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="ftoggle sat" id="ft-sat" onclick="toggleFilter('sat')">
+    <div class="pill"></div>
+    <span>🙏 Sattvic / No Onion-Garlic</span>
+  </div>
+  <div class="ftoggle kids" id="ft-kids" onclick="toggleFilter('kids')">
+    <div class="pill"></div>
+    <span>👦 Kids-Friendly</span>
+  </div>
+  <div class="ftoggle seas" id="ft-seas" onclick="toggleFilter('seas')">
+    <div class="pill"></div>
+    <span>🌱 In-Season Only</span>
+  </div>
+</div>
+
+<!-- SEASONAL STRIP -->
+<div class="season-strip">
+  <div class="season-strip-inner">
+    <div class="season-label" id="season-label">🌿 June Veggies:</div>
+    <div class="veg-chips" id="season-chips"></div>
+  </div>
+</div>
+
+<!-- DESKTOP TABS -->
+<div class="desk-nav">
+  <button class="tab-btn active" onclick="switchTab('weekly',this)">📅 Weekly Planner</button>
+  <button class="tab-btn" onclick="switchTab('random',this)">🎲 Random Planner</button>
+</div>
+
+<main>
+  <!-- WEEKLY -->
+  <div id="view-weekly" class="view active">
+    <div class="action-bar">
+      <h2>📅 This Week</h2>
+      <button class="btn btn-red" onclick="generateWeekly()">🔄 Regenerate Week</button>
+    </div>
+    <div class="week-scroll">
+      <div class="week-grid" id="weekly-grid"></div>
+    </div>
+  </div>
+
+  <!-- RANDOM -->
+  <div id="view-random" class="view">
+    <div class="action-bar"><h2>🎲 Random Ideas</h2></div>
+    <div class="random-controls">
+      <select class="styled-select" id="rand-period">
+        <option value="1">Today (3 meals)</option>
+        <option value="2">2 Days (6 meals)</option>
+        <option value="3">3 Days (9 meals)</option>
+      </select>
+      <button class="btn btn-amber" onclick="generateRandom()">🎲 Generate</button>
+    </div>
+    <div class="random-grid" id="random-grid">
+      <div class="empty"><div class="ico">🎲</div><p>Tap Generate to get meal ideas!</p></div>
+    </div>
+  </div>
+</main>
+
+<!-- MOBILE NAV -->
+<nav class="mob-nav">
+  <div class="mob-nav-row">
+    <button class="mnav active" id="mnav-weekly" onclick="switchTab('weekly',null,'mnav-weekly')">
+      <span class="ico">📅</span><span>Weekly</span>
+    </button>
+    <button class="mnav" id="mnav-random" onclick="switchTab('random',null,'mnav-random')">
+      <span class="ico">🎲</span><span>Random</span>
+    </button>
+  </div>
+</nav>
+
+<!-- DISH DETAIL MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-drag"></div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<footer>Made with ❤️ for the family · Kya Banaon — Har Roz Ka Sawaal</footer>
+
+<script>
+// ─── SEASONAL DATA ───────────────────────────────────────────────
+// month 1=Jan … 12=Dec
+const SEASONAL_VEGS = {
+  1:  ["🟢 Matar (Peas)","🥦 Phool Gobi","🥬 Palak","🌿 Methi","🥕 Gajar","🌰 Mooli","🌾 Sarson","🔴 Shimla Mirch"],
+  2:  ["🟢 Matar","🥦 Phool Gobi","🥬 Palak","🌿 Methi","🥕 Gajar","🌰 Mooli","🔴 Shimla Mirch"],
+  3:  ["🥬 Palak","🥦 Patta Gobi","🔴 Shimla Mirch","🍅 Tamatar","🟢 Matar (ending)"],
+  4:  ["🥒 Kakdi","🍶 Lauki","🥭 Kacchi Keri","🟡 Kaddu","🌽 Tinda starting"],
+  5:  ["🍶 Lauki","🥭 Kacchi Keri","🌽 Tinda","🥒 Turai","🟡 Kaddu","🥒 Kakdi"],
+  6:  ["🍶 Lauki","🌽 Tinda","🥒 Turai","🥭 Kacchi Keri","🟡 Kaddu","🟩 Bhindi starting"],
+  7:  ["🟩 Bhindi","🥜 Arbi","🍆 Baingan","🌽 Makki","🌽 Tinda","🟡 Kaddu","🫘 Cluster Beans"],
+  8:  ["🟩 Bhindi","🥜 Arbi","🍆 Baingan","🌽 Makki","🟡 Kaddu","🫘 Cluster Beans"],
+  9:  ["🍆 Baingan","🥜 Arbi","🌽 Tinda","🟡 Kaddu","🍠 Shakarkandi"],
+  10: ["🍠 Shakarkandi","🍆 Baingan","🥜 Arbi","🥦 Gobi (early)","🥬 Palak (early)"],
+  11: ["🥦 Phool Gobi","🟢 Matar","🥬 Palak","🌿 Methi","🥕 Gajar","🌰 Mooli","🥦 Broccoli"],
+  12: ["🥦 Phool Gobi","🟢 Matar","🥬 Palak","🌿 Methi","🥕 Gajar","🌰 Mooli","🌾 Salgam"],
+};
+const MONTH_NAMES = ["","January","February","March","April","May","June","July","August","September","October","November","December"];
+const SEASON_NAME = {
+  1:"Winter",2:"Winter",3:"Spring",4:"Summer",5:"Summer",6:"Summer",
+  7:"Monsoon",8:"Monsoon",9:"Post-Monsoon",10:"Post-Monsoon",11:"Early Winter",12:"Winter"
+};
+
+// ─── DISH DATABASE ───────────────────────────────────────────────
+// seasons: months when key veg is in season. kids: kids-friendly. kcal: per serving.
+// nutri: short nutrition note.
+const dishes = {
+  breakfast: [
+    { name:"Poha",              desc:"Flattened rice with mustard, peas & turmeric",          sattvic:true,  kids:true,  seasons:[12,1,2,3], kcal:270, nutri:"Good carbs, light & energising" },
+    { name:"Upma",              desc:"Semolina cooked with veggies & curry leaves",             kids:true,  kcal:220, nutri:"Quick energy, low fat" },
+    { name:"Idli & Sambar",     desc:"Soft steamed rice cakes with lentil soup",               kids:true,  kcal:180, nutri:"High protein, probiotic, low cal" },
+    { name:"Masala Dosa",       desc:"Crispy rice crepe with spiced potato filling",           kids:true,  kcal:340, nutri:"Fermented, gut-friendly" },
+    { name:"Aloo Paratha",      desc:"Wheat flatbread stuffed with spiced potato",             sattvic:true, kids:true,  kcal:310, nutri:"Filling, good for active mornings" },
+    { name:"Methi Thepla",      desc:"Spiced fenugreek flatbread from Gujarat",                sattvic:true, seasons:[10,11,12,1,2,3], kcal:230, nutri:"Iron-rich, diabetic-friendly" },
+    { name:"Besan Chilla",      desc:"Savory gram flour pancakes with veggies",                sattvic:true, kcal:200, nutri:"High protein, gluten-free" },
+    { name:"Sabudana Khichdi",  desc:"Tapioca pearls with peanuts & potato — vrat favourite", sattvic:true, kcal:350, nutri:"Quick energy, good for fasting" },
+    { name:"Vermicelli Upma",   desc:"Roasted semiya with onion & mustard",                   kids:true,  kcal:240, nutri:"Light, easy to digest" },
+    { name:"Puri Bhaji",        desc:"Deep-fried puris with potato curry",                    kids:true,  kcal:420, nutri:"High energy — weekend treat" },
+    { name:"Uttapam",           desc:"Thick rice pancake topped with onion & tomato",         kids:true,  kcal:220, nutri:"Fermented, rich in B vitamins" },
+    { name:"Moong Dal Chilla",  desc:"Protein-rich green lentil pancakes",                    sattvic:true, kcal:190, nutri:"High protein, low GI" },
+    { name:"Rava Idli",         desc:"Quick semolina idli with coconut chutney",               sattvic:true, kids:true,  kcal:160, nutri:"Low cal, easy to digest" },
+    { name:"Khaman Dhokla",     desc:"Steamed, fluffy chickpea flour snack",                  sattvic:true, kids:true,  kcal:150, nutri:"Low fat, high protein" },
+    { name:"Suji Halwa & Puri", desc:"Sweet semolina pudding with fried bread — prasad style",sattvic:true, kids:true,  kcal:450, nutri:"High energy — festive treat" },
+    { name:"Bread Poha",        desc:"Quick poha made with bread, peas & spices",             kids:true,  seasons:[12,1,2,3], kcal:280, nutri:"Good carbs, quick to make" },
+    { name:"Paneer Paratha",    desc:"Flatbread stuffed with spiced cottage cheese",           sattvic:true, kids:true,  kcal:370, nutri:"High protein & calcium" },
+    { name:"Gobi Paratha",      desc:"Flatbread stuffed with spiced cauliflower",             sattvic:true, kids:true,  seasons:[11,12,1,2], kcal:290, nutri:"Fibre-rich, good immunity" },
+    { name:"Sabudana Vada",     desc:"Crispy tapioca fritters — popular vrat snack",          sattvic:true, kids:true,  kcal:280, nutri:"Quick energy for vrat mornings" },
+    { name:"Kuttu Paratha",     desc:"Buckwheat flatbread with cool curd — navratri staple",  sattvic:true, kcal:320, nutri:"Gluten-free, high antioxidants" },
+    { name:"Singhare ka Halwa", desc:"Water chestnut flour halwa with ghee & dry fruits",     sattvic:true, kcal:380, nutri:"Rich in minerals, vrat-special" },
+    { name:"Makhana Kheer",     desc:"Lotus seed pudding in creamy sweetened milk",           sattvic:true, kids:true,  kcal:300, nutri:"High calcium & magnesium" },
+    { name:"Banana & Curd",     desc:"Fresh banana with thick curd & honey — simple sattvic", sattvic:true, kids:true,  kcal:200, nutri:"Probiotic, potassium-rich" },
+  ],
+  lunch: [
+    { name:"Dal Tadka & Rice",      desc:"Yellow lentils tempered with ghee & cumin",              sattvic:true, kids:true,  kcal:380, nutri:"Complete protein, high fibre" },
+    { name:"Rajma Chawal",          desc:"Red kidney bean curry with steamed rice",                kids:true,  kcal:450, nutri:"High protein & iron, comfort food" },
+    { name:"Chole Bhature",         desc:"Spicy chickpea curry with fluffy fried bread",          kids:true,  kcal:520, nutri:"High protein — indulgent weekend" },
+    { name:"Palak Paneer & Roti",   desc:"Cottage cheese in creamy spinach gravy",                sattvic:true, kids:true,  seasons:[10,11,12,1,2,3], kcal:380, nutri:"Iron + calcium combo" },
+    { name:"Kadhi Chawal",          desc:"Yogurt-based curry with pakoda over rice",              sattvic:true, kcal:350, nutri:"Probiotic, gut-friendly" },
+    { name:"Paneer Butter Masala",  desc:"Rich tomato-cream gravy with paneer",                   kids:true,  kcal:480, nutri:"High protein, rich in calcium" },
+    { name:"Baingan Bharta",        desc:"Smoky roasted eggplant with spices",                   seasons:[7,8,9,10], kcal:280, nutri:"High fibre, low cal" },
+    { name:"Aloo Gobi Sabzi",       desc:"Stir-fried potato & cauliflower masala",               sattvic:true, kids:true,  seasons:[11,12,1,2], kcal:260, nutri:"Vitamin C-rich, filling" },
+    { name:"Bhindi Masala & Dal",   desc:"Okra stir-fry with toor dal and rice",                 sattvic:true, seasons:[6,7,8,9], kcal:240, nutri:"Blood sugar-friendly, high fibre" },
+    { name:"Moong Dal Khichdi",     desc:"Comforting rice-lentil porridge with ghee",             sattvic:true, kids:true,  kcal:320, nutri:"Easy to digest, complete meal" },
+    { name:"Sambar Rice",           desc:"South Indian lentil-veggie soup over rice",             kcal:340, nutri:"High fibre, tangy & nutritious" },
+    { name:"Vegetable Pulao",       desc:"Fragrant basmati rice with mixed veggies",              sattvic:true, kids:true,  kcal:360, nutri:"Balanced, aromatic one-pot" },
+    { name:"Dal Makhani & Naan",    desc:"Creamy black lentil dal with butter naan",              kids:true,  kcal:480, nutri:"High protein, indulgent" },
+    { name:"Matar Paneer",          desc:"Green peas and cottage cheese in tomato gravy",         sattvic:true, kids:true,  seasons:[12,1,2,3], kcal:420, nutri:"Protein + Vitamin C" },
+    { name:"Lauki Dal & Rice",      desc:"Bottle gourd cooked with yellow lentils",               sattvic:true, seasons:[4,5,6,7,8,9], kcal:280, nutri:"Light, hydrating, cooling" },
+    { name:"Pav Bhaji",             desc:"Spiced mixed veggie mash with buttered buns",           kids:true,  kcal:440, nutri:"High fibre — popular street treat" },
+    { name:"Aloo Matar Curry",      desc:"Potato and peas in tangy tomato gravy",                 sattvic:true, kids:true,  seasons:[12,1,2,3], kcal:300, nutri:"Fibre-rich comfort meal" },
+    { name:"Methi Malai Paneer",    desc:"Paneer in fenugreek-cream sauce",                       sattvic:true, seasons:[10,11,12,1,2,3], kcal:400, nutri:"Iron-rich, high protein" },
+    { name:"Kuttu Khichdi",         desc:"Buckwheat porridge with potato — navratri special",     sattvic:true, kcal:330, nutri:"Gluten-free, high protein" },
+    { name:"Singhare ki Puri & Aloo",desc:"Water chestnut puri with vrat-style aloo",            sattvic:true, kcal:400, nutri:"Mineral-rich vrat meal" },
+    { name:"Sama Rice & Dahi",      desc:"Barnyard millet with thick curd — light vrat lunch",   sattvic:true, kcal:280, nutri:"Low GI, probiotic, cooling" },
+    { name:"Arbi Sabzi & Roti",     desc:"Colocasia stir-fry with whole wheat roti",             sattvic:true, seasons:[7,8,9,10], kcal:250, nutri:"Rich in potassium" },
+    { name:"Makhana Curry & Rice",  desc:"Lotus seeds in tomato-cashew gravy over rice",         sattvic:true, kcal:350, nutri:"High magnesium, antioxidant-rich" },
+  ],
+  dinner: [
+    { name:"Roti & Mix Veg",      desc:"Seasonal mixed vegetable curry with phulka",           sattvic:true, kids:true,  kcal:360, nutri:"Balanced, fibre-rich" },
+    { name:"Dal Khichdi",         desc:"Light one-pot rice & lentil comfort meal",              sattvic:true, kids:true,  kcal:310, nutri:"Easy to digest — great for nights" },
+    { name:"Paneer Curry & Chapati",desc:"Simple paneer gravy with soft rotis",                sattvic:true, kids:true,  kcal:400, nutri:"High protein, satisfying" },
+    { name:"Aloo Jeera & Dal",    desc:"Cumin potato with dal and steamed rice",               sattvic:true, kids:true,  kcal:280, nutri:"Light, digestive-friendly" },
+    { name:"Lauki Sabzi & Roti",  desc:"Light bottle gourd sabzi with phulkas",               sattvic:true, seasons:[4,5,6,7,8,9], kcal:220, nutri:"Very low cal, cooling, hydrating" },
+    { name:"Vegetable Biryani",   desc:"Aromatic basmati with whole spices & veggies",         kids:true,  kcal:420, nutri:"Balanced, aromatic — weekend special" },
+    { name:"Dahi Rice",           desc:"Soothing curd rice with mustard & curry leaves",       sattvic:true, kids:true,  kcal:300, nutri:"Probiotic, cooling, gut-healing" },
+    { name:"Toor Dal & Ghee Rice",desc:"Simple toor dal with tempered ghee rice",              sattvic:true, kcal:380, nutri:"Complete protein, nourishing" },
+    { name:"Stuffed Paratha & Dahi",desc:"Seasonal stuffed parathas with cool curd",           sattvic:true, kids:true,  kcal:380, nutri:"Satisfying, calcium-rich" },
+    { name:"Palak Dal & Rice",    desc:"Spinach-lentil combo, light and nutritious",           sattvic:true, seasons:[10,11,12,1,2,3], kcal:280, nutri:"Iron + protein powerhouse" },
+    { name:"Vegetable Soup & Roti",desc:"Hot veggie soup with whole wheat roti",              sattvic:true, kids:true,  kcal:160, nutri:"Very light, great for digestion" },
+    { name:"Rajma & Chapati",     desc:"Kidney bean curry with soft rotis",                    kids:true,  kcal:420, nutri:"High protein & iron" },
+    { name:"Moong Dal Tadka & Rice",desc:"Light yellow moong dal with turmeric",              sattvic:true, kids:true,  kcal:310, nutri:"Easiest to digest, detoxifying" },
+    { name:"Pumpkin Sabzi & Roti",desc:"Sweet-spiced kaddu bharta with phulka",               sattvic:true, seasons:[7,8,9,10,11], kcal:220, nutri:"Beta-carotene rich, anti-inflammatory" },
+    { name:"Chole & Rice",        desc:"Chickpea masala served over steamed rice",             kcal:430, nutri:"High protein & fibre" },
+    { name:"Tinda Sabzi & Dal",   desc:"Apple gourd curry with comforting dal",               sattvic:true, seasons:[5,6,7,8,9], kcal:200, nutri:"Low cal, cooling summer dish" },
+    { name:"Karela Sabzi & Roti", desc:"Bitter gourd stir-fry, good for health",              sattvic:true, seasons:[6,7,8,9], kcal:180, nutri:"Blood sugar control, high in Vit C" },
+    { name:"Veg Pulao & Raita",   desc:"One-pot pulao with cooling cucumber raita",           sattvic:true, kids:true,  kcal:370, nutri:"Balanced, probiotic raita" },
+    { name:"Sama Rice Khichdi",   desc:"Barnyard millet & potato khichdi — vrat dinner",      sattvic:true, kcal:300, nutri:"Low GI, gluten-free" },
+    { name:"Arbi Curry & Phulka", desc:"Colocasia in light tomato gravy with roti",           sattvic:true, seasons:[7,8,9,10], kcal:280, nutri:"Rich in potassium & Vit B6" },
+    { name:"Makhana & Paneer",    desc:"Lotus seeds & cottage cheese in creamy gravy",        sattvic:true, kids:true,  kcal:380, nutri:"High magnesium, calcium-rich" },
+    { name:"Sabudana Kheer",      desc:"Tapioca pearls cooked in sweetened milk — vrat treat",sattvic:true, kids:true,  kcal:320, nutri:"High energy vrat dessert-dinner" },
+    { name:"Kuttu Roti & Aloo",   desc:"Buckwheat roti with sendha namak aloo sabzi",         sattvic:true, kcal:340, nutri:"Gluten-free, antioxidant-rich" },
+  ]
+};
+
+const DAYS       = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const MEAL_TYPES = ["breakfast","lunch","dinner"];
+
+// ─── STATE ───────────────────────────────────────────────────────
+let weeklyPlan = {};
+let filters    = { sat: false, kids: false, seas: false };
+let curMonth   = new Date().getMonth() + 1; // 1-12
+
+// ─── INIT SEASON STRIP ───────────────────────────────────────────
+function initSeasonStrip() {
+  const vegs = SEASONAL_VEGS[curMonth] || [];
+  document.getElementById("season-label").textContent =
+    `🌿 ${MONTH_NAMES[curMonth]} (${SEASON_NAME[curMonth]}) — In Season:`;
+  document.getElementById("season-chips").innerHTML =
+    vegs.map(v => `<span class="veg-chip">${v}</span>`).join("");
+}
+
+// ─── FILTERS ─────────────────────────────────────────────────────
+function toggleFilter(key) {
+  filters[key] = !filters[key];
+  document.getElementById(`ft-${key}`).classList.toggle("on", filters[key]);
+  try { localStorage.setItem(`kyaF_${key}`, filters[key] ? "1" : "0"); } catch(e) {}
+  generateWeekly();
+}
+
+function getPool(type) {
+  return dishes[type].filter(d => {
+    if (filters.sat  && !d.sattvic) return false;
+    if (filters.kids && !d.kids)    return false;
+    if (filters.seas && !(d.seasons && d.seasons.includes(curMonth))) return false;
+    return true;
+  });
+}
+
+// ─── PICK ────────────────────────────────────────────────────────
+function pick(arr) {
+  if (!arr.length) return null;
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// ─── WEEK DATES ──────────────────────────────────────────────────
+function getWeekDates() {
+  const now = new Date();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  return DAYS.map((_, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return d.toLocaleDateString("en-IN", { day:"numeric", month:"short" });
+  });
+}
+
+// ─── WEEKLY ──────────────────────────────────────────────────────
+function generateWeekly() {
+  weeklyPlan = {};
+  DAYS.forEach(day =>
+    MEAL_TYPES.forEach(type => {
+      const pool = getPool(type);
+      weeklyPlan[`${day}_${type}`] = pool.length ? pick(pool) : null;
+    })
+  );
+  renderWeekly();
+  saveState();
+}
+
+function regenerateMeal(e, day, type) {
+  e.stopPropagation();
+  const pool = getPool(type);
+  weeklyPlan[`${day}_${type}`] = pool.length ? pick(pool) : null;
+  renderWeekly();
+  saveState();
+}
+
+function renderWeekly() {
+  const grid  = document.getElementById("weekly-grid");
+  const dates = getWeekDates();
+  const mealIcon = { breakfast:"☀️", lunch:"🌿", dinner:"🌙" };
+  let html = `<div></div>`;
+
+  DAYS.forEach((day, i) =>
+    html += `<div class="day-header">${day}<span>${dates[i]}</span></div>`
+  );
+
+  MEAL_TYPES.forEach(type => {
+    html += `<div class="row-lbl"><div class="row-lbl-txt">${mealIcon[type]} ${type}</div></div>`;
+    DAYS.forEach(day => {
+      const meal = weeklyPlan[`${day}_${type}`];
+      if (!meal) {
+        html += `<div class="meal-cell type-${type}"><div class="meal-name" style="color:var(--sub);font-style:italic">No match</div><div></div></div>`;
+        return;
+      }
+      const tags = buildTagsHtml(meal, true);
+      const mealJson = encodeURIComponent(JSON.stringify({...meal, type}));
+      html += `
+        <div class="meal-cell type-${type}" onclick="openModal('${mealJson}')">
+          <div class="meal-name">${meal.name}</div>
+          <div class="cell-bottom">
+            <div class="cell-tags">${tags}</div>
+            <button class="btn-xs regen-btn" onclick="regenerateMeal(event,'${day}','${type}')">🔄</button>
+          </div>
+        </div>`;
+    });
+  });
+
+  grid.innerHTML = html;
+}
+
+// ─── RANDOM ──────────────────────────────────────────────────────
+function generateRandom() {
+  const days = parseInt(document.getElementById("rand-period").value, 10);
+  const dayLabels = ["Today","Tomorrow","Day 3"];
+  const typeLabel  = { breakfast:"Breakfast", lunch:"Lunch", dinner:"Dinner" };
+  const typeIcon   = { breakfast:"☀️", lunch:"🌿", dinner:"🌙" };
+  let html = "";
+
+  for (let d = 0; d < days; d++) {
+    MEAL_TYPES.forEach(type => {
+      const pool = getPool(type);
+      const meal = pool.length ? pick(pool) : null;
+      if (!meal) {
+        html += `<div class="rcard"><div class="rcard-head ${type}">
+          <div><div class="rcard-day">${dayLabels[d]}</div><div class="rcard-type">${typeIcon[type]} ${typeLabel[type]}</div></div>
+        </div><div class="rcard-body"><div class="rcard-desc" style="font-style:italic">No dish matches current filters</div></div></div>`;
+        return;
+      }
+      const tags = buildTagsHtml(meal, false);
+      const mealJson = encodeURIComponent(JSON.stringify({...meal, type}));
+      html += `
+        <div class="rcard" onclick="openModal('${mealJson}')">
+          <div class="rcard-head ${type}">
+            <div class="rcard-head-left">
+              <span class="rcard-day">${dayLabels[d]}</span>
+              <span class="rcard-type">${typeIcon[type]} ${typeLabel[type]}</span>
+            </div>
+          </div>
+          <div class="rcard-body">
+            <div class="rcard-name">${meal.name}</div>
+            <div class="rcard-desc">${meal.desc}</div>
+          </div>
+          <div class="rcard-foot">
+            <div class="rcard-tags">${tags}</div>
+            <button class="btn-xs change-btn" onclick="refreshCard(event,this,'${type}')">🔄 Change</button>
+          </div>
+        </div>`;
+    });
+  }
+  document.getElementById("random-grid").innerHTML = html || `<div class="empty"><div class="ico">😕</div><p>No dishes match the active filters. Try relaxing some filters.</p></div>`;
+}
+
+function refreshCard(e, btn, type) {
+  e.stopPropagation();
+  const card = btn.closest(".rcard");
+  const pool = getPool(type);
+  if (!pool.length) return;
+  const meal = pick(pool);
+  card.querySelector(".rcard-name").textContent = meal.name;
+  card.querySelector(".rcard-desc").textContent = meal.desc;
+  card.querySelector(".rcard-tags").innerHTML = buildTagsHtml(meal, false);
+  const mealJson = encodeURIComponent(JSON.stringify({...meal, type}));
+  card.setAttribute("onclick", `openModal('${mealJson}')`);
+}
+
+// ─── TAGS HTML ───────────────────────────────────────────────────
+function buildTagsHtml(meal, small) {
+  let t = "";
+  if (meal.sattvic && meal.sattvic === true) t += `<span class="tag tag-sat">🙏</span>`;
+  if (meal.kids)    t += `<span class="tag tag-kids">👦</span>`;
+  if (meal.seasons && meal.seasons.includes(curMonth)) t += `<span class="tag tag-seas">🌱</span>`;
+  return t;
+}
+
+// ─── MODAL ───────────────────────────────────────────────────────
+function openModal(mealJson) {
+  const meal = JSON.parse(decodeURIComponent(mealJson));
+  const typeLabel = { breakfast:"Breakfast ☀️", lunch:"Lunch 🌿", dinner:"Dinner 🌙" };
+  const typeCls   = { breakfast:"t-b", lunch:"t-l", dinner:"t-d" };
+  const inSeason  = meal.seasons && meal.seasons.includes(curMonth);
+  const seasonMonths = meal.seasons ? meal.seasons.map(m => MONTH_NAMES[m]).join(", ") : null;
+
+  let tags = `<span class="modal-tag ${typeCls[meal.type]}">${typeLabel[meal.type]}</span>`;
+  if (meal.sattvic) tags += `<span class="modal-tag sat">🙏 Sattvic / No Onion-Garlic</span>`;
+  if (meal.kids)    tags += `<span class="modal-tag kids">👦 Kids-Friendly</span>`;
+  if (inSeason)     tags += `<span class="modal-tag seas">🌱 In Season Now</span>`;
+
+  let seasonInfo = "";
+  if (seasonMonths) {
+    seasonInfo = `<div class="modal-season-info">🗓️ <strong>Best Season:</strong> ${seasonMonths} — uses fresh local produce in these months.</div>`;
+  }
+
+  document.getElementById("modal-content").innerHTML = `
+    <div class="modal-title">${meal.name}</div>
+    <div class="modal-sub">${meal.desc}</div>
+    <div class="modal-tags">${tags}</div>
+    <div class="info-grid">
+      <div class="info-box">
+        <div class="info-box-label">🔥 Calories</div>
+        <div class="info-box-val">~${meal.kcal || "–"}</div>
+        <div class="info-box-sub">kcal per serving</div>
+      </div>
+      <div class="info-box">
+        <div class="info-box-label">💚 Nutrition</div>
+        <div class="info-box-val" style="font-size:0.85rem;font-weight:700">${meal.nutri || "Wholesome veg dish"}</div>
+      </div>
+    </div>
+    ${seasonInfo}
+  `;
+  document.getElementById("modal-overlay").classList.add("open");
+}
+
+function closeModal(e) {
+  if (!e || e.target === document.getElementById("modal-overlay") || e.target.classList.contains("modal-close")) {
+    document.getElementById("modal-overlay").classList.remove("open");
+  }
+}
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal({}); });
+
+// ─── TABS ────────────────────────────────────────────────────────
+function switchTab(tab, desktopBtn, mobileId) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  document.getElementById(`view-${tab}`).classList.add("active");
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  if (desktopBtn) desktopBtn.classList.add("active");
+  else document.querySelectorAll(".tab-btn").forEach(b => {
+    if (b.getAttribute("onclick") && b.getAttribute("onclick").includes(`'${tab}'`)) b.classList.add("active");
+  });
+  document.querySelectorAll(".mnav").forEach(b => b.classList.remove("active"));
+  const mId = mobileId || { weekly:"mnav-weekly", random:"mnav-random" }[tab];
+  if (mId) document.getElementById(mId).classList.add("active");
+}
+
+// ─── PERSISTENCE ─────────────────────────────────────────────────
+function saveState() {
+  try { localStorage.setItem("kyaBanaonWeekly", JSON.stringify(weeklyPlan)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    ["sat","kids","seas"].forEach(k => {
+      filters[k] = localStorage.getItem(`kyaF_${k}`) === "1";
+      if (filters[k]) document.getElementById(`ft-${k}`).classList.add("on");
+    });
+    const saved = localStorage.getItem("kyaBanaonWeekly");
+    if (saved) { weeklyPlan = JSON.parse(saved); renderWeekly(); return; }
+  } catch(e) {}
+  generateWeekly();
+}
+
+initSeasonStrip();
+loadState();
+</script>
+</body>
+</html>
