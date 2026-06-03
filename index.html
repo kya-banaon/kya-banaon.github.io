@@ -365,6 +365,69 @@ main{padding:16px}
 .mobile-nav-btn.active{color:var(--primary)}
 #mobile-nav-inner{display:flex}
 
+/* ── SEASONAL VIEW ── */
+.season-selector{
+  display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  margin-bottom:20px;
+}
+.season-selector::-webkit-scrollbar{display:none}
+.season-card{
+  flex-shrink:0;
+  min-width:130px;padding:14px 16px;
+  border-radius:14px;border:2.5px solid var(--border);
+  background:var(--card);cursor:pointer;
+  text-align:center;transition:all .22s cubic-bezier(.22,.68,0,1.3);
+  user-select:none;
+}
+.season-card:hover{transform:translateY(-3px);box-shadow:var(--sh-lg)}
+.season-card.active{border-color:currentColor;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.season-card .s-ico{font-size:1.8rem;margin-bottom:4px}
+.season-card .s-name{font-family:'Rozha One',serif;font-size:1rem;font-weight:400}
+.season-card .s-months{font-size:.68rem;color:var(--sub);margin-top:2px;font-weight:600}
+.season-card.win{color:#2C6FBF}.season-card.win.active{background:#EEF4FD}
+.season-card.spr{color:#2D7A4F}.season-card.spr.active{background:#E8F8EF}
+.season-card.sum{color:#B84A00}.season-card.sum.active{background:#FEF3E6}
+.season-card.mon{color:#1A6B8A}.season-card.mon.active{background:#E4F5FA}
+.season-card.aut{color:#7B4A00}.season-card.aut.active{background:#FFF0DC}
+
+.season-why{
+  background:var(--card);border:1.5px solid var(--border);
+  border-radius:12px;padding:14px 16px;margin-bottom:20px;
+  font-size:.88rem;color:var(--sub);line-height:1.6;
+}
+.season-why strong{color:var(--text);font-weight:700}
+
+.season-section-title{
+  font-family:'Rozha One',serif;font-size:1.05rem;font-weight:400;
+  color:var(--primary);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.season-dishes{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:12px;margin-bottom:24px;
+}
+.sdish-card{
+  background:var(--card);border:1.5px solid var(--border);
+  border-radius:12px;padding:14px 16px;cursor:pointer;
+  transition:all .2s cubic-bezier(.22,.68,0,1.3);
+  position:relative;overflow:hidden;
+}
+.sdish-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
+  border-radius:4px 0 0 4px;
+}
+.sdish-card.type-breakfast::before{background:var(--amber-lt)}
+.sdish-card.type-lunch::before{background:var(--green)}
+.sdish-card.type-dinner::before{background:var(--indigo)}
+.sdish-card:hover{transform:translateY(-3px);box-shadow:var(--sh-lg);border-color:var(--primary)}
+.sdish-card:active{transform:scale(.97)}
+.sdish-name{font-weight:700;font-size:.92rem;margin-bottom:3px}
+.sdish-why{font-size:.76rem;color:var(--sub);line-height:1.45;margin-bottom:8px}
+.sdish-tags{display:flex;flex-wrap:wrap;gap:4px}
+.sdish-time{font-size:.7rem;font-weight:700;background:#FEF3E6;color:var(--primary);
+  border-radius:20px;padding:2px 8px}
+
 /* ── FOOTER ── */
 footer{
   text-align:center;padding:24px 16px;
@@ -432,6 +495,7 @@ footer{
 <div id="tab-nav">
   <button class="tab-btn active" data-tab="weekly" onclick="switchTab('weekly')">📅 Weekly Planner</button>
   <button class="tab-btn" data-tab="random" onclick="switchTab('random')">🎲 Random Planner</button>
+  <button class="tab-btn" data-tab="seasonal" onclick="switchTab('seasonal')">🌿 Seasonal Picks</button>
 </div>
 
 <!-- MAIN -->
@@ -451,6 +515,13 @@ footer{
     </div>
     <div id="rand-content"></div>
   </div>
+
+  <!-- SEASONAL VIEW -->
+  <div id="view-seasonal" style="display:none">
+    <div class="season-selector" id="season-selector"></div>
+    <div class="season-why" id="season-why"></div>
+    <div id="season-content"></div>
+  </div>
 </main>
 
 <!-- FOOTER -->
@@ -466,6 +537,9 @@ footer{
     </button>
     <button class="mobile-nav-btn" data-tab="random" onclick="switchTab('random')">
       <span class="nav-icon">🎲</span>Random
+    </button>
+    <button class="mobile-nav-btn" data-tab="seasonal" onclick="switchTab('seasonal')">
+      <span class="nav-icon">🌿</span>Seasonal
     </button>
   </div>
 </div>
@@ -1277,10 +1351,12 @@ function switchTab(tab){
   currentTab=tab;
   document.getElementById('view-weekly').style.display=tab==='weekly'?'block':'none';
   document.getElementById('view-random').style.display=tab==='random'?'block':'none';
+  document.getElementById('view-seasonal').style.display=tab==='seasonal'?'block':'none';
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   document.querySelectorAll('.mobile-nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   if(tab==='random'&&!randPlan)randPlan=generateRand(randPeriod);
   if(tab==='random')renderRand();
+  if(tab==='seasonal')renderSeasonalView();
 }
 
 /* ═══════════════════════════════════════════
@@ -1325,6 +1401,187 @@ function initTicker(){
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   SEASONAL RECOMMENDATIONS
+═══════════════════════════════════════════ */
+const SEASONS=[
+  {
+    key:'win', name:'Winter', ico:'❄️', cls:'win',
+    months:[11,12,1,2],
+    label:'Nov – Feb',
+    why:'<strong>Winter is the richest season for Indian vegetables.</strong> Fresh peas, cauliflower, spinach, methi and carrots flood the markets. Warm, hearty dishes with ghee and whole spices help the body stay warm. Perfect time for parathas, rich dals and green sabzis.',
+    picks:{
+      breakfast:['Methi Thepla','Gobi Paratha','Poha','Aloo Paratha','Suji Halwa & Puri'],
+      lunch:['Palak Paneer & Roti','Aloo Gobi Sabzi','Matar Paneer','Methi Malai Paneer','Dal Makhani & Naan'],
+      dinner:['Palak Dal & Rice','Roti & Mix Veg','Dal Khichdi','Stuffed Paratha & Dahi','Toor Dal & Ghee Rice']
+    },
+    whyDish:{
+      'Methi Thepla':'Iron-rich methi is at its tenderest — full flavour.',
+      'Gobi Paratha':'Cauliflower is sweetest and firmest in winter.',
+      'Palak Paneer & Roti':'Spinach peaks in winter — rich in iron & Vit C.',
+      'Aloo Gobi Sabzi':'Both veggies at prime freshness — best texture.',
+      'Matar Paneer':'Fresh green peas add natural sweetness.',
+      'Methi Malai Paneer':'Fenugreek leaves are tender and less bitter now.',
+      'Palak Dal & Rice':'Double iron — spinach + dal, warming & nourishing.',
+      'Suji Halwa & Puri':'Warming ghee-rich prasad — festive winter mornings.',
+      'Dal Makhani & Naan':'Long-cooked, warming dal — perfect for cold nights.',
+    }
+  },
+  {
+    key:'spr', name:'Spring', ico:'🌸', cls:'spr',
+    months:[3,4],
+    label:'Mar – Apr',
+    why:'<strong>Transition season — light, refreshing meals.</strong> Peas are wrapping up; fresh tomatoes and capsicum are excellent. Temperatures rise, so meals should start getting lighter. Great for fermented foods like idli-dosa and probiotic-rich curd dishes.',
+    picks:{
+      breakfast:['Idli & Sambar','Uttapam','Besan Chilla','Moong Dal Chilla','Bread Poha'],
+      lunch:['Sambar Rice','Kadhi Chawal','Aloo Matar Curry','Vegetable Pulao','Bhindi Masala & Dal'],
+      dinner:['Dahi Rice','Moong Dal Tadka & Rice','Veg Pulao & Raita','Aloo Jeera & Dal','Dal Khichdi']
+    },
+    whyDish:{
+      'Idli & Sambar':'Fermented, probiotic — ideal as weather warms up.',
+      'Besan Chilla':'Light, high-protein, no heavy spices needed.',
+      'Kadhi Chawal':'Yogurt-based — cooling and gut-friendly.',
+      'Aloo Matar Curry':'Last of the fresh peas — use them now!',
+      'Dahi Rice':'Probiotic curd rice — easy on stomach in spring heat.',
+      'Moong Dal Tadka':'Lightest of all dals — easy to digest in warm weather.',
+    }
+  },
+  {
+    key:'sum', name:'Summer', ico:'☀️', cls:'sum',
+    months:[4,5,6],
+    label:'Apr – Jun',
+    why:'<strong>Beat the heat with cooling, hydrating vegetables.</strong> Lauki, tinda, turai and raw mango dominate markets. Meals should be light, hydrating and cooling. Avoid heavy fried foods. Curd, buttermilk and water-rich gourds are your best friends.',
+    picks:{
+      breakfast:['Poha','Rava Idli','Sabudana Khichdi','Banana & Curd','Moong Dal Chilla'],
+      lunch:['Lauki Dal & Rice','Sambar Rice','Moong Dal Khichdi','Sama Rice & Dahi','Aloo Matar Curry'],
+      dinner:['Lauki Sabzi & Roti','Dahi Rice','Tinda Sabzi & Dal','Vegetable Soup & Roti','Moong Dal Tadka & Rice']
+    },
+    whyDish:{
+      'Lauki Dal & Rice':'Bottle gourd is 92% water — extremely cooling.',
+      'Lauki Sabzi & Roti':'Lightest summer dinner — reduces body heat.',
+      'Banana & Curd':'Cooling, potassium-rich, no cooking needed.',
+      'Dahi Rice':'South Indian classic for summer — cools the gut.',
+      'Tinda Sabzi & Dal':'Apple gourd is cooling, very light on stomach.',
+      'Moong Dal Khichdi':'Easy-digest one-pot meal, great for hot afternoons.',
+      'Sabudana Khichdi':'Quick energy without heating the body.',
+    }
+  },
+  {
+    key:'mon', name:'Monsoon', ico:'🌧️', cls:'mon',
+    months:[7,8,9],
+    label:'Jul – Sep',
+    why:'<strong>Monsoon brings fresh bhindi, arbi, baingan and corn.</strong> Avoid raw salads and leafy greens — humidity causes contamination. Stick to well-cooked, lightly spiced food. Gut health matters most — warm soups, khichdi and roasted dishes are ideal.',
+    picks:{
+      breakfast:['Upma','Sabudana Vada','Besan Chilla','Poha','Khaman Dhokla'],
+      lunch:['Bhindi Masala & Dal','Baingan Bharta & Roti','Arbi Sabzi & Roti','Sambar Rice','Moong Dal Khichdi'],
+      dinner:['Pumpkin Sabzi & Roti','Arbi Curry & Phulka','Karela Sabzi & Roti','Dal Khichdi','Vegetable Soup & Roti']
+    },
+    whyDish:{
+      'Bhindi Masala & Dal':'Bhindi is at peak freshness and crunch in monsoon.',
+      'Baingan Bharta & Roti':'Smoky roasted brinjal — best during monsoon.',
+      'Arbi Sabzi & Roti':'Colocasia thrives in monsoon — rich in potassium.',
+      'Karela Sabzi & Roti':'Bitter gourd boosts immunity — perfect for rains.',
+      'Dal Khichdi':'Easy-digest comfort food for rainy evenings.',
+      'Pumpkin Sabzi & Roti':'Kaddu is nutrient-dense and available all monsoon.',
+      'Sabudana Vada':'Warm, crispy comfort snack on a rainy morning.',
+    }
+  },
+  {
+    key:'aut', name:'Post-Monsoon', ico:'🍂', cls:'aut',
+    months:[10,11],
+    label:'Oct – Nov',
+    why:'<strong>Harvest season — immunity building before winter.</strong> Sweet potato, early cauliflower, arbi and brinjal are still available. Festival season (Navratri, Diwali) means sattvic and vrat foods are especially relevant. Build immunity with warming, spiced meals.',
+    picks:{
+      breakfast:['Kuttu Paratha','Sabudana Khichdi','Singhare ka Halwa','Makhana Kheer','Sabudana Vada'],
+      lunch:['Kuttu Khichdi','Sama Rice & Dahi','Arbi Sabzi & Roti','Makhana Curry & Rice','Singhare ki Puri & Aloo'],
+      dinner:['Sama Rice Khichdi','Arbi Curry & Phulka','Makhana & Paneer','Kuttu Roti & Aloo','Sabudana Kheer']
+    },
+    whyDish:{
+      'Kuttu Paratha':'Buckwheat is harvested now — peak freshness, great for Navratri.',
+      'Sabudana Khichdi':'Festival favourite — light yet energising for vrat days.',
+      'Makhana Kheer':'High calcium, warming — perfect post-festival sweet.',
+      'Arbi Sabzi & Roti':'Last of the monsoon arbi — crispy and nutty.',
+      'Sama Rice Khichdi':'Millet is new-season — earthy and nourishing.',
+      'Singhare ka Halwa':'Water chestnuts peak in Oct-Nov — use fresh.',
+    }
+  }
+];
+
+let activeSeason=null;
+
+function getSeasonForMonth(m){
+  return SEASONS.find(s=>s.months.includes(m))||SEASONS[0];
+}
+
+function findDish(name){
+  for(const type of ['breakfast','lunch','dinner']){
+    const d=dishes[type].find(x=>x.name===name);
+    if(d)return{...d,type};
+  }
+  return null;
+}
+
+function renderSeasonalView(){
+  if(!activeSeason)activeSeason=getSeasonForMonth(CURR_MONTH);
+  renderSeasonSelector();
+  renderSeasonContent();
+}
+
+function renderSeasonSelector(){
+  const sel=document.getElementById('season-selector');
+  sel.innerHTML=SEASONS.map(s=>`
+    <div class="season-card ${s.cls}${activeSeason.key===s.key?' active':''}"
+         onclick="selectSeason('${s.key}')">
+      <div class="s-ico">${s.ico}</div>
+      <div class="s-name">${s.name}</div>
+      <div class="s-months">${s.label}</div>
+      ${s.months.includes(CURR_MONTH)?'<div style="font-size:.65rem;margin-top:3px;font-weight:700;opacity:.8">▶ Now</div>':''}
+    </div>`).join('');
+}
+
+function selectSeason(key){
+  activeSeason=SEASONS.find(s=>s.key===key);
+  renderSeasonSelector();
+  renderSeasonContent();
+}
+
+function renderSeasonContent(){
+  const s=activeSeason;
+  document.getElementById('season-why').innerHTML=`${s.ico} <span>${s.why}</span>`;
+
+  const mealTypes=['breakfast','lunch','dinner'];
+  const icons={breakfast:'☀️',lunch:'🌿',dinner:'🌙'};
+  const labels={breakfast:'Breakfast',lunch:'Lunch',dinner:'Dinner'};
+
+  let html='';
+  mealTypes.forEach(type=>{
+    const names=s.picks[type]||[];
+    if(!names.length)return;
+    html+=`<div class="season-section-title">${icons[type]} ${labels[type]} Picks</div>`;
+    html+='<div class="season-dishes">';
+    names.forEach((name,i)=>{
+      const dish=findDish(name);
+      if(!dish)return;
+      const why=s.whyDish[name]||dish.desc;
+      const tags=buildTagChips(dish,type);
+      const mj=encodeURIComponent(JSON.stringify(dish));
+      html+=`
+        <div class="sdish-card type-${type} animate-fade-up" style="animation-delay:${i*60}ms"
+             onclick="openModal('${mj}')">
+          <div class="sdish-name">${dish.name}</div>
+          <div class="sdish-why">${why}</div>
+          <div class="sdish-tags">
+            <span class="sdish-time">⏱ ${dish.time} min</span>
+            ${tags}
+          </div>
+        </div>`;
+    });
+    html+='</div>';
+  });
+
+  document.getElementById('season-content').innerHTML=html;
+}
+
 loadState();
 initFilters();
 initSeasonStrip();
