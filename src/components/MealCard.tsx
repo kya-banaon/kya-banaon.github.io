@@ -29,7 +29,7 @@ export default function MealCard({ dish: rawDish, mealType, dayIdx, animDelay = 
   };
 
   if (!dish) return (
-    <div className="rounded-xl p-5 text-center text-sm animate-slide-up"
+    <div className="rounded-lg p-5 text-center text-sm animate-slide-up"
       style={{ background:'var(--surface)', border:'1px solid var(--border)', animationDelay:`${animDelay}ms`, color:'var(--sub)' }}>
       {t('card.no_dish')}
     </div>
@@ -42,7 +42,7 @@ export default function MealCard({ dish: rawDish, mealType, dayIdx, animDelay = 
   if (dish.oilFree) tags.push('💧');
 
   return (
-    <div className="rounded-xl overflow-hidden cursor-pointer active:scale-[.978] transition-transform animate-slide-up"
+    <div className="rounded-lg overflow-hidden cursor-pointer active:scale-[.978] transition-transform animate-slide-up"
       style={{ background:'var(--surface)', border:'1px solid var(--border)',
         boxShadow:'0 4px 24px rgba(0,0,0,0.3)', animationDelay:`${animDelay}ms` }}
       onClick={() => openModal({ dish, mealType })}>

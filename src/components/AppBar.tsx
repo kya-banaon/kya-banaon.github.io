@@ -61,7 +61,7 @@ export default function AppBar() {
             <div className="flex gap-3">
               {(['dark','light'] as const).map(t => (
                 <button key={t} onClick={() => { setTheme(t); setShowPanel(false); }}
-                  className={`flex-1 py-2 rounded-xl text-sm font-bold transition-all ${theme===t ? 'ring-2 ring-offset-1 ring-[var(--primary)]' : ''}`}
+                  className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${theme===t ? 'ring-2 ring-offset-1 ring-[var(--primary)]' : ''}`}
                   style={{ background: t==='dark' ? '#0C0907' : '#F4EFE8',
                     color: t==='dark' ? '#F0E4D0' : '#1E110A',
                     border: '1px solid var(--border2)' }}>

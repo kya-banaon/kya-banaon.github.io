@@ -89,7 +89,7 @@ function DesktopCell({ dish: rawDish, mealType, dayIdx }: { dish: Dish | null; m
 
   return (
     <td className="p-2" style={{ borderLeft:`1px solid var(--border)` }}>
-      <div className="rounded-xl p-2 cursor-pointer transition-all hover:scale-[1.02] active:scale-[.98] group relative"
+      <div className="rounded-lg p-2 cursor-pointer transition-all hover:scale-[1.02] active:scale-[.98] group relative"
         style={{ background:'var(--surface2)' }}
         onClick={() => openModal({ dish: rawDish, mealType })}>
         <div className="w-full h-0.5 rounded-full mb-2" style={{ background:COLOR[mealType] }} />

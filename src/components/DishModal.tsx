@@ -40,7 +40,7 @@ export default function DishModal() {
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center"
       style={{ background:'rgba(0,0,0,0.7)', backdropFilter:'blur(6px)' }}
       onClick={e => e.target === e.currentTarget && closeModal()}>
-      <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-t-xl sm:rounded-xl animate-sheet-in sm:animate-slide-up"
+      <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-t-lg sm:rounded-lg animate-sheet-in sm:animate-slide-up"
         style={{ background:'var(--surface)' }}>
         {/* Handle */}
         <div className="w-10 h-1 rounded-full mx-auto mt-3 mb-0 sm:hidden" style={{ background:'var(--border2)' }} />

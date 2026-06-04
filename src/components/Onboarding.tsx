@@ -75,7 +75,7 @@ export default function Onboarding() {
             <div className="flex flex-wrap gap-2">
               {CUISINES.map(c => (
                 <button key={c} onClick={() => toggleCuisine(c)}
-                  className="px-4 py-2 rounded-xl text-sm font-bold transition-all active:scale-95"
+                  className="px-4 py-2 rounded-lg text-sm font-bold transition-all active:scale-95"
                   style={{
                     background: selCuisines.includes(c) ? 'var(--primary)' : 'var(--surface2)',
                     color: selCuisines.includes(c) ? '#fff' : 'var(--sub)',
@@ -92,7 +92,7 @@ export default function Onboarding() {
             <div className="flex flex-wrap gap-2">
               {TIMES.map(t => (
                 <button key={t || 'any'} onClick={() => setSelTime(t)}
-                  className="px-4 py-2 rounded-xl text-sm font-bold transition-all active:scale-95"
+                  className="px-4 py-2 rounded-lg text-sm font-bold transition-all active:scale-95"
                   style={{
                     background: selTime === t ? 'var(--primary)' : 'var(--surface2)',
                     color: selTime === t ? '#fff' : 'var(--sub)',

@@ -19,7 +19,7 @@ export default function DaySelector() {
               style={{ color: isActive ? 'var(--primary)' : 'var(--sub)' }}>
               {name}
             </span>
-            <span className="w-9 h-9 flex items-center justify-center rounded-xl text-sm font-bold transition-all"
+            <span className="w-9 h-9 flex items-center justify-center rounded-lg text-sm font-bold transition-all"
               style={isToday
                 ? { background:'var(--primary)', color:'#fff', boxShadow:'0 3px 12px var(--primary-glow)' }
                 : isActive
