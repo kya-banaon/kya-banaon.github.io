@@ -4,7 +4,7 @@ import { useTranslation } from '../i18n';
 
 
 export default function AppBar() {
-  const { theme, setTheme, lang, setLang, resetOnboarding } = useStore();
+  const { theme, setTheme, resetOnboarding } = useStore();
   const { t } = useTranslation();
   const [showPanel, setShowPanel] = useState(false);
 
