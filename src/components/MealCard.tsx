@@ -11,11 +11,7 @@ interface Props {
   animDelay?: number;
 }
 
-const GRAD: Record<MealType, string> = {
-  breakfast: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
-  lunch: 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
-  dinner: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
-};
+
 
 export default function MealCard({ dish: rawDish, mealType, dayIdx, animDelay = 0 }: Props) {
   const { filters, openModal, regenMeal, lang } = useStore();
