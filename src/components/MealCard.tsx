@@ -47,9 +47,9 @@ export default function MealCard({ dish: rawDish, mealType, dayIdx, animDelay = 
         boxShadow:'0 4px 24px rgba(0,0,0,0.3)', animationDelay:`${animDelay}ms` }}
       onClick={() => openModal({ dish, mealType })}>
 
-      {/* Gradient header */}
-      <div className={`relative overflow-hidden px-5 pt-5 pb-4 min-h-[120px] flex flex-col justify-end text-white`}
-        style={{ background: `linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%), ${GRAD[mealType]}` }}>
+      {/* Gradient header with custom monocolor image */}
+      <div className={`relative overflow-hidden px-5 pt-5 pb-4 min-h-[120px] flex flex-col justify-end text-white bg-cover bg-center`}
+        style={{ backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 100%), url('/images/bg_${mealType}.png')` }}>
         
         <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3 w-fit"
           style={{ background:`rgba(255,255,255,0.2)`, color: '#fff', backdropFilter: 'blur(4px)' }}>
