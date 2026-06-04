@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kya-banaon.github.io/sitemap.xml
