@@ -5,14 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Kya Banaon? — Hindu Vegetarian Family Meal Planner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#FDF6EC;
   --card:#FFFBF4;
+  --card2:#FFF8EE;
   --border:#E8D5B7;
-  --text:#3B1F0A;
+  --text:#2A1505;
   --sub:#8C5E3C;
+  --muted:#B8926A;
   --primary:#D4700A;
   --accent:#C0392B;
   --amber:#D4700A;
@@ -22,109 +25,263 @@
   --indigo:#3D3B8E;
   --violet:#7B3FA0;
   --teal:#0097A7;
-  --r:12px;
-  --sh:0 2px 16px rgba(90,40,0,.10);
-  --sh-lg:0 8px 32px rgba(90,40,0,.16);
+  --r:16px;
+  --sh:0 4px 16px rgba(90,40,0,.10);
+  --sh-lg:0 12px 40px rgba(90,40,0,.20);
+  --bar-h:60px;
+  --filter-h:52px;
+  /* meal gradient tokens */
+  --grad-b1:#FFF0DC; --grad-b2:#FAD7A0;
+  --grad-l1:#E8F8EF; --grad-l2:#A9DFBF;
+  --grad-d1:#EEEEFF; --grad-d2:#C5CAF0;
+  --name-b:#7B3500; --name-l:#0F3D25; --name-d:#1A1860;
+}
+/* ── DARK MODE ── */
+[data-dark="1"]{
+  --bg:#1A0C04;
+  --card:#2C1A0A;
+  --card2:#251508;
+  --border:#3D2510;
+  --text:#F0E0C8;
+  --sub:#A07050;
+  --muted:#6B4A30;
+  --grad-b1:#3D2208; --grad-b2:#5C3010;
+  --grad-l1:#0A2818; --grad-l2:#163D25;
+  --grad-d1:#161630; --grad-d2:#252550;
+  --name-b:#FFB870; --name-l:#78D8A0; --name-d:#9BA8E8;
+  --sh:0 4px 20px rgba(0,0,0,.4);
+  --sh-lg:0 12px 40px rgba(0,0,0,.55);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  font-family:'Hind Siliguri','Segoe UI',system-ui,sans-serif;
+  font-family:'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif;
   background:var(--bg);color:var(--text);
-  min-height:100vh;padding-bottom:80px;
+  min-height:100vh;padding-bottom:72px;
   font-size:15px;line-height:1.5;
+  -webkit-tap-highlight-color:transparent;
 }
+/* Warm paper texture on background */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+main,header,#filter-bar,#tab-nav,#day-selector-wrap,#mobile-nav,#theme-panel{position:relative;z-index:1;}
 
-/* ── HEADER ── */
+/* ── APP BAR ── */
 header{
   background:linear-gradient(135deg,#7B2D00 0%,#B84A00 50%,#D4700A 100%);
-  color:#fff;padding:16px 20px 12px;text-align:center;
+  color:#fff;padding:10px 16px;
   position:sticky;top:0;z-index:100;
-  box-shadow:0 4px 20px rgba(0,0,0,.25);
+  box-shadow:0 4px 24px rgba(0,0,0,.22);
+  display:flex;align-items:center;justify-content:space-between;
+  min-height:var(--bar-h);
 }
+header::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.06) 0%,transparent 100%);
+  pointer-events:none;
+}
+.app-bar-brand{display:flex;flex-direction:column;}
 header h1{
   font-family:'Rozha One',serif;
-  font-size:clamp(1.5rem,5vw,2.2rem);font-weight:400;
+  font-size:1.35rem;font-weight:400;
   background:linear-gradient(90deg,#FFD700,#FFF8DC,#FFD700,#FFEC80,#FFD700);
   background-size:200% auto;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;
   animation:shimmerText 3.5s linear infinite;
-  letter-spacing:.02em;
+  letter-spacing:.02em;line-height:1.1;
 }
-header p{font-size:.85rem;opacity:.85;margin-top:3px;letter-spacing:.04em}
+header p{font-size:.68rem;opacity:.75;margin-top:1px;letter-spacing:.03em}
+.today-badge{
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:100px;padding:5px 12px;
+  font-size:.75rem;font-weight:700;color:#fff;
+  white-space:nowrap;backdrop-filter:blur(8px);
+  flex-shrink:0;
+}
 @keyframes shimmerText{0%{background-position:0%}100%{background-position:200%}}
 
 /* ── FILTER BAR ── */
 #filter-bar{
-  background:#fff;border-bottom:1.5px solid var(--border);
-  padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px;
-  align-items:center;position:sticky;top:62px;z-index:90;
-  box-shadow:0 2px 8px rgba(90,40,0,.06);
+  background:#fff;border-bottom:1px solid var(--border);
+  padding:8px 16px;display:flex;gap:8px;
+  align-items:center;position:sticky;top:var(--bar-h);z-index:90;
+  box-shadow:0 2px 8px rgba(90,40,0,.05);
+  overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  flex-wrap:nowrap;min-height:var(--filter-h);
 }
-.filter-pill{
-  display:flex;align-items:center;gap:6px;
-  border:1.5px solid var(--border);border-radius:50px;
-  padding:5px 12px 5px 8px;cursor:pointer;
+#filter-bar::-webkit-scrollbar{display:none}
+.filter-chip{
+  display:flex;align-items:center;gap:5px;
+  border:1.5px solid var(--border);border-radius:100px;
+  padding:6px 14px;cursor:pointer;
   font-size:.8rem;font-weight:600;
-  background:var(--card);color:var(--sub);
-  transition:all .2s;user-select:none;
-  animation:slideInLeft .3s ease backwards;
+  background:transparent;color:var(--sub);
+  transition:all .18s;user-select:none;flex-shrink:0;
 }
-.filter-pill .dot{
-  width:14px;height:14px;border-radius:50%;
-  background:var(--border);transition:background .2s;flex-shrink:0;
-}
-.filter-pill.on{border-color:currentColor;background:var(--pill-bg,#f3f3f3)}
-.filter-pill.on .dot{background:var(--pill-color,#888)}
-.filter-pill[data-f="sat"].on{color:#7B3FA0;--pill-bg:#F3E8FF;--pill-color:#7B3FA0}
-.filter-pill[data-f="kids"].on{color:#0097A7;--pill-bg:#E0F7FA;--pill-color:#0097A7}
-.filter-pill[data-f="seas"].on{color:#2D7A4F;--pill-bg:#E8F5E9;--pill-color:#2D7A4F}
-.filter-pill[data-f="quick"].on{color:#E67E22;--pill-bg:#FEF3E2;--pill-color:#E67E22}
-.filter-pill[data-f="easy"].on{color:#2980B9;--pill-bg:#E3F2FD;--pill-color:#2980B9}
-.filter-pill[data-f="oilFree"].on{color:#C0392B;--pill-bg:#FDECEA;--pill-color:#C0392B}
-@keyframes slideInLeft{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
-.filter-pill:nth-child(1){animation-delay:.05s}.filter-pill:nth-child(2){animation-delay:.10s}
-.filter-pill:nth-child(3){animation-delay:.15s}.filter-pill:nth-child(4){animation-delay:.20s}
-.filter-pill:nth-child(5){animation-delay:.25s}.filter-pill:nth-child(6){animation-delay:.30s}
+.filter-chip:active{transform:scale(.94)}
+.filter-chip.on{border-color:transparent;color:#fff;}
+.filter-chip[data-f="sat"].on{background:#7B3FA0}
+.filter-chip[data-f="kids"].on{background:#0097A7}
+.filter-chip[data-f="seas"].on{background:#555}
+.filter-chip[data-f="quick"].on{background:#E67E22}
+.filter-chip[data-f="easy"].on{background:#2980B9}
+.filter-chip[data-f="oilFree"].on{background:#C0392B}
 
-/* ── TICKER ── */
-.ticker-wrap{
-  background:linear-gradient(90deg,#3B1F0A,#7B2D00,#3B1F0A);
-  color:#FFD700;padding:8px 0;overflow:hidden;
-  font-size:.82rem;font-weight:600;letter-spacing:.03em;
-}
-.ticker-inner{
-  display:flex;white-space:nowrap;
-  animation:tickerScroll 35s linear infinite;
-}
-.ticker-inner span{padding:0 32px}
-@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* ── SEASON STRIP ── */
-#season-strip{
-  padding:10px 16px;background:linear-gradient(90deg,#FDF6EC,#FFFBF4);
-  border-bottom:1.5px solid var(--border);
-  display:flex;align-items:center;gap:8px;overflow-x:auto;
-  scrollbar-width:none;
-}
-#season-strip::-webkit-scrollbar{display:none}
-.season-label{
-  font-weight:700;font-size:.8rem;color:var(--sub);
-  white-space:nowrap;flex-shrink:0;
-}
+/* ── VEG CHIP (seasonal view) ── */
 .veg-chip{
   background:var(--card);border:1px solid var(--border);
-  border-radius:20px;padding:3px 10px;
+  border-radius:20px;padding:4px 12px;
   font-size:.78rem;white-space:nowrap;flex-shrink:0;
   color:var(--text);
 }
+/* ── MOBILE DAY SELECTOR ── */
+#day-selector-wrap{
+  background:var(--card);border-bottom:1px solid var(--border);
+  position:sticky;top:calc(var(--bar-h) + var(--filter-h));z-index:80;
+  box-shadow:0 2px 12px rgba(90,40,0,.07);
+}
+.day-selector-inner{
+  display:flex;overflow-x:auto;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;padding:10px 12px;gap:4px;
+}
+.day-selector-inner::-webkit-scrollbar{display:none}
+.day-tab{
+  flex-shrink:0;display:flex;flex-direction:column;align-items:center;
+  padding:6px 4px;border:none;background:none;cursor:pointer;
+  transition:all .18s;min-width:44px;border-radius:12px;
+}
+.day-tab .dt-name{font-size:.6rem;font-weight:700;color:var(--sub);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;}
+.day-tab .dt-num{
+  width:34px;height:34px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.92rem;font-weight:700;color:var(--text);
+  transition:all .18s;
+}
+.day-tab.today .dt-num{
+  background:var(--primary);color:#fff;
+  box-shadow:0 3px 10px rgba(212,112,10,.4);
+}
+.day-tab.active:not(.today) .dt-num{
+  background:rgba(212,112,10,.1);color:var(--primary);border-radius:10px;
+}
+.day-tab.active .dt-name{color:var(--primary);}
+
+/* View fade on tab switch */
+.view-fade{animation:viewFade .22s ease;}
+@keyframes viewFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* ── TODAY HERO ── */
+#today-hero{
+  margin:16px 16px 4px;
+  background:linear-gradient(135deg,var(--primary),color-mix(in srgb,var(--primary) 60%,#000));
+  border-radius:22px;padding:20px 20px 16px;
+  box-shadow:0 8px 32px color-mix(in srgb,var(--primary) 40%,transparent);
+  position:relative;overflow:hidden;
+}
+#today-hero::before{
+  content:'';position:absolute;top:-40px;right:-30px;
+  width:140px;height:140px;border-radius:50%;
+  background:rgba(255,255,255,.07);
+}
+#today-hero::after{
+  content:'';position:absolute;bottom:-50px;right:40px;
+  width:100px;height:100px;border-radius:50%;
+  background:rgba(255,255,255,.05);
+}
+.hero-label{font-size:.65rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:4px;}
+.hero-date{font-family:'Rozha One',serif;font-size:1.4rem;color:#fff;
+  margin-bottom:14px;line-height:1;}
+.hero-meals-row{display:flex;flex-direction:column;gap:8px;}
+.hero-meal-item{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.12);
+  border-radius:12px;padding:8px 12px;
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.15);
+  cursor:pointer;transition:background .18s;
+}
+.hero-meal-item:active{background:rgba(255,255,255,.2);}
+.hero-meal-icon{font-size:1rem;flex-shrink:0;}
+.hero-meal-info{flex:1;min-width:0;}
+.hero-meal-type{font-size:.58rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:1px;}
+.hero-meal-name{font-size:.88rem;font-weight:700;color:#fff;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hero-meal-kcal{font-size:.7rem;font-weight:700;color:rgba(255,255,255,.6);flex-shrink:0;}
+
+/* ── VERTICAL MEAL CARDS (mobile) ── */
+#mobile-day-meals{padding:14px 16px;display:flex;flex-direction:column;gap:14px;}
+.vmeal-card{
+  background:var(--card);border-radius:20px;
+  border:1px solid var(--border);
+  box-shadow:var(--sh);
+  overflow:hidden;cursor:pointer;
+  display:flex;flex-direction:column;
+  animation:cardIn .38s cubic-bezier(.22,.68,0,1.2) backwards;
+  transition:transform .18s,box-shadow .18s;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.vmeal-card:active{transform:scale(.975);box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.vmeal-head{
+  padding:20px 18px 16px;position:relative;overflow:hidden;
+  min-height:110px;display:flex;flex-direction:column;justify-content:flex-end;
+}
+.vmeal-card.breakfast .vmeal-head{background:linear-gradient(145deg,var(--grad-b1) 0%,var(--grad-b2) 100%);}
+.vmeal-card.lunch .vmeal-head{background:linear-gradient(145deg,var(--grad-l1) 0%,var(--grad-l2) 100%);}
+.vmeal-card.dinner .vmeal-head{background:linear-gradient(145deg,var(--grad-d1) 0%,var(--grad-d2) 100%);}
+/* decorative circle */
+.vmeal-head::before{
+  content:'';position:absolute;top:-30px;right:-20px;
+  width:100px;height:100px;border-radius:50%;
+  background:rgba(255,255,255,.18);
+}
+.vmeal-type-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:4px 10px;border-radius:100px;margin-bottom:10px;width:fit-content;
+}
+.vmeal-card.breakfast .vmeal-type-badge{background:rgba(180,80,0,.12);color:var(--name-b);}
+.vmeal-card.lunch .vmeal-type-badge{background:rgba(20,80,40,.12);color:var(--name-l);}
+.vmeal-card.dinner .vmeal-type-badge{background:rgba(40,40,140,.12);color:var(--name-d);}
+.vmeal-name{
+  font-family:'Rozha One',serif;font-size:1.45rem;
+  line-height:1.15;margin-bottom:0;
+}
+.vmeal-card.breakfast .vmeal-name{color:var(--name-b);}
+.vmeal-card.lunch .vmeal-name{color:var(--name-l);}
+.vmeal-card.dinner .vmeal-name{color:var(--name-d);}
+.vmeal-macros{
+  display:flex;gap:10px;padding:10px 18px;
+  border-bottom:1px solid var(--border);
+  background:var(--card2);
+}
+.vmacro{display:flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;color:var(--sub);}
+.vmacro .vm-val{font-size:.88rem;font-weight:700;color:var(--text);}
+.vmacro .vm-sep{color:var(--border);margin:0 2px;}
+.vmeal-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 18px 12px;gap:8px;background:var(--card);
+}
+.vmeal-tags{display:flex;flex-wrap:wrap;gap:4px;flex:1;}
+.vmeal-change{
+  background:transparent;border:1.5px solid var(--border);
+  border-radius:100px;padding:5px 14px;font-size:.72rem;
+  font-weight:700;cursor:pointer;color:var(--muted);
+  transition:all .18s;flex-shrink:0;
+}
+.vmeal-change:active{background:var(--primary);color:#fff;border-color:var(--primary);}
 
 /* ── TABS (desktop) ── */
 #tab-nav{
   display:flex;border-bottom:2px solid var(--border);
   background:var(--card);padding:0 16px;
-  position:sticky;top:110px;z-index:80;
+  position:sticky;top:calc(var(--bar-h) + var(--filter-h));z-index:80;
 }
 .tab-btn{
   padding:12px 24px;font-size:.9rem;font-weight:700;
@@ -135,7 +292,9 @@ header p{font-size:.85rem;opacity:.85;margin-top:3px;letter-spacing:.04em}
 .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
 
 /* ── MAIN ── */
-main{padding:16px}
+main{padding:0}
+#view-random,#view-seasonal{padding:16px}
+#view-weekly{padding:0}
 
 /* ── WEEK GRID ── */
 #view-weekly{overflow-x:auto}
@@ -199,54 +358,118 @@ main{padding:16px}
 }
 
 /* ── RANDOM PLANNER ── */
-#period-bar{display:flex;gap:8px;margin-bottom:16px;align-items:center}
+#period-bar{display:flex;gap:8px;margin-bottom:20px;align-items:center;flex-wrap:wrap;}
 .period-btn{
-  padding:7px 18px;border-radius:30px;border:2px solid var(--border);
-  background:var(--card);color:var(--sub);font-weight:700;
-  font-size:.85rem;cursor:pointer;transition:all .2s;
+  padding:8px 20px;border-radius:100px;border:1.5px solid var(--border);
+  background:transparent;color:var(--sub);font-weight:700;
+  font-size:.83rem;cursor:pointer;transition:all .18s;
 }
-.period-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
-.rand-day{margin-bottom:24px}
+.period-btn:active{transform:scale(.95)}
+.period-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);
+  box-shadow:0 4px 14px rgba(212,112,10,.35);}
+.rand-day{margin-bottom:28px;}
 .rand-day-label{
-  font-family:'Rozha One',serif;font-size:1.05rem;
-  color:var(--primary);margin-bottom:10px;
+  font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--sub);margin-bottom:12px;display:flex;align-items:center;gap:8px;
 }
-.rand-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.rand-day-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.rand-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+@media(max-width:640px){.rand-cards{grid-template-columns:1fr}}
 .rand-card{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:var(--r);overflow:hidden;cursor:pointer;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;overflow:hidden;cursor:pointer;
   transition:transform .22s,box-shadow .22s;
-  animation:popIn .35s ease backwards;
-  box-shadow:var(--sh);
+  animation:cardIn .35s ease backwards;
+  box-shadow:0 4px 20px rgba(90,40,0,.10);
 }
-.rand-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:var(--sh-lg)}
-.rand-card-head{padding:12px 14px 8px;position:relative}
+.rand-card:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(90,40,0,.16);}
+.rand-card:active{transform:scale(.978);}
+.rand-card-head{padding:18px 16px 14px;}
+.rand-card.breakfast .rand-card-head{background:linear-gradient(135deg,#FFF0DC,#FDEBD0,#FAD7A0);}
+.rand-card.lunch .rand-card-head{background:linear-gradient(135deg,#E8F8EF,#D5F5E3,#A9DFBF);}
+.rand-card.dinner .rand-card-head{background:linear-gradient(135deg,#EEF0FF,#E0E4FF,#C5CAF0);}
 .rand-card-head .meal-type{
-  font-size:.7rem;font-weight:700;text-transform:uppercase;
-  letter-spacing:.08em;margin-bottom:4px;opacity:.8;
+  font-size:.62rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:8px;
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 10px;border-radius:100px;
 }
-.rand-card-head .dish-name{font-family:'Rozha One',serif;font-size:1rem;line-height:1.25;margin-bottom:4px}
-.rand-card-head .dish-desc{font-size:.78rem;color:var(--sub);line-height:1.4}
+.rand-card.breakfast .meal-type{background:rgba(212,112,10,.12);color:#A0520D;}
+.rand-card.lunch .meal-type{background:rgba(45,122,79,.12);color:#1B5E35;}
+.rand-card.dinner .meal-type{background:rgba(61,59,142,.12);color:#2A2876;}
+.rand-card-head .dish-name{
+  font-family:'Rozha One',serif;font-size:1.2rem;line-height:1.25;
+  margin-bottom:5px;
+}
+.rand-card.breakfast .dish-name{color:#7B3500;}
+.rand-card.lunch .dish-name{color:#0F3D25;}
+.rand-card.dinner .dish-name{color:#1A1860;}
+.rand-card-head .dish-meta{font-size:.72rem;font-weight:600;opacity:.6;}
 .rand-card-footer{
-  padding:8px 14px;border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;
+  padding:10px 16px 12px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:6px;
 }
-.rand-card-footer .tag-chips{display:flex;flex-wrap:wrap;gap:3px;flex:1}
+.rand-card-footer .tag-chips{display:flex;flex-wrap:wrap;gap:3px;flex:1;}
 .change-btn{
-  background:var(--bg);border:1.5px solid var(--border);
-  border-radius:20px;padding:3px 10px;font-size:.72rem;
+  background:transparent;border:1.5px solid var(--border);
+  border-radius:100px;padding:4px 12px;font-size:.72rem;
   font-weight:700;cursor:pointer;color:var(--sub);
-  transition:all .2s;flex-shrink:0;
+  transition:all .18s;flex-shrink:0;
 }
-.change-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
-.rand-card.breakfast .rand-card-head{background:linear-gradient(135deg,#FEF3E2,#FFF8F0)}
-.rand-card.lunch .rand-card-head{background:linear-gradient(135deg,#E8F5E9,#F1FAF2)}
-.rand-card.dinner .rand-card-head{background:linear-gradient(135deg,#EEF,#F5F4FF)}
+.change-btn:active{background:var(--primary);color:#fff;border-color:var(--primary);}
 @keyframes popIn{
   0%{opacity:0;transform:scale(.88)}
   70%{opacity:1;transform:scale(1.04)}
   100%{opacity:1;transform:scale(1)}
 }
+
+/* ── THEME PICKER ── */
+.theme-btn{
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  border-radius:50%;width:36px;height:36px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:background .18s;flex-shrink:0;
+}
+.theme-btn:active{transform:scale(.92);}
+#theme-panel{
+  position:fixed;top:calc(var(--bar-h) + 8px);right:12px;
+  background:#fff;border-radius:16px;padding:16px 18px 18px;
+  box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:500;
+  display:none;min-width:216px;
+  animation:popIn .2s ease;
+  border:1px solid var(--border);
+}
+#theme-panel.open{display:block;}
+#theme-panel h4{
+  font-size:.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--sub);margin-bottom:10px;
+}
+.theme-swatches{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;align-items:center;}
+.theme-swatch{
+  width:32px;height:32px;border-radius:50%;cursor:pointer;
+  border:3px solid transparent;transition:all .18s;
+  box-shadow:0 2px 8px rgba(0,0,0,.2);position:relative;
+}
+.theme-swatch:hover{transform:scale(1.15);}
+.theme-swatch.active::after{
+  content:'✓';position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:.75rem;font-weight:700;
+}
+.section-label{font-size:.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--sub);margin:14px 0 8px;}
+.font-options{display:flex;flex-direction:column;gap:6px;}
+.font-opt{
+  display:flex;align-items:center;gap:10px;padding:8px 10px;
+  border-radius:10px;border:1.5px solid var(--border);
+  cursor:pointer;transition:all .18s;background:transparent;width:100%;text-align:left;
+}
+.font-opt:hover{border-color:var(--primary);}
+.font-opt.active{border-color:var(--primary);background:rgba(212,112,10,.07);}
+.font-opt .fp{font-size:.95rem;font-weight:600;color:var(--text);}
+.font-opt .fn{font-size:.7rem;color:var(--sub);}
+.font-opt .fck{margin-left:auto;color:var(--primary);font-size:.8rem;display:none;}
+.font-opt.active .fck{display:block;}
 
 /* ── MODAL ── */
 #modal-overlay{
@@ -351,19 +574,22 @@ main{padding:16px}
 /* ── MOBILE NAV ── */
 #mobile-nav{
   display:none;position:fixed;bottom:0;left:0;right:0;
-  background:var(--card);border-top:1.5px solid var(--border);
-  padding:6px 0 8px;z-index:200;
-  box-shadow:0 -4px 20px rgba(0,0,0,.10);
+  background:#fff;border-top:1px solid var(--border);
+  z-index:200;box-shadow:0 -4px 24px rgba(0,0,0,.10);
 }
+#mobile-nav-inner{display:flex;}
 .mobile-nav-btn{
-  flex:1;display:flex;flex-direction:column;align-items:center;
-  gap:2px;border:none;background:none;cursor:pointer;
-  color:var(--sub);font-size:.68rem;font-weight:600;padding:4px 8px;
-  transition:color .2s;
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;border:none;background:none;cursor:pointer;
+  color:var(--sub);font-size:.68rem;font-weight:600;
+  padding:10px 4px;transition:color .18s;position:relative;
 }
-.mobile-nav-btn .nav-icon{font-size:1.3rem;line-height:1}
-.mobile-nav-btn.active{color:var(--primary)}
-#mobile-nav-inner{display:flex}
+.mobile-nav-btn .nav-icon{font-size:1.35rem;line-height:1;}
+.mobile-nav-btn.active{color:var(--primary);}
+.mobile-nav-btn.active::before{
+  content:'';position:absolute;top:0;left:25%;right:25%;
+  height:3px;background:var(--primary);border-radius:0 0 3px 3px;
+}
 
 /* ── SEASONAL VIEW ── */
 .season-selector{
@@ -408,18 +634,19 @@ main{padding:16px}
   gap:12px;margin-bottom:24px;
 }
 .sdish-card{
-  background:var(--card);border:1.5px solid var(--border);
-  border-radius:12px;padding:14px 16px;cursor:pointer;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:14px 16px 14px 20px;cursor:pointer;
   transition:all .2s cubic-bezier(.22,.68,0,1.3);
   position:relative;overflow:hidden;
+  box-shadow:0 2px 10px rgba(90,40,0,.07);
 }
 .sdish-card::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
+  content:'';position:absolute;left:0;top:0;bottom:0;width:5px;
   border-radius:4px 0 0 4px;
 }
-.sdish-card.type-breakfast::before{background:var(--amber-lt)}
-.sdish-card.type-lunch::before{background:var(--green)}
-.sdish-card.type-dinner::before{background:var(--indigo)}
+.sdish-card.type-breakfast::before{background:linear-gradient(180deg,var(--amber-lt),var(--amber));}
+.sdish-card.type-lunch::before{background:linear-gradient(180deg,#4CAF82,var(--green));}
+.sdish-card.type-dinner::before{background:linear-gradient(180deg,#6B69C8,var(--indigo));}
 .sdish-card:hover{transform:translateY(-3px);box-shadow:var(--sh-lg);border-color:var(--primary)}
 .sdish-card:active{transform:scale(.97)}
 .sdish-name{font-weight:700;font-size:.92rem;margin-bottom:3px}
@@ -441,54 +668,51 @@ footer{
   #mobile-nav{display:block}
   body{padding-bottom:70px}
   .rand-cards{grid-template-columns:1fr}
-  #filter-bar{top:56px}
-  #tab-nav{top:96px}
+  #week-grid-wrap{display:none}
+  #day-selector-wrap{display:block}
+  #mobile-day-meals{display:flex}
+  #today-hero{display:block}
 }
 @media(min-width:641px){
   #mobile-nav{display:none}
+  #day-selector-wrap{display:none}
+  #mobile-day-meals{display:none}
+  #today-hero{display:none}
+  #week-grid-wrap{display:block}
   body{padding-bottom:0}
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header>
-  <h1>🍽 Kya Banaon?</h1>
-  <p>Hindu Vegetarian Family Meal Planner</p>
+<!-- APP BAR -->
+<header id="app-bar-gradient">
+  <div class="app-bar-brand">
+    <h1>🍽 Kya Banaon?</h1>
+    <p>Hindu Vegetarian Family Meal Planner</p>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div class="today-badge" id="today-badge"></div>
+    <button class="theme-btn" id="theme-toggle-btn" title="Change theme">🎨</button>
+  </div>
 </header>
+
+<!-- THEME PANEL -->
+<div id="theme-panel">
+  <h4>Theme Color</h4>
+  <div class="theme-swatches" id="theme-swatches"></div>
+  <div class="section-label">Font Style</div>
+  <div class="font-options" id="font-options"></div>
+</div>
 
 <!-- FILTER BAR -->
 <div id="filter-bar">
-  <div class="filter-pill" data-f="sat" title="No Onion-Garlic">
-    <span class="dot"></span>🙏 Sattvic
-  </div>
-  <div class="filter-pill" data-f="kids" title="Kids-Friendly">
-    <span class="dot"></span>👦 Kids
-  </div>
-  <div class="filter-pill" data-f="seas" title="In-Season Ingredients">
-    <span class="dot"></span>🌱 In-Season
-  </div>
-  <div class="filter-pill" data-f="quick" title="20 min or less">
-    <span class="dot"></span>⚡ Quick
-  </div>
-  <div class="filter-pill" data-f="easy" title="Easy to Make">
-    <span class="dot"></span>👌 Easy
-  </div>
-  <div class="filter-pill" data-f="oilFree" title="Oil-Free">
-    <span class="dot"></span>💧 Oil-Free
-  </div>
-</div>
-
-<!-- TICKER -->
-<div class="ticker-wrap">
-  <div class="ticker-inner" id="ticker-inner"></div>
-</div>
-
-<!-- SEASON STRIP -->
-<div id="season-strip">
-  <span class="season-label" id="season-label"></span>
-  <div id="veg-chips"></div>
+  <div class="filter-chip" data-f="sat">🙏 Sattvic</div>
+  <div class="filter-chip" data-f="kids">👦 Kids</div>
+  <div class="filter-chip" data-f="seas" title="Show dishes from all seasons">🌍 All Seasons</div>
+  <div class="filter-chip" data-f="quick">⚡ Quick</div>
+  <div class="filter-chip" data-f="easy">👌 Easy</div>
+  <div class="filter-chip" data-f="oilFree">💧 Oil-Free</div>
 </div>
 
 <!-- DESKTOP TAB NAV -->
@@ -502,7 +726,18 @@ footer{
 <main>
   <!-- WEEKLY VIEW -->
   <div id="view-weekly">
-    <div class="week-grid" id="week-grid"></div>
+    <!-- Mobile: today hero -->
+    <div id="today-hero" style="display:none"></div>
+    <!-- Mobile: day selector tabs -->
+    <div id="day-selector-wrap" style="display:none">
+      <div class="day-selector-inner" id="day-selector"></div>
+    </div>
+    <!-- Mobile: vertical meal cards -->
+    <div id="mobile-day-meals" style="display:none"></div>
+    <!-- Desktop: week grid -->
+    <div id="week-grid-wrap" style="padding:16px">
+      <div class="week-grid" id="week-grid"></div>
+    </div>
   </div>
 
   <!-- RANDOM VIEW -->
@@ -519,6 +754,7 @@ footer{
   <!-- SEASONAL VIEW -->
   <div id="view-seasonal" style="display:none">
     <div class="season-selector" id="season-selector"></div>
+    <div id="seas-veg-strip" style="display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 14px;"></div>
     <div class="season-why" id="season-why"></div>
     <div id="season-content"></div>
   </div>
@@ -1030,8 +1266,18 @@ let weekPlan=null;
 let randPlan=null;
 let randPeriod=1;
 let currentTab='weekly';
+let selectedDay=0;
 const TODAY=new Date();
 const CURR_MONTH=TODAY.getMonth()+1;
+// Default selectedDay to today (Mon=0…Sun=6)
+(function(){const dow=TODAY.getDay();selectedDay=dow===0?6:dow-1;})();
+// Today badge
+(function(){
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const b=document.getElementById('today-badge');
+  if(b)b.textContent=`${days[TODAY.getDay()]} ${TODAY.getDate()} ${months[TODAY.getMonth()]}`;
+})();
 
 /* ═══════════════════════════════════════════
    PERSISTENCE
@@ -1056,9 +1302,14 @@ function loadState(){
 ═══════════════════════════════════════════ */
 function getPool(type){
   return DISHES[type].filter(d=>{
+    // Seasonal filter is always ON by default.
+    // The 'seas' chip = "All Seasons" override: when active, ignore season restriction.
+    if(!filters.seas){
+      const allYear=d.seasons.length>=12;
+      if(!allYear && !d.seasons.includes(CURR_MONTH)) return false;
+    }
     if(filters.sat && !d.sattvic) return false;
     if(filters.kids && !d.kids) return false;
-    if(filters.seas && !d.seasons.includes(CURR_MONTH)) return false;
     if(filters.quick && d.time>20) return false;
     if(filters.easy && !d.easy) return false;
     if(filters.oilFree && !d.oilFree) return false;
@@ -1101,10 +1352,17 @@ function getDayDate(dayIndex){
 
 function renderWeek(){
   if(!weekPlan)weekPlan=generateWeek();
-  const grid=document.getElementById('week-grid');
-  grid.innerHTML='';
+  renderWeekGrid();
+  renderTodayHero();
+  renderDaySelector();
+  renderDayMeals(selectedDay);
+  saveState();
+}
 
-  // Check if any pool is empty
+function renderWeekGrid(){
+  const grid=document.getElementById('week-grid');
+  if(!grid)return;
+  grid.innerHTML='';
   const allEmpty=MEAL_TYPES.every(t=>getPool(t).length===0);
   if(allEmpty){
     grid.style.display='block';
@@ -1112,8 +1370,6 @@ function renderWeek(){
     return;
   }
   grid.style.display='grid';
-
-  // Header row
   const cornerHead=document.createElement('div');
   cornerHead.className='wg-head';
   cornerHead.textContent='Meal';
@@ -1127,20 +1383,16 @@ function renderWeek(){
     if(isToday)h.style.background='linear-gradient(135deg,#C0392B,#E74C3C)';
     grid.appendChild(h);
   }
-
-  // Meal rows
   MEAL_TYPES.forEach((mtype,mi)=>{
     const rowLabel=document.createElement('div');
     rowLabel.className='wg-row-label';
     rowLabel.innerHTML=`<span class="meal-icon">${MEAL_ICONS[mtype]}</span><span>${mtype.charAt(0).toUpperCase()+mtype.slice(1)}</span>`;
     grid.appendChild(rowLabel);
-
     for(let d=0;d<7;d++){
       const cellData=weekPlan[d][mtype];
       const cell=document.createElement('div');
       cell.className=`meal-cell ${mtype}`;
       cell.style.animationDelay=`${(mi*7+d)*18}ms`;
-
       if(!cellData){
         const pool=getPool(mtype);
         if(pool.length===0){
@@ -1156,7 +1408,112 @@ function renderWeek(){
       grid.appendChild(cell);
     }
   });
-  saveState();
+}
+
+function renderDaySelector(){
+  const sel=document.getElementById('day-selector');
+  if(!sel)return;
+  sel.innerHTML='';
+  for(let d=0;d<7;d++){
+    const dt=getDayDate(d);
+    const isToday=dt.toDateString()===TODAY.toDateString();
+    const btn=document.createElement('button');
+    btn.className='day-tab'+(isToday?' today':'')+(d===selectedDay?' active':'');
+    btn.innerHTML=`<span class="dt-name">${DAY_NAMES[d]}</span><span class="dt-num">${dt.getDate()}</span>`;
+    btn.addEventListener('click',()=>selectDay(d));
+    sel.appendChild(btn);
+  }
+  const active=sel.querySelector('.day-tab.active');
+  if(active)active.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function selectDay(dayIdx){
+  selectedDay=dayIdx;
+  renderDaySelector();
+  renderDayMeals(dayIdx);
+}
+
+function renderTodayHero(){
+  const el=document.getElementById('today-hero');
+  if(!el)return;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dateStr=`${days[TODAY.getDay()]}, ${TODAY.getDate()} ${months[TODAY.getMonth()]}`;
+  const todayData=weekPlan[selectedDay===getTodayIdx()?selectedDay:getTodayIdx()];
+  let mealsHtml='';
+  MEAL_TYPES.forEach(mtype=>{
+    const meal=todayData?todayData[mtype]:null;
+    if(!meal)return;
+    mealsHtml+=`<div class="hero-meal-item" onclick="openModal(weekPlan[${getTodayIdx()}]['${mtype}'],'${mtype}')">
+      <span class="hero-meal-icon">${MEAL_ICONS[mtype]}</span>
+      <div class="hero-meal-info">
+        <div class="hero-meal-type">${mtype}</div>
+        <div class="hero-meal-name">${meal.name}</div>
+      </div>
+      <span class="hero-meal-kcal">${meal.kcal} kcal</span>
+    </div>`;
+  });
+  el.innerHTML=`
+    <div class="hero-label">Today's Plan</div>
+    <div class="hero-date">${dateStr}</div>
+    <div class="hero-meals-row">${mealsHtml}</div>`;
+}
+
+function getTodayIdx(){
+  const dow=TODAY.getDay();return dow===0?6:dow-1;
+}
+
+function renderDayMeals(dayIdx){
+  const container=document.getElementById('mobile-day-meals');
+  if(!container)return;
+  container.innerHTML='';
+  const dayData=weekPlan[dayIdx];
+  MEAL_TYPES.forEach((mtype,i)=>{
+    let meal=dayData[mtype];
+    if(!meal){
+      const pool=getPool(mtype);
+      if(pool.length){meal={...pickRandom(pool),_type:mtype};weekPlan[dayIdx][mtype]=meal;}
+    }
+    container.appendChild(buildVMealCard(meal,dayIdx,mtype,i));
+  });
+}
+
+function buildVMealCard(meal,dayIdx,mtype,animIdx){
+  const card=document.createElement('div');
+  card.className=`vmeal-card ${mtype}`;
+  card.style.animationDelay=`${animIdx*60}ms`;
+  if(!meal){
+    card.innerHTML=`<div class="vmeal-inner"><div class="vmeal-bar"></div><div class="vmeal-body"><div class="vmeal-type">${MEAL_ICONS[mtype]} ${mtype}</div><div class="vmeal-name" style="color:var(--sub)">No dishes match filters</div></div></div>`;
+    return card;
+  }
+  const tags=buildTagChips(meal,mtype);
+  card.innerHTML=`
+    <div class="vmeal-head">
+      <div class="vmeal-type-badge">${MEAL_ICONS[mtype]} ${mtype.charAt(0).toUpperCase()+mtype.slice(1)}</div>
+      <div class="vmeal-name">${meal.name}</div>
+    </div>
+    <div class="vmeal-macros">
+      <div class="vmacro"><span class="vm-val">${meal.kcal}</span> kcal</div>
+      <span class="vm-sep">·</span>
+      <div class="vmacro"><span class="vm-val">${meal.protein}g</span> protein</div>
+      <span class="vm-sep">·</span>
+      <div class="vmacro">⏱ <span class="vm-val">${meal.time}</span> min</div>
+    </div>
+    <div class="vmeal-footer">
+      <div class="vmeal-tags">${tags}</div>
+      <button class="vmeal-change">↺ Change</button>
+    </div>`;
+  card.querySelector('.vmeal-change').addEventListener('click',e=>{
+    e.stopPropagation();
+    const pool=getPool(mtype);
+    if(!pool.length)return;
+    const nd={...pickRandom(pool),_type:mtype};
+    weekPlan[dayIdx][mtype]=nd;
+    card.replaceWith(buildVMealCard(nd,dayIdx,mtype,animIdx));
+    saveState();
+  });
+  card.addEventListener('click',()=>openModal(meal,mtype));
+  return card;
 }
 
 function renderCell(cell,data,dayIdx,mtype){
@@ -1236,11 +1593,11 @@ function buildRandCard(meal,dayIdx,mealIdx){
     <div class="rand-card-head">
       <div class="meal-type">${MEAL_ICONS[mtype]} ${mtype.charAt(0).toUpperCase()+mtype.slice(1)}</div>
       <div class="dish-name">${meal.name}</div>
-      <div class="dish-desc">${meal.desc}</div>
+      <div class="dish-meta">⏱ ${meal.time} min &nbsp;·&nbsp; 🔥 ${meal.kcal} kcal</div>
     </div>
     <div class="rand-card-footer">
       <div class="tag-chips">${tags}</div>
-      <button class="change-btn">🔄 Change</button>
+      <button class="change-btn">↺ Change</button>
     </div>`;
   card.querySelector('.change-btn').addEventListener('click',e=>{
     e.stopPropagation();
@@ -1349,9 +1706,17 @@ function closeModalOnOverlay(e){if(e.target===document.getElementById('modal-ove
 ═══════════════════════════════════════════ */
 function switchTab(tab){
   currentTab=tab;
-  document.getElementById('view-weekly').style.display=tab==='weekly'?'block':'none';
-  document.getElementById('view-random').style.display=tab==='random'?'block':'none';
-  document.getElementById('view-seasonal').style.display=tab==='seasonal'?'block':'none';
+  ['weekly','random','seasonal'].forEach(t=>{
+    const el=document.getElementById(`view-${t}`);
+    if(t===tab){
+      el.style.display='block';
+      el.classList.remove('view-fade');
+      void el.offsetWidth;
+      el.classList.add('view-fade');
+    } else {
+      el.style.display='none';
+    }
+  });
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   document.querySelectorAll('.mobile-nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   if(tab==='random'&&!randPlan)randPlan=generateRand(randPeriod);
@@ -1363,12 +1728,12 @@ function switchTab(tab){
    FILTER TOGGLES
 ═══════════════════════════════════════════ */
 function initFilters(){
-  document.querySelectorAll('.filter-pill').forEach(pill=>{
-    const f=pill.dataset.f;
-    if(filters[f])pill.classList.add('on');
-    pill.addEventListener('click',()=>{
+  document.querySelectorAll('.filter-chip').forEach(chip=>{
+    const f=chip.dataset.f;
+    if(filters[f])chip.classList.add('on');
+    chip.addEventListener('click',()=>{
       filters[f]=!filters[f];
-      pill.classList.toggle('on',filters[f]);
+      chip.classList.toggle('on',filters[f]);
       weekPlan=null;
       randPlan=null;
       renderWeek();
@@ -1378,25 +1743,7 @@ function initFilters(){
   });
 }
 
-/* ═══════════════════════════════════════════
-   SEASON STRIP
-═══════════════════════════════════════════ */
-function initSeasonStrip(){
-  const vegs=SEASONAL_VEGS[CURR_MONTH]||[];
-  const label=document.getElementById('season-label');
-  label.textContent=`${SEASON_NAME[CURR_MONTH]} — ${MONTH_NAMES[CURR_MONTH]}:`;
-  const chips=document.getElementById('veg-chips');
-  chips.innerHTML=vegs.map(v=>`<span class="veg-chip">${v}</span>`).join('');
-}
-
-/* ═══════════════════════════════════════════
-   TICKER
-═══════════════════════════════════════════ */
-function initTicker(){
-  const inner=document.getElementById('ticker-inner');
-  const tips=[...TICKER_TIPS,...TICKER_TIPS];
-  inner.innerHTML=tips.map(t=>`<span>${t} &nbsp;•&nbsp;</span>`).join('');
-}
+/* season strip removed — vegs shown in seasonal view */
 
 /* ═══════════════════════════════════════════
    INIT
@@ -1515,7 +1862,7 @@ function getSeasonForMonth(m){
 
 function findDish(name){
   for(const type of ['breakfast','lunch','dinner']){
-    const d=dishes[type].find(x=>x.name===name);
+    const d=DISHES[type].find(x=>x.name===name);
     if(d)return{...d,type};
   }
   return null;
@@ -1524,6 +1871,13 @@ function findDish(name){
 function renderSeasonalView(){
   if(!activeSeason)activeSeason=getSeasonForMonth(CURR_MONTH);
   renderSeasonSelector();
+  // Veg strip for current month
+  const strip=document.getElementById('seas-veg-strip');
+  if(strip){
+    const vegs=SEASONAL_VEGS[CURR_MONTH]||[];
+    strip.innerHTML=`<span class="veg-chip" style="background:var(--primary);color:#fff;font-weight:700;border-color:var(--primary)">🌱 ${SEASON_NAME[CURR_MONTH]} picks</span>`
+      +vegs.map(v=>`<span class="veg-chip">${v}</span>`).join('');
+  }
   renderSeasonContent();
 }
 
@@ -1582,10 +1936,120 @@ function renderSeasonContent(){
   document.getElementById('season-content').innerHTML=html;
 }
 
+/* ═══════════════════════════════════════════
+   THEMES & FONTS
+═══════════════════════════════════════════ */
+const THEMES=[
+  {key:'saffron', name:'Saffron', color:'#D4700A', dark:0, grad:'135deg,#7B2D00 0%,#B84A00 50%,#D4700A 100%'},
+  {key:'crimson', name:'Crimson', color:'#C0392B', dark:0, grad:'135deg,#7A0A00 0%,#9E1B10 50%,#C0392B 100%'},
+  {key:'forest',  name:'Forest',  color:'#2D7A4F', dark:0, grad:'135deg,#0F3D25 0%,#1C5E35 50%,#2D7A4F 100%'},
+  {key:'violet',  name:'Violet',  color:'#7B3FA0', dark:0, grad:'135deg,#3D1260 0%,#5B2080 50%,#7B3FA0 100%'},
+  {key:'teal',    name:'Teal',    color:'#0097A7', dark:0, grad:'135deg,#004D56 0%,#006878 50%,#0097A7 100%'},
+  {key:'indigo',  name:'Indigo',  color:'#3D3B8E', dark:0, grad:'135deg,#1A1860 0%,#2A2876 50%,#3D3B8E 100%'},
+  /* dark themes */
+  {key:'dark-amber',  name:'Dark Amber',  color:'#E8830A', dark:1, grad:'135deg,#0A0500 0%,#2C1400 50%,#4A2200 100%'},
+  {key:'dark-forest', name:'Dark Forest', color:'#38A062', dark:1, grad:'135deg,#010800 0%,#042810 50%,#073D18 100%'},
+  {key:'dark-violet', name:'Dark Night',  color:'#9B5CC8', dark:1, grad:'135deg,#060010 0%,#180830 50%,#2A1048 100%'},
+];
+const FONTS=[
+  {key:'jakarta', name:'Plus Jakarta Sans', label:'Aa', stack:"'Plus Jakarta Sans',system-ui,sans-serif"},
+  {key:'nunito',  name:'Nunito',            label:'Aa', stack:"'Nunito',system-ui,sans-serif"},
+  {key:'poppins', name:'Poppins',           label:'Aa', stack:"'Poppins',system-ui,sans-serif"},
+];
+// Lazy-load extra fonts
+const FONT_URLS={
+  nunito:"https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap",
+  poppins:"https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap",
+};
+let loadedFonts=new Set(['jakarta']);
+
+let activeTheme=THEMES[0];
+let activeFont=FONTS[0];
+
+function applyTheme(t){
+  activeTheme=t;
+  const r=document.documentElement.style;
+  r.setProperty('--primary',t.color);
+  r.setProperty('--accent',t.color);
+  document.getElementById('app-bar-gradient').style.background=`linear-gradient(${t.grad})`;
+  document.documentElement.setAttribute('data-dark', t.dark?'1':'0');
+  try{localStorage.setItem('kb_theme',t.key);}catch(e){}
+  renderThemeSwatches();
+}
+
+function applyFont(f){
+  activeFont=f;
+  if(!loadedFonts.has(f.key) && FONT_URLS[f.key]){
+    const l=document.createElement('link');
+    l.rel='stylesheet';l.href=FONT_URLS[f.key];
+    document.head.appendChild(l);
+    loadedFonts.add(f.key);
+  }
+  document.body.style.fontFamily=f.stack;
+  try{localStorage.setItem('kb_font',f.key);}catch(e){}
+  renderFontOptions();
+}
+
+function renderThemeSwatches(){
+  const el=document.getElementById('theme-swatches');
+  if(!el)return;
+  el.innerHTML='';
+  let addedDark=false;
+  THEMES.forEach(t=>{
+    if(t.dark&&!addedDark){
+      addedDark=true;
+      const sep=document.createElement('div');
+      sep.style.cssText='width:100%;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:6px 0 2px;';
+      sep.textContent='Dark';
+      el.appendChild(sep);
+    }
+    const s=document.createElement('button');
+    s.className='theme-swatch'+(t.key===activeTheme.key?' active':'');
+    s.style.background=t.dark?`linear-gradient(135deg,#111 0%,${t.color} 100%)`:`linear-gradient(135deg,${t.color},color-mix(in srgb,${t.color} 70%,#000))`;
+    s.title=t.name;
+    s.addEventListener('click',()=>applyTheme(t));
+    el.appendChild(s);
+  });
+}
+
+function renderFontOptions(){
+  const el=document.getElementById('font-options');
+  if(!el)return;
+  el.innerHTML='';
+  FONTS.forEach(f=>{
+    const b=document.createElement('button');
+    b.className='font-opt'+(f.key===activeFont.key?' active':'');
+    b.style.fontFamily=f.stack;
+    b.innerHTML=`<span class="fp">${f.label} ${f.name}</span><span class="fck">✓</span>`;
+    b.addEventListener('click',()=>{applyFont(f);});
+    el.appendChild(b);
+  });
+}
+
+function initThemePanel(){
+  renderThemeSwatches();
+  renderFontOptions();
+  const btn=document.getElementById('theme-toggle-btn');
+  const panel=document.getElementById('theme-panel');
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    panel.classList.toggle('open');
+  });
+  document.addEventListener('click',e=>{
+    if(!panel.contains(e.target)&&e.target!==btn) panel.classList.remove('open');
+  });
+  // Restore saved prefs
+  try{
+    const tk=localStorage.getItem('kb_theme');
+    const fk=localStorage.getItem('kb_font');
+    if(tk){const t=THEMES.find(x=>x.key===tk);if(t)applyTheme(t);}
+    if(fk){const f=FONTS.find(x=>x.key===fk);if(f)applyFont(f);}
+  }catch(e){}
+}
+
 loadState();
 initFilters();
-initSeasonStrip();
-initTicker();
+initThemePanel();
 renderWeek();
 </script>
 </body>
