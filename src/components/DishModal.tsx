@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useStore } from '../store';
+import { useTranslation } from '../i18n';
+import { useDishTranslation } from '../hooks/useDishTranslation';
 import { MEAL_ICONS } from '../mealLogic';
 import type { MealType } from '../types';
 
@@ -8,7 +10,11 @@ const MONTH_NAMES = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','O
 const COLOR: Record<MealType, string> = { breakfast:'var(--c-b)', lunch:'var(--c-l)', dinner:'var(--c-d)' };
 
 export default function DishModal() {
-  const { modal, closeModal, favorites, toggleFavorite } = useStore();
+  const { modal, closeModal, favorites, toggleFavorite, lang } = useStore();
+  const { t } = useTranslation();
+  const rawDish = modal?.dish || null;
+  const mealType = modal?.mealType || 'lunch';
+  const dish = useDishTranslation(rawDish);
 
   useEffect(() => {
     if (!modal) return;
@@ -18,11 +24,11 @@ export default function DishModal() {
     return () => { document.removeEventListener('keydown', fn); document.body.style.overflow = ''; };
   }, [modal, closeModal]);
 
-  if (!modal) return null;
-  const { dish, mealType } = modal;
+  if (!modal || !dish) return null;
+  
   const color = COLOR[mealType];
-  const seasText = dish.seasons.length >= 12 ? 'All year' : dish.seasons.map(m => MONTH_NAMES[m]).join(', ');
-  const diff = dish.easy ? 'Easy' : dish.time <= 30 ? 'Medium' : 'Hard';
+  const seasText = dish.seasons.length >= 12 ? (lang === 'hi' ? 'पूरा साल' : 'All year') : dish.seasons.map(m => MONTH_NAMES[m]).join(', ');
+  const diff = dish.easy ? t('modal.easy') : dish.time <= 30 ? t('modal.medium') : t('modal.hard');
 
   const GRAD: Record<MealType, string> = {
     breakfast: `linear-gradient(to top, var(--surface) 0%, rgba(0,0,0,0.4) 100%), url(/images/breakfast.png) center/cover`,
@@ -58,8 +64,12 @@ export default function DishModal() {
             style={{ background:`color-mix(in srgb, ${color} 20%, transparent)`, color }}>
             {MEAL_ICONS[mealType]} {mealType}
           </span>
-          <h2 className="font-display text-3xl leading-tight mb-2">{dish.name}</h2>
-          <p className="text-sm opacity-70 leading-relaxed">{dish.desc}</p>
+          <h2 className="font-display text-3xl leading-tight mb-2">
+            {lang === 'hi' && dish.nameHi ? dish.nameHi : dish.name}
+          </h2>
+          <p className="text-sm opacity-70 leading-relaxed">
+            {lang === 'hi' && dish.descHi ? dish.descHi : dish.desc}
+          </p>
 
           <div className="flex gap-3 mt-4 text-sm flex-wrap">
             <span className="flex items-center gap-1.5 font-semibold opacity-70">⏱ {dish.time} min</span>
@@ -78,12 +88,12 @@ export default function DishModal() {
         {/* Nutrition */}
         <div className="grid grid-cols-3 gap-2 p-4" style={{ borderBottom:`1px solid var(--border)` }}>
           {[
-            { icon:'🔥', label:'Calories', val:`${dish.kcal} kcal` },
-            { icon:'🥩', label:'Protein',  val:`${dish.protein}g` },
-            { icon:'🍚', label:'Carbs',    val:`${dish.carbs}g` },
-            { icon:'🧈', label:'Fat',      val:`${dish.fat}g` },
-            { icon:'🌿', label:'Fiber',    val:`${dish.fiber}g` },
-            { icon:'🌱', label:'Season',   val: seasText },
+            { icon:'🔥', label:t('modal.calories'), val:`${dish.kcal} kcal` },
+            { icon:'🥩', label:t('modal.protein'),  val:`${dish.protein}g` },
+            { icon:'🍚', label:t('modal.carbs'),    val:`${dish.carbs}g` },
+            { icon:'🧈', label:t('modal.fat'),      val:`${dish.fat}g` },
+            { icon:'🌿', label:t('modal.fiber'),    val:`${dish.fiber}g` },
+            { icon:'🌱', label:t('modal.season'),   val: seasText },
           ].map(({ icon, label, val }) => (
             <div key={label} className="rounded-2xl p-3 text-center" style={{ background:'var(--surface2)' }}>
               <div className="text-lg mb-1">{icon}</div>
@@ -95,11 +105,11 @@ export default function DishModal() {
 
         {/* Recipe */}
         <div className="p-5 pb-8">
-          <h3 className="font-display text-xl mb-4" style={{ color:'var(--primary)' }}>📝 Recipe</h3>
+          <h3 className="font-display text-xl mb-4" style={{ color:'var(--primary)' }}>{t('modal.recipe')}</h3>
 
-          <h4 className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color:'var(--sub)' }}>Ingredients</h4>
+          <h4 className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color:'var(--sub)' }}>{t('modal.ingredients')}</h4>
           <ul className="space-y-2 mb-5">
-            {dish.recipe.ingredients.map((ing, i) => (
+            {(lang === 'hi' && dish.recipeHi ? dish.recipeHi.ingredients : dish.recipe.ingredients).map((ing, i) => (
               <li key={i} className="flex items-start gap-2.5 text-sm py-1.5 border-b" style={{ borderColor:'var(--border)', color:'var(--sub)' }}>
                 <span className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ background:'var(--primary)' }} />
                 {ing}
@@ -107,9 +117,9 @@ export default function DishModal() {
             ))}
           </ul>
 
-          <h4 className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color:'var(--sub)' }}>Steps</h4>
+          <h4 className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color:'var(--sub)' }}>{t('modal.steps')}</h4>
           <ol className="space-y-3">
-            {dish.recipe.steps.map((step, i) => (
+            {(lang === 'hi' && dish.recipeHi ? dish.recipeHi.steps : dish.recipe.steps).map((step, i) => (
               <li key={i} className="flex gap-3 text-sm leading-relaxed">
                 <span className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold text-white"
                   style={{ background:'var(--primary)', marginTop:'1px' }}>

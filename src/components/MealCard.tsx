@@ -1,4 +1,6 @@
 import { useStore } from '../store';
+import { useTranslation } from '../i18n';
+import { useDishTranslation } from '../hooks/useDishTranslation';
 import { getPool, pickRandom, MEAL_ICONS } from '../mealLogic';
 import type { Dish, MealType } from '../types';
 
@@ -15,14 +17,10 @@ const GRAD_CLASS: Record<MealType, string> = {
   dinner: 'url(/images/dinner.png)',
 };
 
-const COLOR: Record<MealType, string> = {
-  breakfast: 'var(--c-b)',
-  lunch: 'var(--c-l)',
-  dinner: 'var(--c-d)',
-};
-
-export default function MealCard({ dish, mealType, dayIdx, animDelay = 0 }: Props) {
-  const { filters, openModal, regenMeal } = useStore();
+export default function MealCard({ dish: rawDish, mealType, dayIdx, animDelay = 0 }: Props) {
+  const { filters, openModal, regenMeal, lang } = useStore();
+  const { t } = useTranslation();
+  const dish = useDishTranslation(rawDish);
 
   const handleRegen = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -33,7 +31,7 @@ export default function MealCard({ dish, mealType, dayIdx, animDelay = 0 }: Prop
   if (!dish) return (
     <div className="rounded-xl p-5 text-center text-sm animate-slide-up"
       style={{ background:'var(--surface)', border:'1px solid var(--border)', animationDelay:`${animDelay}ms`, color:'var(--sub)' }}>
-      No dish matches filters
+      {t('card.no_dish')}
     </div>
   );
 
@@ -58,7 +56,9 @@ export default function MealCard({ dish, mealType, dayIdx, animDelay = 0 }: Prop
           {MEAL_ICONS[mealType]} {mealType.charAt(0).toUpperCase() + mealType.slice(1)}
         </span>
 
-        <h3 className="font-display text-2xl leading-tight text-white shadow-sm" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{dish.name}</h3>
+        <h3 className="font-display text-2xl leading-tight text-white shadow-sm" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+          {lang === 'hi' && dish.nameHi ? dish.nameHi : dish.name}
+        </h3>
       </div>
 
       {/* Macro strip */}
@@ -80,7 +80,7 @@ export default function MealCard({ dish, mealType, dayIdx, animDelay = 0 }: Prop
           <button onClick={handleRegen}
             className="text-xs font-bold px-3 py-1.5 rounded-full flex-shrink-0 transition-all active:scale-95"
             style={{ background:'var(--surface2)', border:'1.5px solid var(--border)', color:'var(--sub)' }}>
-            ↺ Change
+            {t('card.change')}
           </button>
         )}
       </div>

@@ -6,35 +6,53 @@ export const DISHES: Record<string, Dish[]> = {
                     {
       id: 'poha',
       name: 'Poha',
+      nameHi: 'पोहा',
       desc: 'Fluffy flattened rice tossed with peas, peanuts and spices — a beloved morning classic.',
+      descHi: 'मटर, मूंगफली और मसालों के साथ भुना हुआ चपटा चावल — एक पसंदीदा सुबह का क्लासिक।',
       region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 270, protein: 6, carbs: 48, fat: 5, fiber: 3, time: 15, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup thick poha', '½ cup green peas', '1 potato boiled & cubed', '2 tsp oil', '1 tsp mustard seeds', '8-10 curry leaves', '¼ tsp turmeric', '2 tbsp roasted peanuts', 'Salt & lemon to taste', 'Fresh coriander'],
         steps: ['Rinse poha under cold water until soft. Drain well and set aside.', 'Heat oil in a pan. Add mustard seeds and let them splutter.', 'Add curry leaves, peanuts, peas and potato. Sauté 2 minutes.', 'Add drained poha, turmeric and salt. Mix gently.', 'Cover and cook on low for 2 minutes. Squeeze lemon, garnish with coriander.'],
       },
+      recipeHi: {
+        ingredients: ['1 कप मोटा पोहा', '½ कप हरी मटर', '1 उबला और कटा हुआ आलू', '2 छोटी चम्मच तेल', '1 छोटी चम्मच राई', '8-10 करी पत्ते', '¼ छोटी चम्मच हल्दी', '2 बड़े चम्मच भुनी हुई मूंगफली', 'नमक और नींबू स्वादानुसार', 'ताजा हरा धनिया'],
+        steps: ['पोहे को ठंडे पानी से धो लें जब तक कि यह नरम न हो जाए। अच्छी तरह से छान लें और अलग रख दें।', 'पैन में तेल गरम करें। राई डालें और तड़कने दें।', 'करी पत्ता, मूंगफली, मटर और आलू डालें। 2 मिनट तक भूनें।', 'छना हुआ पोहा, हल्दी और नमक डालें। धीरे से मिलाएँ।', 'ढककर धीमी आँच पर 2 मिनट तक पकाएँ। नींबू निचोड़ें, हरे धनिये से गार्निश करें।'],
+      }
     },
     {
       id: 'upma',
       name: 'Upma',
+      nameHi: 'उपमा',
       desc: 'Savory semolina porridge with vegetables — quick, filling and light on the stomach.',
+      descHi: 'सब्जियों के साथ स्वादिष्ट सूजी का दलिया — पेट के लिए हल्का और जल्दी बनने वाला।',
       region: 'North Indian', sattvic: false, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 220, protein: 7, carbs: 38, fat: 5, fiber: 3, time: 20, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['1 cup semolina (rava)', '1 onion chopped', '½ cup mixed veggies', '1 tbsp ghee or oil', '1 tsp mustard seeds', '1 tsp urad dal', '8 curry leaves', '2.5 cups water', 'Salt to taste'],
         steps: ['Dry roast rava on medium heat until lightly golden. Set aside.', 'Heat ghee, add mustard seeds, urad dal, curry leaves.', 'Add onion, sauté until translucent. Add veggies, cook 3 min.', 'Pour in water, bring to boil, add salt.', 'Slowly add rava while stirring. Cook 3 min on low, stirring. Serve hot.'],
       },
+      recipeHi: {
+        ingredients: ['1 कप सूजी (रवा)', '1 प्याज कटा हुआ', '½ कप मिक्स सब्जियां', '1 बड़ा चम्मच घी या तेल', '1 छोटी चम्मच राई', '1 छोटी चम्मच उड़द दाल', '8 करी पत्ते', '2.5 कप पानी', 'स्वादानुसार नमक'],
+        steps: ['रवे को मध्यम आँच पर हल्का सुनहरा होने तक सूखा भून लें। अलग रख दें।', 'घी गरम करें, राई, उड़द दाल, करी पत्ता डालें।', 'प्याज डालें, पारदर्शी होने तक भूनें। सब्जियां डालें, 3 मिनट पकाएं।', 'पानी डालें, उबाल लें, नमक डालें।', 'हिलाते हुए धीरे-धीरे रवा डालें। धीमी आँच पर 3 मिनट तक चलाते हुए पकाएँ। गरमागरम परोसें।'],
+      }
     },
     {
       id: 'idli-sambar',
       name: 'Idli & Sambar',
+      nameHi: 'इडली और सांभर',
       desc: 'Steamed rice-lentil cakes served with spiced lentil soup — the ultimate South Indian breakfast.',
+      descHi: 'मसालेदार दाल के सूप के साथ परोसे जाने वाले भाप में पके चावल-दाल के केक — बेहतरीन दक्षिण भारतीय नाश्ता।',
       region: 'South Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 180, protein: 9, carbs: 32, fat: 2, fiber: 5, time: 30, easy: false, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['2 cups idli batter (fermented rice & urad dal)', 'For sambar: 1 cup toor dal', 'Mixed veggies (drumstick, carrot, pumpkin)', 'Sambar powder 2 tsp', 'Tamarind water', 'Tempering: mustard, curry leaves, red chilli'],
         steps: ['Pour batter into greased idli moulds.', 'Steam for 10-12 minutes until a toothpick comes out clean.', 'Cook toor dal with veggies and tamarind water.', 'Add sambar powder, salt. Simmer 10 minutes.', 'Temper with mustard seeds and curry leaves. Serve idli hot with sambar and coconut chutney.'],
       },
+      recipeHi: {
+        ingredients: ['2 कप इडली बैटर (किण्वित चावल और उड़द दाल)', 'सांभर के लिए: 1 कप अरहर दाल', 'मिक्स सब्जियां (सहजन, गाजर, कद्दू)', 'सांभर मसाला 2 छोटी चम्मच', 'इमली का पानी', 'तड़का: राई, करी पत्ता, लाल मिर्च'],
+        steps: ['ग्रीस किए हुए इडली मोल्ड में बैटर डालें।', '10-12 मिनट तक भाप में पकाएँ जब तक कि टूथपिक साफ न निकल आए।', 'सब्जियों और इमली के पानी के साथ अरहर की दाल पकाएं।', 'सांभर मसाला, नमक डालें। 10 मिनट तक उबालें।', 'राई और करी पत्ते से तड़का लगाएँ। इडली को सांभर और नारियल की चटनी के साथ गरमागरम परोसें।'],
+      }
     },
     {
       id: 'masala-dosa',
@@ -772,4 +790,5 @@ export const DISHES: Record<string, Dish[]> = {
 };
 
 
-export function registerDishes(mealType, dishes) { DISHES[mealType].push(...dishes); }
+export function registerDishes(mealType: keyof typeof DISHES, dishes: Dish[]) {
+  DISHES[mealType].push(...dishes); }

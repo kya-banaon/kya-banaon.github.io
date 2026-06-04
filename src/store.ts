@@ -1,9 +1,10 @@
 import { create } from 'zustand';
-import type { Filters, WeekPlan, TabType, ModalState, SeasonKey, ThemeKey, Dish } from './types';
+import type { Filters, WeekPlan, TabType, ModalState, SeasonKey, ThemeKey, Dish, Lang } from './types';
 
 interface AppState {
   isReady: boolean;
   theme: ThemeKey;
+  lang: Lang;
   filters: Filters;
   weekPlan: WeekPlan | null;
   randPlan: (Dish | null)[][];
@@ -17,6 +18,7 @@ interface AppState {
 
   initializeApp: () => Promise<void>;
   setTheme: (t: ThemeKey) => void;
+  setLang: (l: Lang) => void;
   toggleFilter: (key: keyof Filters) => void;
   setWeekPlan: (plan: WeekPlan) => void;
   regenMeal: (dayIdx: number, mealType: string, dish: Dish | null) => void;
@@ -52,6 +54,7 @@ const save = (key: string, val: unknown) => { try { localStorage.setItem(key, JS
 export const useStore = create<AppState>((set, get) => ({
   isReady: false,
   theme: load('kb_theme', 'dark') as ThemeKey,
+  lang: load('kb_lang', 'en') as Lang,
   filters: load('kb_filters', { sat: false, kids: false, seas: false, quick: false, easy: false, oilFree: false }),
   weekPlan: load('kb_week', null),
   randPlan: [],
@@ -112,6 +115,11 @@ export const useStore = create<AppState>((set, get) => ({
     save('kb_theme', t);
     document.documentElement.classList.toggle('light', t === 'light');
     document.documentElement.classList.toggle('dark', t === 'dark');
+  },
+
+  setLang: (l) => {
+    set({ lang: l });
+    save('kb_lang', l);
   },
 
   toggleFilter: (key) => {

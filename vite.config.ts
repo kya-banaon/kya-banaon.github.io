@@ -7,12 +7,26 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['icon.svg', 'robots.txt', 'sitemap.xml', 'images/*.png'],
       manifest: {
         name: 'Kya Banaon',
         short_name: 'KyaBanaon',
-        description: 'Meal Planner App',
-        theme_color: '#1a1a1a',
-        icons: [] // Needs actual icons later
+        description: 'Never ask Kya Banaon again. The Ultimate Indian Meal Planner.',
+        theme_color: '#E65100',
+        background_color: '#F4EFE8',
+        display: 'standalone',
+        orientation: 'portrait',
+        icons: [
+          {
+            src: 'icon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any maskable'
+          }
+        ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,png,jpg,ico,json}']
       }
     })
   ],

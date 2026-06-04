@@ -10,13 +10,17 @@ import RandomView from './views/RandomView';
 import SeasonalView from './views/SeasonalView';
 import GroceryView from './views/GroceryView';
 import SavedView from './views/SavedView';
+import PwaBanner from './components/PwaBanner';
+import Footer from './components/Footer';
+import { useTranslation } from './i18n';
 import type { TabType } from './types';
 
 const TAB_ICONS: Record<TabType, string> = { weekly: '📅', random: '🎲', seasonal: '🌿', groceries: '🛒', saved: '❤️' };
-const TAB_LABELS: Record<TabType, string> = { weekly: 'Weekly', random: 'Random', seasonal: 'Seasonal', groceries: 'Groceries', saved: 'Saved' };
+const TAB_LABEL_KEYS: Record<TabType, string> = { weekly: 'tab.weekly', random: 'tab.random', seasonal: 'tab.seasonal', groceries: 'tab.groceries', saved: 'tab.saved' };
 
 export default function App() {
   const { currentTab, setTab, theme, isReady, initializeApp } = useStore();
+  const { t } = useTranslation();
 
   useEffect(() => {
     initializeApp();
@@ -32,15 +36,16 @@ export default function App() {
       <div className="min-h-dvh flex items-center justify-center" style={{ background: 'var(--bg)' }}>
         <div className="flex flex-col items-center gap-4 animate-pulse">
           <div className="text-4xl">🍲</div>
-          <div className="text-sm font-bold" style={{ color: 'var(--sub)' }}>Loading flavors...</div>
+          <div className="text-sm font-bold" style={{ color: 'var(--sub)' }}>{t('toast.loading')}</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto min-h-dvh relative" style={{ background:'var(--bg)' }}>
+    <div className="max-w-2xl mx-auto min-h-dvh relative flex flex-col" style={{ background:'var(--bg)' }}>
       <AppBar />
+      <PwaBanner />
       {['weekly','random','seasonal'].includes(currentTab) && <FilterBar />}
 
       {/* Desktop tab nav */}
@@ -51,18 +56,20 @@ export default function App() {
             style={currentTab === tab
               ? { color:'var(--primary)', borderColor:'var(--primary)' }
               : { color:'var(--sub)', borderColor:'transparent' }}>
-            {TAB_ICONS[tab]} {TAB_LABELS[tab]}
+            {TAB_ICONS[tab]} {t(TAB_LABEL_KEYS[tab] as any)}
           </button>
         ))}
       </div>
 
-      <main>
+      <main className="flex-1">
         {currentTab === 'weekly'   && <WeeklyView />}
         {currentTab === 'random'   && <RandomView />}
         {currentTab === 'seasonal' && <SeasonalView />}
         {currentTab === 'groceries' && <GroceryView />}
         {currentTab === 'saved' && <SavedView />}
       </main>
+
+      <Footer />
 
       <BottomNav />
       <DishModal />

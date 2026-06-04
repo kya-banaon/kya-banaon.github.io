@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { useStore } from '../store';
+import { useTranslation } from '../i18n';
 
-const MONTH_NAMES = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 export default function AppBar() {
-  const { theme, setTheme } = useStore();
+  const { theme, setTheme, lang, setLang } = useStore();
+  const { t } = useTranslation();
   const [showPanel, setShowPanel] = useState(false);
 
   const today = new Date();
-  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const dateStr = `${days[today.getDay()]} ${today.getDate()} ${MONTH_NAMES[today.getMonth()+1]}`;
+  const days = ['day.sun','day.mon','day.tue','day.wed','day.thu','day.fri','day.sat'] as const;
+  const monthKey = `month.${today.getMonth() + 1}` as any;
+  const dateStr = `${t(days[today.getDay()])} ${today.getDate()} ${t(monthKey)}`;
 
   return (
     <>
@@ -20,15 +22,20 @@ export default function AppBar() {
             style={{ background: 'linear-gradient(90deg,#FFD700,#FFF8DC,#FFD700)', backgroundSize:'200% auto',
               WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text',
               animation:'shimmer 3s linear infinite' }}>
-            🍽 Kya Banaon?
+            🍽 {t('app.title')}
           </h1>
-          <p className="text-xs mt-0.5 opacity-60 text-white tracking-wider">Vegetarian Meal Planner</p>
+          <p className="text-xs mt-0.5 opacity-60 text-white tracking-wider">{t('app.subtitle')}</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-white text-xs font-bold px-3 py-1.5 rounded-full"
+          <span className="text-white text-[10px] font-bold px-2 py-1 rounded-full hidden sm:block"
             style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)' }}>
             {dateStr}
           </span>
+          <button onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}
+            className="w-9 h-9 rounded-full text-base font-bold flex items-center justify-center transition-all active:scale-90"
+            style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)', color: '#fff' }}>
+            {lang === 'en' ? 'अ' : 'A'}
+          </button>
           <button onClick={() => setShowPanel(v => !v)}
             className="w-9 h-9 rounded-full text-base flex items-center justify-center transition-all active:scale-90"
             style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)' }}>

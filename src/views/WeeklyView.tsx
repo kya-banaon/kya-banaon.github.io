@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useStore } from '../store';
+import { useTranslation } from '../i18n';
 import { generateWeek, MEAL_TYPES, getDayDate, DAY_NAMES, MEAL_ICONS, getPool } from '../mealLogic';
+import { useDishTranslation } from '../hooks/useDishTranslation';
 import DaySelector from '../components/DaySelector';
 import MealCard from '../components/MealCard';
 import TodayHero from '../components/TodayHero';
@@ -10,6 +12,7 @@ const TODAY = new Date();
 
 export default function WeeklyView() {
   const { weekPlan, setWeekPlan, filters, selectedDay } = useStore();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!weekPlan) setWeekPlan(generateWeek(filters));
@@ -38,16 +41,17 @@ export default function WeeklyView() {
             <thead>
               <tr>
                 <th className="p-4 text-xs font-bold uppercase tracking-wider text-left w-24"
-                  style={{ background:'var(--surface2)', color:'var(--sub)', borderBottom:`1px solid var(--border)` }}>Meal</th>
+                  style={{ background:'var(--surface2)', color:'var(--sub)', borderBottom:`1px solid var(--border)` }}>{t('header.meal' as any)}</th>
                 {DAY_NAMES.map((d, i) => {
                   const dt = getDayDate(i);
                   const isToday = dt.toDateString() === TODAY.toDateString();
+                  const dayKey = `day.${d.toLowerCase()}` as any;
                   return (
                     <th key={d} className="p-3 text-center text-xs font-bold"
                       style={{ background: isToday ? 'var(--primary-dim)' : 'var(--surface2)',
                         color: isToday ? 'var(--primary)' : 'var(--sub)',
                         borderBottom:`1px solid var(--border)` }}>
-                      <div>{d}</div>
+                      <div>{t(dayKey)}</div>
                       <div className="text-base font-bold mt-0.5" style={{ color: isToday ? 'var(--primary)' : 'var(--text)' }}>
                         {dt.getDate()}
                       </div>
@@ -60,7 +64,7 @@ export default function WeeklyView() {
               {MEAL_TYPES.map(mtype => (
                 <tr key={mtype} style={{ borderBottom:`1px solid var(--border)` }}>
                   <td className="p-3 text-xs font-bold uppercase tracking-wider" style={{ background:'var(--surface2)', color:'var(--sub)' }}>
-                    {MEAL_ICONS[mtype as MealType]}<br/>{mtype}
+                    {MEAL_ICONS[mtype as MealType]}<br/>{t(`meal.${mtype}` as any)}
                   </td>
                   {weekPlan.map((day, di) => (
                     <DesktopCell key={di} dish={day[mtype]} mealType={mtype} dayIdx={di} />
@@ -75,9 +79,11 @@ export default function WeeklyView() {
   );
 }
 
-function DesktopCell({ dish, mealType, dayIdx }: { dish: Dish | null; mealType: MealType; dayIdx: number }) {
+function DesktopCell({ dish: rawDish, mealType, dayIdx }: { dish: Dish | null; mealType: MealType; dayIdx: number }) {
   const { openModal, filters, regenMeal } = useStore();
-  if (!dish) return <td className="p-2 text-center text-xs" style={{ color:'var(--muted)' }}>—</td>;
+  const dish = useDishTranslation(rawDish);
+  
+  if (!dish || !rawDish) return <td className="p-2 text-center text-xs" style={{ color:'var(--muted)' }}>—</td>;
 
   const COLOR: Record<MealType,string> = { breakfast:'var(--c-b)', lunch:'var(--c-l)', dinner:'var(--c-d)' };
 
@@ -85,9 +91,9 @@ function DesktopCell({ dish, mealType, dayIdx }: { dish: Dish | null; mealType: 
     <td className="p-2" style={{ borderLeft:`1px solid var(--border)` }}>
       <div className="rounded-xl p-2 cursor-pointer transition-all hover:scale-[1.02] active:scale-[.98] group relative"
         style={{ background:'var(--surface2)' }}
-        onClick={() => openModal({ dish, mealType })}>
+        onClick={() => openModal({ dish: rawDish, mealType })}>
         <div className="w-full h-0.5 rounded-full mb-2" style={{ background:COLOR[mealType] }} />
-        <div className="text-xs font-bold leading-snug">{dish.name}</div>
+        <div className="text-xs font-bold leading-snug">{dish.nameHi || dish.name}</div>
         <button onClick={e => { e.stopPropagation(); const pool = getPool(mealType, filters); if(pool?.length) regenMeal(dayIdx, mealType, { ...pool[Math.floor(Math.random()*pool.length)], _type:mealType }); }}
           className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-[10px] px-1.5 py-0.5 rounded-lg transition-all"
           style={{ background:'var(--primary-dim)', color:'var(--primary)' }}>↺</button>
