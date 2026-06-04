@@ -1,17 +1,9 @@
 import type { Dish } from '../types';
-import { indoChineseBreakfast, indoChineseLunch, indoChineseDinner } from './regions/indoChinese';
-import { northIndianBreakfast, northIndianLunch, northIndianDinner } from './regions/northIndian';
-import { southIndianBreakfast, southIndianLunch, southIndianDinner } from './regions/southIndian';
-import { otherRegionsBreakfast, otherRegionsLunch, otherRegionsDinner } from './regions/otherRegions';
 
 
 export const DISHES: Record<string, Dish[]> = {
   breakfast: [
-    ...indoChineseBreakfast,
-    ...northIndianBreakfast,
-    ...southIndianBreakfast,
-    ...otherRegionsBreakfast,
-    {
+                    {
       id: 'poha',
       name: 'Poha',
       desc: 'Fluffy flattened rice tossed with peas, peanuts and spices — a beloved morning classic.',
@@ -267,11 +259,7 @@ export const DISHES: Record<string, Dish[]> = {
   ],
 
   lunch: [
-    ...indoChineseLunch,
-    ...northIndianLunch,
-    ...southIndianLunch,
-    ...otherRegionsLunch,
-    {
+                    {
       id: 'dal-tadka-rice',
       name: 'Dal Tadka & Rice',
       desc: 'Comforting toor dal with smoky ghee tempering — the soul of Indian home cooking.',
@@ -527,11 +515,7 @@ export const DISHES: Record<string, Dish[]> = {
   ],
 
   dinner: [
-    ...indoChineseDinner,
-    ...northIndianDinner,
-    ...southIndianDinner,
-    ...otherRegionsDinner,
-    {
+                    {
       id: 'roti-mix-veg',
       name: 'Roti & Mix Veg',
       desc: 'Seasonal vegetable medley with warm whole wheat rotis — everyday home comfort.',
@@ -786,3 +770,6 @@ export const DISHES: Record<string, Dish[]> = {
     },
   ],
 };
+
+
+export function registerDishes(mealType, dishes) { DISHES[mealType].push(...dishes); }

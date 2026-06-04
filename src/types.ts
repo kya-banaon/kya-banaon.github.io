@@ -1,5 +1,5 @@
 export type MealType = 'breakfast' | 'lunch' | 'dinner';
-export type TabType = 'weekly' | 'random' | 'seasonal';
+export type TabType = 'weekly' | 'random' | 'seasonal' | 'groceries' | 'saved';
 export type SeasonKey = 'win' | 'spr' | 'sum' | 'mon' | 'aut';
 export type ThemeKey = 'dark' | 'light';
 export type FilterKey = 'sat' | 'kids' | 'seas' | 'quick' | 'easy' | 'oilFree';

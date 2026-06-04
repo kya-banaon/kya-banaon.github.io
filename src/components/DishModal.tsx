@@ -8,7 +8,7 @@ const MONTH_NAMES = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','O
 const COLOR: Record<MealType, string> = { breakfast:'var(--c-b)', lunch:'var(--c-l)', dinner:'var(--c-d)' };
 
 export default function DishModal() {
-  const { modal, closeModal } = useStore();
+  const { modal, closeModal, favorites, toggleFavorite } = useStore();
 
   useEffect(() => {
     if (!modal) return;
@@ -25,25 +25,32 @@ export default function DishModal() {
   const diff = dish.easy ? 'Easy' : dish.time <= 30 ? 'Medium' : 'Hard';
 
   const GRAD: Record<MealType, string> = {
-    breakfast: `linear-gradient(145deg, color-mix(in srgb, var(--c-b) 30%, var(--surface)), color-mix(in srgb, var(--c-b) 55%, var(--surface)))`,
-    lunch:     `linear-gradient(145deg, color-mix(in srgb, var(--c-l) 26%, var(--surface)), color-mix(in srgb, var(--c-l) 50%, var(--surface)))`,
-    dinner:    `linear-gradient(145deg, color-mix(in srgb, var(--c-d) 26%, var(--surface)), color-mix(in srgb, var(--c-d) 50%, var(--surface)))`,
+    breakfast: `linear-gradient(to top, var(--surface) 0%, rgba(0,0,0,0.4) 100%), url(/images/breakfast.png) center/cover`,
+    lunch:     `linear-gradient(to top, var(--surface) 0%, rgba(0,0,0,0.4) 100%), url(/images/lunch.png) center/cover`,
+    dinner:    `linear-gradient(to top, var(--surface) 0%, rgba(0,0,0,0.4) 100%), url(/images/dinner.png) center/cover`,
   };
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center"
       style={{ background:'rgba(0,0,0,0.7)', backdropFilter:'blur(6px)' }}
       onClick={e => e.target === e.currentTarget && closeModal()}>
-      <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] animate-sheet-in sm:animate-slide-up"
+      <div className="w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-t-xl sm:rounded-xl animate-sheet-in sm:animate-slide-up"
         style={{ background:'var(--surface)' }}>
         {/* Handle */}
         <div className="w-10 h-1 rounded-full mx-auto mt-3 mb-0 sm:hidden" style={{ background:'var(--border2)' }} />
 
         {/* Hero */}
-        <div className="relative overflow-hidden px-6 pt-6 pb-5" style={{ background: GRAD[mealType] }}>
-          <button onClick={closeModal}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all active:scale-90 z-10"
-            style={{ background:'rgba(0,0,0,0.25)', color:'rgba(255,255,255,0.8)' }}>✕</button>
+        <div className="relative overflow-hidden px-6 pt-6 pb-5 bg-black text-white" style={{ background: GRAD[mealType] }}>
+          <div className="absolute top-4 right-4 flex gap-2 z-10">
+            <button onClick={() => toggleFavorite(dish.id)}
+              className="w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all active:scale-90"
+              style={{ background:'rgba(255,255,255,0.2)', color: favorites.includes(dish.id) ? '#ff4757' : 'white', backdropFilter:'blur(4px)' }}>
+              {favorites.includes(dish.id) ? '❤️' : '🤍'}
+            </button>
+            <button onClick={closeModal}
+              className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all active:scale-90"
+              style={{ background:'rgba(0,0,0,0.25)', color:'rgba(255,255,255,0.8)', backdropFilter:'blur(4px)' }}>✕</button>
+          </div>
 
           <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full opacity-15" style={{ background: color }} />
 

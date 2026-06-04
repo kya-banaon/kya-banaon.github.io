@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type { Filters, WeekPlan, TabType, ModalState, SeasonKey, ThemeKey, Dish } from './types';
 
 interface AppState {
+  isReady: boolean;
   theme: ThemeKey;
   filters: Filters;
   weekPlan: WeekPlan | null;
@@ -11,7 +12,10 @@ interface AppState {
   selectedDay: number;
   modal: ModalState | null;
   activeSeason: SeasonKey | null;
+  favorites: string[];
+  toast: string | null;
 
+  initializeApp: () => Promise<void>;
   setTheme: (t: ThemeKey) => void;
   toggleFilter: (key: keyof Filters) => void;
   setWeekPlan: (plan: WeekPlan) => void;
@@ -24,6 +28,8 @@ interface AppState {
   openModal: (state: ModalState) => void;
   closeModal: () => void;
   setSeason: (key: SeasonKey) => void;
+  toggleFavorite: (id: string) => void;
+  showToast: (msg: string) => void;
 }
 
 const todayIdx = () => { const d = new Date().getDay(); return d === 0 ? 6 : d - 1; };
@@ -44,6 +50,7 @@ const load = <T>(key: string, fallback: T): T => {
 const save = (key: string, val: unknown) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { console.error('Failed to save state:', e); } };
 
 export const useStore = create<AppState>((set, get) => ({
+  isReady: false,
   theme: load('kb_theme', 'dark') as ThemeKey,
   filters: load('kb_filters', { sat: false, kids: false, seas: false, quick: false, easy: false, oilFree: false }),
   weekPlan: load('kb_week', null),
@@ -53,6 +60,52 @@ export const useStore = create<AppState>((set, get) => ({
   selectedDay: todayIdx(),
   modal: null,
   activeSeason: null,
+  favorites: load('kb_favs', []),
+  toast: null,
+
+  initializeApp: async () => {
+    if (get().isReady) return;
+    const { registerDishes } = await import('./data/dishes');
+    const modules = import.meta.glob('./data/regions/*.ts');
+    for (const path in modules) {
+      const mod = await modules[path]() as Record<string, Dish[]>;
+      for (const key in mod) {
+        if (key.includes('Breakfast')) registerDishes('breakfast', mod[key]);
+        else if (key.includes('Lunch')) registerDishes('lunch', mod[key]);
+        else if (key.includes('Dinner')) registerDishes('dinner', mod[key]);
+      }
+    }
+    set({ isReady: true });
+
+    // PWA Local Notification Reminders (Requires app to be open or in background tab)
+    if ('Notification' in window && Notification.permission !== 'denied') {
+      const checkMealTime = () => {
+        const hour = new Date().getHours();
+        const min = new Date().getMinutes();
+        if (min === 0) {
+          let meal = '';
+          if (hour === 8) meal = 'Breakfast';
+          if (hour === 12) meal = 'Lunch';
+          if (hour === 19) meal = 'Dinner';
+          
+          if (meal && Notification.permission === 'granted') {
+            new Notification(`Time for ${meal}!`, {
+              body: 'Check out your Kya Banaon recommendation.',
+              icon: '/icons/icon-192x192.png'
+            });
+          }
+        }
+      };
+      
+      // Request permission on first load if default
+      if (Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+      
+      setInterval(checkMealTime, 60000); // check every minute
+      checkMealTime();
+    }
+  },
 
   setTheme: (t) => {
     set({ theme: t });
@@ -86,4 +139,17 @@ export const useStore = create<AppState>((set, get) => ({
   openModal: (state) => set({ modal: state }),
   closeModal: () => set({ modal: null }),
   setSeason: (key) => set({ activeSeason: key }),
+  
+  toggleFavorite: (id) => {
+    const favs = get().favorites;
+    const newFavs = favs.includes(id) ? favs.filter(x => x !== id) : [...favs, id];
+    set({ favorites: newFavs });
+    save('kb_favs', newFavs);
+    get().showToast(favs.includes(id) ? 'Removed from saved' : 'Saved to favorites');
+  },
+  
+  showToast: (msg) => {
+    set({ toast: msg });
+    setTimeout(() => { if (get().toast === msg) set({ toast: null }); }, 3000);
+  }
 }));

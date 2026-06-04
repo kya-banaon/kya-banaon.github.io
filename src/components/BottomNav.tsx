@@ -5,6 +5,8 @@ const TABS: { key: TabType; icon: string; label: string }[] = [
   { key: 'weekly',   icon: '📅', label: 'Weekly' },
   { key: 'random',   icon: '🎲', label: 'Random' },
   { key: 'seasonal', icon: '🌿', label: 'Seasonal' },
+  { key: 'groceries', icon: '🛒', label: 'Groceries' },
+  { key: 'saved',    icon: '❤️', label: 'Saved' },
 ];
 
 export default function BottomNav() {
