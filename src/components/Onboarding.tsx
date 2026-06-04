@@ -132,8 +132,10 @@ export default function Onboarding() {
 
       {step === 3 && (
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fade-in">
-          <div className="relative w-48 h-48 mb-8">
-            <img src="/images/thinking.png" alt="Thinking Kya Banaon" className="w-full h-full object-contain drop-shadow-2xl animate-float" />
+          <div className="relative w-24 h-24 mb-8">
+            <div className="absolute inset-0 border-4 rounded-full border-[var(--primary)] border-t-transparent animate-spin" />
+            <div className="absolute inset-2 border-4 rounded-full border-[var(--c-l)] border-b-transparent animate-spin-slow" />
+            <div className="absolute inset-0 flex items-center justify-center text-3xl">✨</div>
           </div>
           
           <h2 className="font-display text-2xl mb-2" style={{ color: 'var(--text)' }}>Building Your Week</h2>

@@ -110,10 +110,7 @@ export const useStore = create<AppState>((set, get) => ({
         }
       };
       
-      // Request permission on first load if default
-      if (Notification.permission === 'default') {
-        Notification.requestPermission();
-      }
+      // Request permission on first load if default (removed, now explicit via AppBar UI)
       
       setInterval(checkMealTime, 60000); // check every minute
       checkMealTime();

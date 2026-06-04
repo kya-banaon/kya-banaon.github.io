@@ -4,7 +4,7 @@ import { useTranslation } from '../i18n';
 
 
 export default function AppBar() {
-  const { theme, setTheme, resetOnboarding } = useStore();
+  const { theme, setTheme, resetOnboarding, showToast } = useStore();
   const { t } = useTranslation();
   const [showPanel, setShowPanel] = useState(false);
 
@@ -38,6 +38,21 @@ export default function AppBar() {
             {lang === 'en' ? 'अ' : 'A'}
           </button>
           */}
+          <button onClick={() => {
+            if ('Notification' in window) {
+              Notification.requestPermission().then(p => {
+                if (p === 'granted') showToast('Reminders Enabled! 🔔');
+                else showToast('Permission denied');
+              });
+            } else {
+              showToast('Notifications not supported');
+            }
+          }}
+            className="w-9 h-9 rounded-full text-base flex items-center justify-center transition-all active:scale-90"
+            style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)' }}
+            title="Enable Reminders">
+            🔔
+          </button>
           <button onClick={resetOnboarding}
             className="w-9 h-9 rounded-full text-base flex items-center justify-center transition-all active:scale-90"
             style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)' }}>
