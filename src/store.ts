@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Filters, WeekPlan, TabType, ModalState, SeasonKey, ThemeKey, Dish, Lang } from './types';
+import type { Filters, Preferences, WeekPlan, TabType, ModalState, SeasonKey, ThemeKey, Dish, Lang } from './types';
 
 interface AppState {
   isReady: boolean;
@@ -15,6 +15,9 @@ interface AppState {
   activeSeason: SeasonKey | null;
   favorites: string[];
   toast: string | null;
+  preferences: Preferences;
+  hasOnboarded: boolean;
+  showTour: boolean;
 
   initializeApp: () => Promise<void>;
   setTheme: (t: ThemeKey) => void;
@@ -32,6 +35,10 @@ interface AppState {
   setSeason: (key: SeasonKey) => void;
   toggleFavorite: (id: string) => void;
   showToast: (msg: string) => void;
+  setPreferences: (prefs: Preferences) => void;
+  completeOnboarding: () => void;
+  resetOnboarding: () => void;
+  completeTour: () => void;
 }
 
 const todayIdx = () => { const d = new Date().getDay(); return d === 0 ? 6 : d - 1; };
@@ -65,6 +72,9 @@ export const useStore = create<AppState>((set, get) => ({
   activeSeason: null,
   favorites: load('kb_favs', []),
   toast: null,
+  preferences: load('kb_prefs', { cuisines: [], maxTime: null, diets: [] }),
+  hasOnboarded: load('kb_onboarded', false) as boolean,
+  showTour: load('kb_tour', false) as boolean,
 
   initializeApp: async () => {
     if (get().isReady) return;
@@ -159,5 +169,25 @@ export const useStore = create<AppState>((set, get) => ({
   showToast: (msg) => {
     set({ toast: msg });
     setTimeout(() => { if (get().toast === msg) set({ toast: null }); }, 3000);
+  },
+  
+  setPreferences: (prefs) => {
+    set({ preferences: prefs });
+    save('kb_prefs', prefs);
+  },
+  
+  completeOnboarding: () => {
+    set({ hasOnboarded: true, showTour: true });
+    save('kb_onboarded', true);
+    save('kb_tour', true);
+  },
+  
+  resetOnboarding: () => {
+    set({ hasOnboarded: false });
+  },
+  
+  completeTour: () => {
+    set({ showTour: false });
+    save('kb_tour', false);
   }
 }));

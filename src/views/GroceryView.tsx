@@ -65,12 +65,31 @@ export default function GroceryView() {
     if (!weekPlan) return [];
     const items = new Map<string, number>();
     
+    // A simple heuristic to extract base ingredients from strings like "1 cup rice" or "1/2 tsp salt"
+    const extractBaseIngredient = (raw: string) => {
+      let s = raw.toLowerCase().trim();
+      
+      // Remove all numbers and fractions
+      s = s.replace(/[\d/¼½¾.-]+/g, '');
+      
+      // Remove common measurement units and adjectives
+      const stopWords = ['cup', 'cups', 'tsp', 'tbsp', 'teaspoon', 'tablespoon', 'tablespoons', 'teaspoons', 'pinch', 'handful', 'bunch', 'pieces', 'pc', 'gram', 'grams', 'g', 'ml', 'liter', 'kg', 'sprig', 'leaves', 'chopped', 'diced', 'sliced', 'boiled', 'soaked', 'to taste', 'finely', 'freshly', 'ground', 'crushed', 'grated', 'peeled', 'to', 'for', 'of', 'a', 'an'];
+      
+      const words = s.split(/\s+/).filter(w => !stopWords.includes(w));
+      s = words.join(' ').trim();
+      
+      // Remove trailing/leading punctuation
+      s = s.replace(/^[^a-z]+|[^a-z]+$/g, '');
+      
+      return s || raw; // fallback if stripped completely
+    };
+
     weekPlan.forEach(day => {
       ['breakfast', 'lunch', 'dinner'].forEach(meal => {
         const dish = day[meal as 'breakfast'|'lunch'|'dinner'];
         if (dish && dish.recipe && dish.recipe.ingredients) {
           dish.recipe.ingredients.forEach(ing => {
-            const clean = ing.toLowerCase().trim();
+            const clean = extractBaseIngredient(ing);
             items.set(clean, (items.get(clean) || 0) + 1);
           });
         }

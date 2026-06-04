@@ -12,6 +12,8 @@ import GroceryView from './views/GroceryView';
 import SavedView from './views/SavedView';
 import PwaBanner from './components/PwaBanner';
 import Footer from './components/Footer';
+import Onboarding from './components/Onboarding';
+import Tour from './components/Tour';
 import { useTranslation } from './i18n';
 import type { TabType } from './types';
 
@@ -19,7 +21,7 @@ const TAB_ICONS: Record<TabType, string> = { weekly: '📅', random: '🎲', sea
 const TAB_LABEL_KEYS: Record<TabType, string> = { weekly: 'tab.weekly', random: 'tab.random', seasonal: 'tab.seasonal', groceries: 'tab.groceries', saved: 'tab.saved' };
 
 export default function App() {
-  const { currentTab, setTab, theme, isReady, initializeApp } = useStore();
+  const { currentTab, setTab, theme, isReady, initializeApp, hasOnboarded } = useStore();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -74,6 +76,9 @@ export default function App() {
       <BottomNav />
       <DishModal />
       <Toast />
+      
+      {!hasOnboarded && <Onboarding />}
+      <Tour />
     </div>
   );
 }

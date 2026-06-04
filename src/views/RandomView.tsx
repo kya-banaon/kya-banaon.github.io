@@ -12,12 +12,12 @@ const GRAD: Record<MealType,string> = {
 };
 
 export default function RandomView() {
-  const { randPlan, setRandPlan, randPeriod, setRandPeriod, filters, openModal, regenRandMeal } = useStore();
+  const { randPlan, setRandPlan, randPeriod, setRandPeriod, filters, preferences, openModal, regenRandMeal } = useStore();
   const today = new Date();
 
   useEffect(() => {
-    if (!randPlan.length) setRandPlan(generateRand(randPeriod, filters));
-  }, [randPlan.length, randPeriod, filters, setRandPlan]);
+    if (!randPlan.length) setRandPlan(generateRand(randPeriod, filters, preferences));
+  }, [randPlan.length, randPeriod, filters, preferences, setRandPlan]);
 
   const dayLabel = (i: number) => {
     const d = new Date(today); d.setDate(today.getDate() + i);
@@ -79,7 +79,7 @@ export default function RandomView() {
                     </span>
                     <button onClick={e => {
                       e.stopPropagation();
-                      const pool = getPool(mtype, filters);
+                      const pool = getPool(mtype, filters, preferences);
                       if (pool.length) regenRandMeal(di, mi, { ...pickRandom(pool), _type: mtype });
                     }} className="text-xs font-bold px-3 py-1.5 rounded-full transition-all active:scale-95"
                       style={{ background:'var(--surface2)', border:'1.5px solid var(--border)', color:'var(--sub)' }}>

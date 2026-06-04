@@ -44,6 +44,12 @@ export interface Filters {
   oilFree: boolean;
 }
 
+export interface Preferences {
+  cuisines: RegionType[];
+  maxTime: number | null; // e.g. 15, 30, 45, 60, null for unlimited
+  diets: ('sattvic' | 'oilFree' | 'kids')[];
+}
+
 export type DayPlan = Record<MealType, Dish | null>;
 export type WeekPlan = DayPlan[];
 
