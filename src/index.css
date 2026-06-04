@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design Tokens ── */
+:root {
+  /* Dark theme (default) */
+  --bg:        #0C0907;
+  --surface:   #181108;
+  --surface2:  #221A0C;
+  --border:    #32210F;
+  --border2:   #453018;
+  --text:      #F0E4D0;
+  --sub:       #A07858;
+  --muted:     #5A3E28;
+  --primary:        #F5880A;
+  --primary-dim:    rgba(245,136,10,0.14);
+  --primary-glow:   rgba(245,136,10,0.4);
+  /* meal colors */
+  --c-b:   #FF8142; --c-b-dim: rgba(255,129,66,0.14);  /* breakfast */
+  --c-l:   #3DBF7A; --c-l-dim: rgba(61,191,122,0.14);  /* lunch     */
+  --c-d:   #9090F0; --c-d-dim: rgba(144,144,240,0.14); /* dinner    */
+}
+
+html.light {
+  --bg:       #F4EFE8;
+  --surface:  #FFFFFF;
+  --surface2: #FAF6F0;
+  --border:   #E2D5C4;
+  --border2:  #CFC0A8;
+  --text:     #1E110A;
+  --sub:      #7A5840;
+  --muted:    #BFA890;
+  --primary:        #D4700A;
+  --primary-dim:    rgba(212,112,10,0.12);
+  --primary-glow:   rgba(212,112,10,0.35);
+  --c-b:   #D4700A; --c-b-dim: rgba(212,112,10,0.12);
+  --c-l:   #2D7A4F; --c-l-dim: rgba(45,122,79,0.12);
+  --c-d:   #5555CC; --c-d-dim: rgba(85,85,204,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* ── Utilities ── */
+.hide-scrollbar { scrollbar-width: none; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
+.glass {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+html.light .glass {
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* Meal gradient headers */
+.meal-grad-b { background: linear-gradient(145deg, color-mix(in srgb, var(--c-b) 22%, var(--surface)), color-mix(in srgb, var(--c-b) 38%, var(--surface))); }
+.meal-grad-l { background: linear-gradient(145deg, color-mix(in srgb, var(--c-l) 18%, var(--surface)), color-mix(in srgb, var(--c-l) 36%, var(--surface))); }
+.meal-grad-d { background: linear-gradient(145deg, color-mix(in srgb, var(--c-d) 18%, var(--surface)), color-mix(in srgb, var(--c-d) 36%, var(--surface))); }
+
+/* Animations */
+@keyframes slideUp    { from { opacity:0; transform: translateY(28px) scale(.96); } to { opacity:1; transform: none; } }
+@keyframes fadeIn     { from { opacity:0; } to { opacity:1; } }
+@keyframes sheetIn    { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes shimmer    { 0%{ background-position:0%; } 100%{ background-position:200%; } }
+
+.animate-slide-up { animation: slideUp 0.38s cubic-bezier(0.22,0.68,0,1.2) both; }
+.animate-fade-in  { animation: fadeIn 0.22s ease both; }
+.animate-sheet-in { animation: sheetIn 0.4s cubic-bezier(0.32,0.72,0,1) both; }
