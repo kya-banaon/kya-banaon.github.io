@@ -11,10 +11,10 @@ interface Props {
   animDelay?: number;
 }
 
-const GRAD_CLASS: Record<MealType, string> = {
-  breakfast: 'url(/images/breakfast.png)',
-  lunch: 'url(/images/lunch.png)',
-  dinner: 'url(/images/dinner.png)',
+const GRAD: Record<MealType, string> = {
+  breakfast: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
+  lunch: 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
+  dinner: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
 };
 
 export default function MealCard({ dish: rawDish, mealType, dayIdx, animDelay = 0 }: Props) {
@@ -48,8 +48,8 @@ export default function MealCard({ dish: rawDish, mealType, dayIdx, animDelay = 
       onClick={() => openModal({ dish, mealType })}>
 
       {/* Gradient header */}
-      <div className={`relative overflow-hidden px-5 pt-5 pb-4 min-h-[120px] flex flex-col justify-end bg-black text-white`}
-        style={{ background: `linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%), ${GRAD_CLASS[mealType]} center/cover` }}>
+      <div className={`relative overflow-hidden px-5 pt-5 pb-4 min-h-[120px] flex flex-col justify-end text-white`}
+        style={{ background: `linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%), ${GRAD[mealType]}` }}>
         
         <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3 w-fit"
           style={{ background:`rgba(255,255,255,0.2)`, color: '#fff', backdropFilter: 'blur(4px)' }}>

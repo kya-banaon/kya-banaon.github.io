@@ -31,11 +31,13 @@ export default function AppBar() {
             style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)' }}>
             {dateStr}
           </span>
+          {/* 
           <button onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}
             className="w-9 h-9 rounded-full text-base font-bold flex items-center justify-center transition-all active:scale-90"
             style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)', color: '#fff' }}>
             {lang === 'en' ? 'अ' : 'A'}
           </button>
+          */}
           <button onClick={resetOnboarding}
             className="w-9 h-9 rounded-full text-base flex items-center justify-center transition-all active:scale-90"
             style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)' }}>

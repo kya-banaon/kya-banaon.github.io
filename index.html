@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -15,6 +15,14 @@
     <meta name="description" content="Never ask 'Kya Banaon?' again. Automatically generate weekly Indian meal plans, discover regional recipes, and manage your grocery list—all for free." />
     <meta name="keywords" content="meal planner, indian recipes, weekly meal plan, kya banaon, what to cook, indian cooking, grocery list, daily recipes, breakfast ideas, dinner ideas, lunch thali" />
     <meta name="author" content="Kya Banaon" />
+    <script>
+    if (localStorage.getItem('kb_theme') === '"dark"') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    }
+  </script>
     <meta name="language" content="English" />
     
     <!-- Open Graph / Facebook -->

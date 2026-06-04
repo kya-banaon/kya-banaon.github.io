@@ -60,8 +60,8 @@ const save = (key: string, val: unknown) => { try { localStorage.setItem(key, JS
 
 export const useStore = create<AppState>((set, get) => ({
   isReady: false,
-  theme: load('kb_theme', 'dark') as ThemeKey,
-  lang: load('kb_lang', 'en') as Lang,
+  theme: load('kb_theme', 'light') as ThemeKey,
+  lang: 'en', // Disabled translation flow for now
   filters: load('kb_filters', { sat: false, kids: false, seas: false, quick: false, easy: false, oilFree: false }),
   weekPlan: load('kb_week', null),
   randPlan: [],
@@ -172,7 +172,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
   
   setPreferences: (prefs) => {
-    set({ preferences: prefs });
+    set({ preferences: prefs, weekPlan: null, randPlan: [] });
     save('kb_prefs', prefs);
   },
   
