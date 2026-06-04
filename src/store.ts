@@ -1,11 +1,11 @@
 import { create } from 'zustand';
-import type { Filters, WeekPlan, TabType, ModalState, SeasonKey, ThemeKey } from './types';
+import type { Filters, WeekPlan, TabType, ModalState, SeasonKey, ThemeKey, Dish } from './types';
 
 interface AppState {
   theme: ThemeKey;
   filters: Filters;
   weekPlan: WeekPlan | null;
-  randPlan: any[][];
+  randPlan: (Dish | null)[][];
   randPeriod: 1 | 2 | 3;
   currentTab: TabType;
   selectedDay: number;
@@ -15,9 +15,9 @@ interface AppState {
   setTheme: (t: ThemeKey) => void;
   toggleFilter: (key: keyof Filters) => void;
   setWeekPlan: (plan: WeekPlan) => void;
-  regenMeal: (dayIdx: number, mealType: string, dish: any) => void;
-  setRandPlan: (plan: any[][]) => void;
-  regenRandMeal: (dayIdx: number, mealIdx: number, dish: any) => void;
+  regenMeal: (dayIdx: number, mealType: string, dish: Dish | null) => void;
+  setRandPlan: (plan: (Dish | null)[][]) => void;
+  regenRandMeal: (dayIdx: number, mealIdx: number, dish: Dish | null) => void;
   setRandPeriod: (p: 1 | 2 | 3) => void;
   setTab: (tab: TabType) => void;
   selectDay: (idx: number) => void;
@@ -29,9 +29,19 @@ interface AppState {
 const todayIdx = () => { const d = new Date().getDay(); return d === 0 ? 6 : d - 1; };
 
 const load = <T>(key: string, fallback: T): T => {
-  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
+  try {
+    const v = localStorage.getItem(key);
+    if (!v) return fallback;
+    const parsed = JSON.parse(v);
+    if (key === 'kb_week' && Array.isArray(parsed) && parsed.length > 0) {
+      const firstDay = parsed[0];
+      const someMeal = firstDay.breakfast || firstDay.lunch || firstDay.dinner;
+      if (someMeal && !someMeal.region) return fallback;
+    }
+    return parsed;
+  } catch { return fallback; }
 };
-const save = (key: string, val: any) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} };
+const save = (key: string, val: unknown) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { console.error('Failed to save state:', e); } };
 
 export const useStore = create<AppState>((set, get) => ({
   theme: load('kb_theme', 'dark') as ThemeKey,
@@ -66,7 +76,7 @@ export const useStore = create<AppState>((set, get) => ({
 
   setRandPlan: (plan) => set({ randPlan: plan }),
   regenRandMeal: (dayIdx, mealIdx, dish) => {
-    const plan = get().randPlan.map((d, di) => di === dayIdx ? d.map((m: any, mi: number) => mi === mealIdx ? dish : m) : d);
+    const plan = get().randPlan.map((d, di) => di === dayIdx ? d.map((m, mi) => mi === mealIdx ? dish : m) : d);
     set({ randPlan: plan });
   },
 

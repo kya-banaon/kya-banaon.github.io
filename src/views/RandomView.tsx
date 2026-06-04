@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useStore } from '../store';
 import { generateRand, MEAL_TYPES, MEAL_ICONS, getPool, pickRandom } from '../mealLogic';
-import type { MealType } from '../types';
+import type { MealType, Dish } from '../types';
 
 const MONTH_NAMES = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const MEAL_COLOR: Record<MealType,string> = { breakfast:'var(--c-b)', lunch:'var(--c-l)', dinner:'var(--c-d)' };
@@ -17,7 +17,7 @@ export default function RandomView() {
 
   useEffect(() => {
     if (!randPlan.length) setRandPlan(generateRand(randPeriod, filters));
-  }, [randPeriod, filters]);
+  }, [randPlan.length, randPeriod, filters, setRandPlan]);
 
   const dayLabel = (i: number) => {
     const d = new Date(today); d.setDate(today.getDate() + i);
@@ -50,7 +50,7 @@ export default function RandomView() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {dayMeals.map((meal: any, mi: number) => {
+            {dayMeals.map((meal: Dish | null, mi: number) => {
               const mtype = MEAL_TYPES[mi];
               const color = MEAL_COLOR[mtype];
               if (!meal) return (

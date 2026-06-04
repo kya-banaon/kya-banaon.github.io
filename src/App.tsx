@@ -19,7 +19,7 @@ export default function App() {
   useEffect(() => {
     document.documentElement.classList.toggle('light', theme === 'light');
     document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, []);
+  }, [theme]);
 
   return (
     <div className="max-w-2xl mx-auto min-h-dvh relative" style={{ background:'var(--bg)' }}>

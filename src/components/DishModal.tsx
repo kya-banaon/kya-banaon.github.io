@@ -54,9 +54,13 @@ export default function DishModal() {
           <h2 className="font-display text-3xl leading-tight mb-2">{dish.name}</h2>
           <p className="text-sm opacity-70 leading-relaxed">{dish.desc}</p>
 
-          <div className="flex gap-3 mt-4 text-sm">
+          <div className="flex gap-3 mt-4 text-sm flex-wrap">
             <span className="flex items-center gap-1.5 font-semibold opacity-70">⏱ {dish.time} min</span>
             <span className="flex items-center gap-1.5 font-semibold opacity-70">👤 {dish.serves}</span>
+            <span className="px-3 py-0.5 rounded-full text-xs font-bold"
+              style={{ background:`color-mix(in srgb, ${color} 18%, transparent)`, color }}>
+              🌍 {dish.region}
+            </span>
             <span className="px-3 py-0.5 rounded-full text-xs font-bold"
               style={{ background:`color-mix(in srgb, ${color} 18%, transparent)`, color }}>
               {diff}

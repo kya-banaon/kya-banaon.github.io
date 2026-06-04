@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useStore } from '../store';
-import { generateWeek, MEAL_TYPES, getDayDate, DAY_NAMES, MEAL_ICONS } from '../mealLogic';
+import { generateWeek, MEAL_TYPES, getDayDate, DAY_NAMES, MEAL_ICONS, getPool } from '../mealLogic';
 import DaySelector from '../components/DaySelector';
 import MealCard from '../components/MealCard';
 import TodayHero from '../components/TodayHero';
-import type { MealType } from '../types';
+import type { MealType, Dish } from '../types';
 
 const TODAY = new Date();
 
@@ -13,11 +13,7 @@ export default function WeeklyView() {
 
   useEffect(() => {
     if (!weekPlan) setWeekPlan(generateWeek(filters));
-  }, []);
-
-  useEffect(() => {
-    if (!weekPlan) setWeekPlan(generateWeek(filters));
-  }, [filters]);
+  }, [weekPlan, filters, setWeekPlan]);
 
   if (!weekPlan) return null;
 
@@ -79,7 +75,7 @@ export default function WeeklyView() {
   );
 }
 
-function DesktopCell({ dish, mealType, dayIdx }: { dish: any; mealType: MealType; dayIdx: number }) {
+function DesktopCell({ dish, mealType, dayIdx }: { dish: Dish | null; mealType: MealType; dayIdx: number }) {
   const { openModal, filters, regenMeal } = useStore();
   if (!dish) return <td className="p-2 text-center text-xs" style={{ color:'var(--muted)' }}>—</td>;
 
@@ -92,7 +88,7 @@ function DesktopCell({ dish, mealType, dayIdx }: { dish: any; mealType: MealType
         onClick={() => openModal({ dish, mealType })}>
         <div className="w-full h-0.5 rounded-full mb-2" style={{ background:COLOR[mealType] }} />
         <div className="text-xs font-bold leading-snug">{dish.name}</div>
-        <button onClick={e => { e.stopPropagation(); const pool = (window as any).__getPool?.(mealType, filters); if(pool?.length) regenMeal(dayIdx, mealType, { ...pool[Math.floor(Math.random()*pool.length)], _type:mealType }); }}
+        <button onClick={e => { e.stopPropagation(); const pool = getPool(mealType, filters); if(pool?.length) regenMeal(dayIdx, mealType, { ...pool[Math.floor(Math.random()*pool.length)], _type:mealType }); }}
           className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 text-[10px] px-1.5 py-0.5 rounded-lg transition-all"
           style={{ background:'var(--primary-dim)', color:'var(--primary)' }}>↺</button>
       </div>

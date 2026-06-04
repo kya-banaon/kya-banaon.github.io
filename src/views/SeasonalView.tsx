@@ -25,7 +25,7 @@ export default function SeasonalView() {
       const current = SEASONS.find(s => s.months.includes(CURR_MONTH));
       setSeason(current?.key || 'win');
     }
-  }, []);
+  }, [activeSeason, setSeason]);
 
   const season = SEASONS.find(s => s.key === activeSeason) || SEASONS[0];
   const vegs = SEASONAL_VEGS[CURR_MONTH] || [];

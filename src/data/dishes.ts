@@ -1,12 +1,21 @@
 import type { Dish } from '../types';
+import { indoChineseBreakfast, indoChineseLunch, indoChineseDinner } from './regions/indoChinese';
+import { northIndianBreakfast, northIndianLunch, northIndianDinner } from './regions/northIndian';
+import { southIndianBreakfast, southIndianLunch, southIndianDinner } from './regions/southIndian';
+import { otherRegionsBreakfast, otherRegionsLunch, otherRegionsDinner } from './regions/otherRegions';
+
 
 export const DISHES: Record<string, Dish[]> = {
   breakfast: [
+    ...indoChineseBreakfast,
+    ...northIndianBreakfast,
+    ...southIndianBreakfast,
+    ...otherRegionsBreakfast,
     {
       id: 'poha',
       name: 'Poha',
       desc: 'Fluffy flattened rice tossed with peas, peanuts and spices — a beloved morning classic.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 270, protein: 6, carbs: 48, fat: 5, fiber: 3, time: 15, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup thick poha', '½ cup green peas', '1 potato boiled & cubed', '2 tsp oil', '1 tsp mustard seeds', '8-10 curry leaves', '¼ tsp turmeric', '2 tbsp roasted peanuts', 'Salt & lemon to taste', 'Fresh coriander'],
@@ -17,7 +26,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'upma',
       name: 'Upma',
       desc: 'Savory semolina porridge with vegetables — quick, filling and light on the stomach.',
-      sattvic: false, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 220, protein: 7, carbs: 38, fat: 5, fiber: 3, time: 20, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['1 cup semolina (rava)', '1 onion chopped', '½ cup mixed veggies', '1 tbsp ghee or oil', '1 tsp mustard seeds', '1 tsp urad dal', '8 curry leaves', '2.5 cups water', 'Salt to taste'],
@@ -28,7 +37,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'idli-sambar',
       name: 'Idli & Sambar',
       desc: 'Steamed rice-lentil cakes served with spiced lentil soup — the ultimate South Indian breakfast.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'South Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 180, protein: 9, carbs: 32, fat: 2, fiber: 5, time: 30, easy: false, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['2 cups idli batter (fermented rice & urad dal)', 'For sambar: 1 cup toor dal', 'Mixed veggies (drumstick, carrot, pumpkin)', 'Sambar powder 2 tsp', 'Tamarind water', 'Tempering: mustard, curry leaves, red chilli'],
@@ -39,7 +48,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'masala-dosa',
       name: 'Masala Dosa',
       desc: 'Crispy fermented rice crepe filled with spiced potato — a South Indian showstopper.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'South Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 340, protein: 8, carbs: 52, fat: 8, fiber: 4, time: 30, easy: false, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['2 cups dosa batter', '2 potatoes boiled & mashed', '1 onion sliced', '½ tsp mustard seeds', '¼ tsp turmeric', 'Salt, oil', 'Coconut chutney & sambar to serve'],
@@ -50,7 +59,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'aloo-paratha',
       name: 'Aloo Paratha',
       desc: 'Whole wheat flatbread stuffed with spiced mashed potato — hearty and satisfying.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 310, protein: 8, carbs: 52, fat: 9, fiber: 4, time: 25, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['2 cups whole wheat flour', '3 potatoes boiled & mashed', '1 tsp cumin seeds', '½ tsp red chilli powder', '1 tsp coriander powder', 'Fresh coriander', 'Salt, oil/ghee'],
@@ -61,7 +70,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'methi-thepla',
       name: 'Methi Thepla',
       desc: 'Thin Gujarati flatbread with fresh fenugreek leaves — fragrant and nutritious.',
-      sattvic: true, kids: false, seasons: [10,11,12,1,2,3],
+      region: 'Gujarati', sattvic: true, kids: false, seasons: [10,11,12,1,2,3],
       kcal: 230, protein: 7, carbs: 38, fat: 6, fiber: 5, time: 20, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup whole wheat flour', '½ cup fresh methi leaves', '¼ cup curd', '1 tsp turmeric', '1 tsp red chilli powder', 'Salt, oil'],
@@ -72,7 +81,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'besan-chilla',
       name: 'Besan Chilla',
       desc: 'Savory gram flour pancake with chopped vegetables — protein-rich and quick.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 200, protein: 12, carbs: 28, fat: 5, fiber: 4, time: 15, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['1 cup besan (gram flour)', '¼ cup chopped veggies (capsicum, tomato)', '½ tsp cumin seeds', '¼ tsp turmeric', 'Salt, red chilli to taste', 'Water to make batter', '1 tsp oil per chilla'],
@@ -83,7 +92,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'sabudana-khichdi',
       name: 'Sabudana Khichdi',
       desc: 'Tapioca pearls with potatoes and peanuts — popular vrat (fasting) breakfast.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'Maharashtrian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 350, protein: 4, carbs: 65, fat: 8, fiber: 2, time: 20, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['1 cup sabudana soaked 4-6 hrs', '2 potatoes boiled & cubed', '3 tbsp peanuts roasted & crushed', '1 tsp cumin seeds', '2 green chillies', 'Salt (sendha namak), lemon', '1 tbsp ghee'],
@@ -94,7 +103,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'vermicelli-upma',
       name: 'Vermicelli Upma',
       desc: 'Roasted thin noodles cooked with peas and onion — light and kids-approved.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 240, protein: 6, carbs: 40, fat: 5, fiber: 2, time: 15, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['1 cup roasted vermicelli (semiya)', '1 onion chopped', '½ cup peas', '1 tsp mustard seeds', '8 curry leaves', '1.5 cups water', 'Salt, oil'],
@@ -105,7 +114,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'puri-bhaji',
       name: 'Puri Bhaji',
       desc: 'Deep-fried wheat puris with spiced potato curry — festive and indulgent.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 420, protein: 7, carbs: 65, fat: 18, fiber: 5, time: 40, easy: false, oilFree: false, serves: '3-4',
       recipe: {
         ingredients: ['2 cups whole wheat flour', '4 potatoes boiled', '1 tsp mustard seeds', '½ tsp turmeric', '1 tsp coriander powder', 'Oil for deep frying', 'Salt, fresh coriander'],
@@ -116,7 +125,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'uttapam',
       name: 'Uttapam',
       desc: 'Thick rice pancake topped with onion, tomato and herbs — soft and wholesome.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'South Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 220, protein: 8, carbs: 35, fat: 5, fiber: 3, time: 25, easy: false, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['2 cups dosa batter (thick)', '1 onion finely chopped', '1 tomato chopped', 'Green chilli and coriander', 'Oil for cooking'],
@@ -127,7 +136,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'moong-dal-chilla',
       name: 'Moong Dal Chilla',
       desc: 'Green moong pancake — high protein, light and oil-free when made on non-stick.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 190, protein: 14, carbs: 24, fat: 4, fiber: 5, time: 20, easy: true, oilFree: true, serves: '2',
       recipe: {
         ingredients: ['1 cup yellow moong dal soaked 2 hrs', '½ tsp cumin', '¼ tsp turmeric', 'Green chilli 1', 'Ginger ½ inch', 'Salt, fresh coriander', 'Minimal oil or non-stick pan'],
@@ -138,7 +147,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'rava-idli',
       name: 'Rava Idli',
       desc: 'Instant semolina idli — no fermentation needed, ready in 20 minutes.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'South Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 160, protein: 6, carbs: 28, fat: 3, fiber: 2, time: 20, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup semolina', '½ cup curd', '¼ tsp baking soda', 'Salt', 'Mustard seeds, curry leaves', '¼ cup coriander and cashews'],
@@ -149,7 +158,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'khaman-dhokla',
       name: 'Khaman Dhokla',
       desc: 'Fluffy steamed gram flour cake tempered with mustard and sesame — a Gujarati gem.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'Gujarati', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 150, protein: 10, carbs: 22, fat: 3, fiber: 3, time: 20, easy: true, oilFree: false, serves: '3-4',
       recipe: {
         ingredients: ['1 cup besan', '½ cup curd', '1 tsp Eno/baking soda', '1 tsp sugar', 'Salt, turmeric', 'Tempering: mustard, sesame, curry leaves, green chilli'],
@@ -160,7 +169,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'suji-halwa-puri',
       name: 'Suji Halwa & Puri',
       desc: 'Sweet roasted semolina pudding with crispy puris — a festive Sunday treat.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 450, protein: 6, carbs: 72, fat: 18, fiber: 2, time: 35, easy: false, oilFree: false, serves: '3-4',
       recipe: {
         ingredients: ['1 cup semolina', '¼ cup ghee', '¾ cup sugar', '2 cups water', 'Cardamom 4 pods', 'Cashews and raisins', '2 cups flour for puris, oil for frying'],
@@ -171,7 +180,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'bread-poha',
       name: 'Bread Poha',
       desc: 'Toasted bread tossed with peas and potato — the fastest Indian breakfast hack.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 280, protein: 5, carbs: 45, fat: 5, fiber: 2, time: 10, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['4 bread slices cubed', '½ cup peas', '1 potato boiled', '1 tsp mustard seeds', 'Curry leaves, turmeric', 'Salt, lemon', '1 tsp oil'],
@@ -182,7 +191,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'paneer-paratha',
       name: 'Paneer Paratha',
       desc: 'Whole wheat flatbread stuffed with spiced cottage cheese — rich and filling.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 370, protein: 14, carbs: 48, fat: 12, fiber: 3, time: 25, easy: false, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['2 cups whole wheat flour', '200g paneer grated', '1 tsp cumin seeds', '½ tsp red chilli', 'Fresh coriander', 'Salt, ghee'],
@@ -193,7 +202,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'gobi-paratha',
       name: 'Gobi Paratha',
       desc: 'Whole wheat flatbread stuffed with spiced grated cauliflower — winter special.',
-      sattvic: true, kids: true, seasons: [11,12,1,2],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [11,12,1,2],
       kcal: 290, protein: 9, carbs: 46, fat: 8, fiber: 5, time: 25, easy: false, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['2 cups whole wheat flour', '2 cups cauliflower grated', '1 tsp cumin, ½ tsp red chilli', 'Ginger 1 inch grated', 'Fresh coriander, salt', 'Ghee for cooking'],
@@ -204,7 +213,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'sabudana-vada',
       name: 'Sabudana Vada',
       desc: 'Crispy tapioca and potato patties — popular fasting snack from Maharashtra.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'Maharashtrian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 280, protein: 5, carbs: 48, fat: 10, fiber: 2, time: 25, easy: false, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup sabudana soaked', '2 potatoes boiled & mashed', '3 tbsp peanuts crushed', 'Green chilli, coriander', 'Sendha namak, lemon', 'Oil for frying'],
@@ -215,7 +224,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'kuttu-paratha',
       name: 'Kuttu Paratha',
       desc: 'Buckwheat flour flatbread — nutritious vrat staple with earthy flavour.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 320, protein: 8, carbs: 52, fat: 10, fiber: 4, time: 20, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['1 cup buckwheat (kuttu) flour', '1 boiled potato mashed', 'Green chilli, coriander', 'Sendha namak', 'Ghee or oil'],
@@ -226,7 +235,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'singhare-ka-halwa',
       name: 'Singhare ka Halwa',
       desc: 'Sweet water chestnut flour pudding — festive vrat dessert-breakfast.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 380, protein: 5, carbs: 58, fat: 14, fiber: 2, time: 20, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup singhara (water chestnut) flour', '¼ cup ghee', '½ cup sugar or jaggery', '1.5 cups water', 'Cardamom 4 pods', 'Dry fruits'],
@@ -237,7 +246,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'makhana-kheer',
       name: 'Makhana Kheer',
       desc: 'Fox nut pudding in creamy milk — rich, soothing and vrat-friendly.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 300, protein: 10, carbs: 45, fat: 8, fiber: 2, time: 20, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup makhana (fox nuts)', '500ml full cream milk', '3 tbsp sugar', '¼ tsp cardamom powder', 'Saffron few strands', 'Dry fruits for garnish'],
@@ -248,7 +257,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'banana-curd',
       name: 'Banana & Curd',
       desc: 'Ripe bananas with thick sweetened curd and cardamom — effortless and nourishing.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 200, protein: 8, carbs: 38, fat: 2, fiber: 3, time: 5, easy: true, oilFree: true, serves: '2',
       recipe: {
         ingredients: ['2 ripe bananas', '1 cup thick curd (dahi)', '1 tsp honey or sugar', 'Cardamom pinch', 'Chopped nuts optional'],
@@ -258,11 +267,15 @@ export const DISHES: Record<string, Dish[]> = {
   ],
 
   lunch: [
+    ...indoChineseLunch,
+    ...northIndianLunch,
+    ...southIndianLunch,
+    ...otherRegionsLunch,
     {
       id: 'dal-tadka-rice',
       name: 'Dal Tadka & Rice',
       desc: 'Comforting toor dal with smoky ghee tempering — the soul of Indian home cooking.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 380, protein: 18, carbs: 62, fat: 8, fiber: 8, time: 30, easy: true, oilFree: false, serves: '3-4',
       recipe: {
         ingredients: ['1 cup toor dal', '1 tomato', '½ tsp turmeric', '1 tsp cumin seeds', '2 tbsp ghee', '2 red chillies', 'Garlic optional (skip for sattvic)', 'Salt, coriander'],
@@ -273,7 +286,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'rajma-chawal',
       name: 'Rajma Chawal',
       desc: 'Hearty kidney bean curry over basmati rice — North India\'s ultimate comfort meal.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 450, protein: 22, carbs: 72, fat: 6, fiber: 12, time: 45, easy: false, oilFree: false, serves: '3-4',
       recipe: {
         ingredients: ['1 cup rajma soaked overnight', '2 tomatoes pureed', '1 onion', '1 tsp ginger-garlic paste', 'Rajma masala 2 tsp', 'Bay leaf, cinnamon', 'Salt, cream optional'],
@@ -284,7 +297,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'chole-bhature',
       name: 'Chole Bhature',
       desc: 'Spiced chickpea curry with fluffy deep-fried bread — a celebration on a plate.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 520, protein: 18, carbs: 82, fat: 18, fiber: 10, time: 45, easy: false, oilFree: false, serves: '3-4',
       recipe: {
         ingredients: ['1 cup chickpeas soaked overnight', '2 tomatoes', '1 onion', 'Chana masala 2 tsp', 'Tea bag (for color)', 'Bhature: 2 cups maida, curd, oil for frying'],
@@ -295,7 +308,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'palak-paneer-roti',
       name: 'Palak Paneer & Roti',
       desc: 'Cottage cheese cubes in silky spiced spinach gravy — vibrant and nutritious.',
-      sattvic: true, kids: true, seasons: [10,11,12,1,2,3],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [10,11,12,1,2,3],
       kcal: 380, protein: 20, carbs: 38, fat: 16, fiber: 6, time: 35, easy: false, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['200g paneer cubed', '300g spinach blanched', '1 tomato', '1 tsp cumin', 'Cream 2 tbsp', 'Garam masala, salt', 'Ghee or oil'],
@@ -306,7 +319,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'kadhi-chawal',
       name: 'Kadhi Chawal',
       desc: 'Tangy yogurt-besan gravy with pakodas — a rainy day favourite.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 350, protein: 12, carbs: 58, fat: 10, fiber: 4, time: 35, easy: false, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['1 cup curd beaten', '2 tbsp besan', '1 tsp turmeric', 'For pakoda: besan, onion, spices', 'Tempering: mustard, methi seeds, red chilli', 'Salt'],
@@ -317,7 +330,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'paneer-butter-masala',
       name: 'Paneer Butter Masala',
       desc: 'Rich tomato-cream curry with golden paneer — restaurant-style at home.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 480, protein: 22, carbs: 28, fat: 24, fiber: 4, time: 35, easy: false, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['200g paneer', '4 tomatoes', '1 onion', '2 tbsp butter', 'Fresh cream 3 tbsp', 'Cashews 10', 'Garam masala, Kashmiri red chilli', 'Salt, sugar pinch'],
@@ -328,7 +341,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'baingan-bharta-roti',
       name: 'Baingan Bharta & Roti',
       desc: 'Fire-roasted eggplant mashed with spices — smoky, rustic, earthy.',
-      sattvic: false, kids: false, seasons: [7,8,9,10],
+      region: 'North Indian', sattvic: false, kids: false, seasons: [7,8,9,10],
       kcal: 280, protein: 5, carbs: 22, fat: 8, fiber: 8, time: 35, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 large baingan (brinjal)', '1 tomato', '1 onion', '1 tsp cumin seeds', '½ tsp red chilli', 'Coriander, salt, oil'],
@@ -339,7 +352,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'aloo-gobi-sabzi',
       name: 'Aloo Gobi Sabzi',
       desc: 'Potato and cauliflower cooked with cumin and spices — simple and satisfying.',
-      sattvic: true, kids: true, seasons: [11,12,1,2],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [11,12,1,2],
       kcal: 260, protein: 6, carbs: 42, fat: 8, fiber: 8, time: 25, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['2 potatoes cubed', '1 small cauliflower florets', '1 tomato', '1 tsp cumin seeds', '½ tsp turmeric, coriander powder', 'Salt, oil, fresh coriander'],
@@ -350,7 +363,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'bhindi-masala-dal',
       name: 'Bhindi Masala & Dal',
       desc: 'Stir-fried okra with tangy spices paired with toor dal — summer perfection.',
-      sattvic: true, kids: false, seasons: [6,7,8,9],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [6,7,8,9],
       kcal: 240, protein: 12, carbs: 38, fat: 8, fiber: 8, time: 30, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['250g bhindi (okra) sliced', '½ cup toor dal cooked', '1 tomato', '1 tsp cumin seeds', '1 tsp coriander powder', 'Amchur, salt, oil'],
@@ -361,7 +374,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'moong-dal-khichdi',
       name: 'Moong Dal Khichdi',
       desc: 'Rice and green moong lentils cooked to comforting mush with ghee tadka.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 320, protein: 14, carbs: 54, fat: 6, fiber: 8, time: 25, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['½ cup rice', '½ cup moong dal', '1 tsp cumin seeds', '¼ tsp turmeric', '1 tbsp ghee', 'Salt, water 3 cups', 'Pinch of asafoetida'],
@@ -372,7 +385,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'sambar-rice',
       name: 'Sambar Rice',
       desc: 'South Indian toor dal and vegetable stew poured over hot rice — humble and wholesome.',
-      sattvic: false, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'South Indian', sattvic: false, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 340, protein: 12, carbs: 58, fat: 6, fiber: 10, time: 40, easy: false, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['1 cup toor dal', 'Mixed veggies: drumstick, carrot, pumpkin', '2 tsp sambar powder', 'Tamarind small ball', 'Mustard, curry leaves tempering', '2 cups rice cooked'],
@@ -383,7 +396,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'vegetable-pulao',
       name: 'Vegetable Pulao',
       desc: 'Fragrant basmati rice cooked with whole spices and seasonal vegetables.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 360, protein: 8, carbs: 62, fat: 8, fiber: 6, time: 25, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup basmati rice washed', 'Mixed veggies: peas, carrot, beans', '2 tbsp ghee', 'Bay leaf, cardamom, cloves, cinnamon', 'Cumin 1 tsp', 'Salt, 2 cups water'],
@@ -394,7 +407,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'dal-makhani-naan',
       name: 'Dal Makhani & Naan',
       desc: 'Slow-cooked black lentils in buttery tomato cream — North India\'s pride.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 480, protein: 22, carbs: 65, fat: 18, fiber: 12, time: 60, easy: false, oilFree: false, serves: '3-4',
       recipe: {
         ingredients: ['1 cup whole urad dal (black) soaked overnight', '¼ cup rajma', '2 tomatoes', 'Butter 3 tbsp, cream 3 tbsp', 'Ginger-garlic paste', 'Garam masala, red chilli, salt'],
@@ -405,7 +418,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'matar-paneer',
       name: 'Matar Paneer',
       desc: 'Fresh green peas and paneer in spiced tomato gravy — winter delight.',
-      sattvic: true, kids: true, seasons: [12,1,2,3],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [12,1,2,3],
       kcal: 420, protein: 20, carbs: 28, fat: 18, fiber: 6, time: 30, easy: true, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['200g paneer cubed', '1 cup fresh green peas', '2 tomatoes pureed', '1 tsp cumin', '1 tsp coriander powder', 'Garam masala, salt, oil'],
@@ -416,7 +429,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'lauki-dal-rice',
       name: 'Lauki Dal & Rice',
       desc: 'Bottle gourd cooked with toor dal — light, cooling and easy to digest.',
-      sattvic: true, kids: false, seasons: [4,5,6,7,8,9],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [4,5,6,7,8,9],
       kcal: 280, protein: 14, carbs: 52, fat: 5, fiber: 6, time: 30, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['½ cup toor dal', '1 medium lauki (bottle gourd) peeled & cubed', '½ tsp turmeric', '1 tsp cumin seeds', '1 tomato', 'Ghee, salt, coriander'],
@@ -427,7 +440,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'pav-bhaji',
       name: 'Pav Bhaji',
       desc: 'Spiced mashed vegetable medley with buttered bread rolls — Mumbai\'s street food icon.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 440, protein: 12, carbs: 68, fat: 16, fiber: 10, time: 35, easy: false, oilFree: false, serves: '3-4',
       recipe: {
         ingredients: ['4 potatoes boiled', '1 cup mixed veg (peas, cauliflower, carrot)', '2 tomatoes', '3 tbsp butter', '2 tsp pav bhaji masala', 'Lemon, coriander', '6 pav buns'],
@@ -438,7 +451,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'aloo-matar-curry',
       name: 'Aloo Matar Curry',
       desc: 'Potatoes and green peas in spiced tomato gravy — simple and satisfying.',
-      sattvic: true, kids: true, seasons: [12,1,2,3],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [12,1,2,3],
       kcal: 300, protein: 8, carbs: 52, fat: 8, fiber: 8, time: 25, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['3 potatoes cubed', '1 cup green peas', '2 tomatoes', '1 tsp cumin seeds', '1 tsp coriander powder', 'Turmeric, garam masala, salt, oil'],
@@ -449,7 +462,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'methi-malai-paneer',
       name: 'Methi Malai Paneer',
       desc: 'Paneer in fenugreek-cream gravy — bitter, rich and luxurious.',
-      sattvic: true, kids: false, seasons: [10,11,12,1,2,3],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [10,11,12,1,2,3],
       kcal: 400, protein: 18, carbs: 18, fat: 22, fiber: 4, time: 30, easy: false, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['200g paneer', '1 cup methi leaves', '2 tbsp cream', '1 onion puree', 'Cashew paste 2 tbsp', 'Ginger, green chilli', 'Salt, cumin, garam masala'],
@@ -460,7 +473,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'kuttu-khichdi',
       name: 'Kuttu Khichdi',
       desc: 'Buckwheat and potato cooked together — filling vrat-friendly one-pot.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 330, protein: 8, carbs: 56, fat: 5, fiber: 5, time: 20, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['½ cup kuttu (buckwheat) groats', '1 potato cubed', '½ tsp cumin seeds', 'Green chilli 1', 'Sendha namak, ghee', 'Fresh coriander'],
@@ -471,7 +484,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'singhare-ki-puri-aloo',
       name: 'Singhare ki Puri & Aloo',
       desc: 'Water chestnut flour puris with vrat-style potato — festive fasting meal.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 400, protein: 8, carbs: 68, fat: 14, fiber: 4, time: 35, easy: false, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup singhara flour', '3 potatoes boiled', 'Green chilli, cumin seeds', 'Sendha namak, ghee', 'Coriander leaves', 'Oil for frying'],
@@ -482,7 +495,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'sama-rice-dahi',
       name: 'Sama Rice & Dahi',
       desc: 'Barnyard millet with cold yogurt and pomegranate — cooling vrat meal.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 280, protein: 10, carbs: 48, fat: 4, fiber: 3, time: 15, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['½ cup sama rice (barnyard millet)', '1 cup thick dahi', 'Sendha namak', 'Cumin powder pinch', 'Pomegranate seeds optional', 'Coriander for garnish'],
@@ -493,7 +506,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'arbi-sabzi-roti',
       name: 'Arbi Sabzi & Roti',
       desc: 'Colocasia root stir-fried with cumin and amchur — earthy and satisfying.',
-      sattvic: true, kids: false, seasons: [7,8,9,10],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [7,8,9,10],
       kcal: 250, protein: 6, carbs: 42, fat: 6, fiber: 5, time: 30, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['500g arbi (colocasia) boiled & peeled', '1 tsp cumin seeds', '½ tsp turmeric', '1 tsp coriander powder', 'Amchur powder', 'Salt, oil, coriander'],
@@ -504,7 +517,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'makhana-curry-rice',
       name: 'Makhana Curry & Rice',
       desc: 'Fox nuts in creamy cashew-tomato curry — light yet indulgent.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 350, protein: 12, carbs: 58, fat: 10, fiber: 4, time: 25, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup makhana (fox nuts)', '2 tomatoes pureed', 'Cashew paste 2 tbsp', '1 tsp cumin seeds', 'Garam masala, salt', 'Cream 2 tbsp, coriander', 'Ghee or oil'],
@@ -514,11 +527,15 @@ export const DISHES: Record<string, Dish[]> = {
   ],
 
   dinner: [
+    ...indoChineseDinner,
+    ...northIndianDinner,
+    ...southIndianDinner,
+    ...otherRegionsDinner,
     {
       id: 'roti-mix-veg',
       name: 'Roti & Mix Veg',
       desc: 'Seasonal vegetable medley with warm whole wheat rotis — everyday home comfort.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 360, protein: 10, carbs: 58, fat: 8, fiber: 8, time: 30, easy: true, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['2 cups seasonal mixed veggies', '1 tomato', '1 tsp cumin seeds', '1 tsp coriander-cumin powder', 'Turmeric, garam masala, salt', 'Oil, coriander', 'Whole wheat rotis'],
@@ -529,7 +546,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'dal-khichdi',
       name: 'Dal Khichdi',
       desc: 'Soft comfort rice-lentil porridge — the original Indian sick-day or lazy-day meal.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 310, protein: 14, carbs: 52, fat: 6, fiber: 8, time: 25, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['½ cup rice', '½ cup moong or toor dal', '1 tbsp ghee', '½ tsp turmeric', 'Cumin seeds, asafoetida', 'Salt, 3 cups water'],
@@ -540,7 +557,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'paneer-curry-chapati',
       name: 'Paneer Curry & Chapati',
       desc: 'Cottage cheese in spiced tomato-curd gravy with soft chapatis.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 400, protein: 20, carbs: 38, fat: 16, fiber: 4, time: 30, easy: true, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['200g paneer cubed', '2 tomatoes blended', '1 tsp cumin, ginger paste', '1 tsp coriander powder', 'Garam masala, turmeric, salt', '2 tbsp cream or curd', 'Oil'],
@@ -551,7 +568,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'aloo-jeera-dal',
       name: 'Aloo Jeera & Dal',
       desc: 'Cumin-scented roasted potatoes with simple dal — quick and soul-warming.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 280, protein: 12, carbs: 46, fat: 6, fiber: 6, time: 20, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['3 potatoes boiled & cubed', '2 tsp cumin seeds', '½ tsp turmeric', 'Green chilli 1', 'Lemon juice, salt', 'Coriander leaves', '1 tsp oil or ghee'],
@@ -562,7 +579,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'lauki-sabzi-roti',
       name: 'Lauki Sabzi & Roti',
       desc: 'Bottle gourd gently spiced — digestive-friendly light summer dinner.',
-      sattvic: true, kids: false, seasons: [4,5,6,7,8,9],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [4,5,6,7,8,9],
       kcal: 220, protein: 5, carbs: 36, fat: 4, fiber: 4, time: 20, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['1 medium lauki peeled & cubed', '½ tsp turmeric', '1 tsp cumin seeds', '½ tsp coriander powder', 'Salt, 1 tsp oil or ghee', 'Coriander leaves'],
@@ -573,7 +590,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'vegetable-biryani',
       name: 'Vegetable Biryani',
       desc: 'Layered aromatic rice with vegetables, saffron and fried onion — festive dum cooking.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 420, protein: 10, carbs: 68, fat: 12, fiber: 6, time: 45, easy: false, oilFree: false, serves: '3-4',
       recipe: {
         ingredients: ['1.5 cups basmati rice soaked', 'Mixed veggies: carrot, peas, beans, potato', 'Fried onion (birista)', 'Whole spices: bay, cardamom, cloves', 'Saffron in warm milk', 'Mint, coriander, ghee'],
@@ -584,7 +601,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'dahi-rice',
       name: 'Dahi Rice',
       desc: 'Cooled rice mixed with tempered yogurt — soothing South Indian curd rice.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'South Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 300, protein: 10, carbs: 52, fat: 4, fiber: 2, time: 10, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['1.5 cups cooked rice cooled', '1 cup thick curd beaten', 'Salt, sugar pinch', 'Tempering: mustard, curry leaves, dry red chilli, urad dal', 'Green chilli optional', 'Pomegranate or grapes optional'],
@@ -595,7 +612,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'toor-dal-ghee-rice',
       name: 'Toor Dal & Ghee Rice',
       desc: 'Toor dal tadka alongside fragrant ghee-drizzled basmati — simple perfection.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 380, protein: 16, carbs: 62, fat: 10, fiber: 8, time: 30, easy: true, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['1 cup toor dal', '1 cup basmati rice', 'Tempering: cumin, mustard, tomato', '2 tbsp ghee', 'Turmeric, salt', 'Curry leaves, coriander'],
@@ -606,7 +623,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'stuffed-paratha-dahi',
       name: 'Stuffed Paratha & Dahi',
       desc: 'Ghee-cooked stuffed flatbread with chilled curd — comforting end to the day.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 380, protein: 14, carbs: 62, fat: 14, fiber: 6, time: 30, easy: false, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['2 cups whole wheat flour', 'Filling: mashed aloo or paneer or gobi', 'Spices for filling', 'Ghee for cooking', 'Thick chilled curd to serve', 'Pickle'],
@@ -617,7 +634,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'palak-dal-rice',
       name: 'Palak Dal & Rice',
       desc: 'Spinach-lentil combination rich in iron and protein — wholesome and green.',
-      sattvic: true, kids: false, seasons: [10,11,12,1,2,3],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [10,11,12,1,2,3],
       kcal: 280, protein: 16, carbs: 52, fat: 5, fiber: 10, time: 30, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['½ cup toor dal', '100g spinach chopped', '1 tomato', '½ tsp turmeric', 'Cumin seeds, garlic (optional)', 'Salt, ghee'],
@@ -628,7 +645,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'vegetable-soup-roti',
       name: 'Vegetable Soup & Roti',
       desc: 'Light broth with chunky vegetables — ideal oil-free dinner for detox days.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 160, protein: 6, carbs: 28, fat: 3, fiber: 6, time: 20, easy: true, oilFree: true, serves: '2',
       recipe: {
         ingredients: ['2 cups mixed veggies (carrot, beans, peas)', '1 tomato', '½ tsp black pepper', 'Salt, herbs', '1 cup water or light vegetable broth', 'Lemon juice'],
@@ -639,7 +656,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'rajma-chapati',
       name: 'Rajma & Chapati',
       desc: 'Kidney bean curry with chapatis — slower-cooked version for weeknight dinners.',
-      sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 420, protein: 18, carbs: 68, fat: 8, fiber: 12, time: 45, easy: false, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['1 cup rajma soaked overnight', '2 tomatoes', '1 tsp ginger paste', 'Rajma masala 2 tsp', 'Bay leaf, cinnamon', 'Salt, cream optional', 'Oil'],
@@ -650,7 +667,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'moong-dal-tadka-rice',
       name: 'Moong Dal Tadka & Rice',
       desc: 'Yellow moong dal with fiery ghee tadka — the quickest satisfying dinner.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 310, protein: 14, carbs: 54, fat: 4, fiber: 8, time: 20, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup yellow moong dal', '½ tsp turmeric', 'Salt', 'Tadka: 1 tbsp ghee, 1 tsp cumin, 2 red chillies, asafoetida', 'Coriander to garnish'],
@@ -661,7 +678,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'pumpkin-sabzi-roti',
       name: 'Pumpkin Sabzi & Roti',
       desc: 'Kaddu cooked with cumin, amchur and jaggery — sweet-sour comfort.',
-      sattvic: true, kids: false, seasons: [7,8,9,10,11],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [7,8,9,10,11],
       kcal: 220, protein: 5, carbs: 36, fat: 5, fiber: 5, time: 20, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['400g kaddu (pumpkin) cubed', '1 tsp cumin seeds', '½ tsp turmeric', '1 tsp coriander powder', 'Dry mango powder (amchur)', 'Salt, oil, coriander'],
@@ -672,7 +689,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'chole-rice',
       name: 'Chole & Rice',
       desc: 'Spiced chickpea curry with tamarind over steamed rice — hearty and flavourful.',
-      sattvic: false, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: false, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 430, protein: 18, carbs: 70, fat: 10, fiber: 12, time: 40, easy: false, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['1 cup chickpeas soaked overnight', '2 tomatoes', 'Chana masala 2 tsp', '1 tsp ginger paste', 'Tamarind water 2 tbsp', 'Salt, coriander, lemon', 'Oil'],
@@ -683,7 +700,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'tinda-sabzi-dal',
       name: 'Tinda Sabzi & Dal',
       desc: 'Apple gourd stir-fry with moong dal — refreshing summer dinner.',
-      sattvic: true, kids: false, seasons: [5,6,7,8,9],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [5,6,7,8,9],
       kcal: 200, protein: 10, carbs: 34, fat: 5, fiber: 5, time: 25, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['400g tinda (apple gourd) cubed', '½ cup moong dal cooked', '1 tomato', '1 tsp cumin', 'Turmeric, coriander powder', 'Salt, oil'],
@@ -694,7 +711,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'karela-sabzi-roti',
       name: 'Karela Sabzi & Roti',
       desc: 'Bitter gourd with jaggery and amchur — an acquired taste worth acquiring.',
-      sattvic: true, kids: false, seasons: [6,7,8,9],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [6,7,8,9],
       kcal: 180, protein: 4, carbs: 28, fat: 5, fiber: 6, time: 20, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['300g karela (bitter gourd) sliced thin', 'Salt to reduce bitterness', '1 onion (optional)', '1 tsp cumin seeds', '½ tsp turmeric', 'Jaggery 1 tsp, amchur', 'Oil'],
@@ -705,7 +722,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'veg-pulao-raita',
       name: 'Veg Pulao & Raita',
       desc: 'Spiced vegetable rice with cooling cucumber raita — effortless weeknight dinner.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 370, protein: 8, carbs: 60, fat: 8, fiber: 6, time: 25, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['1 cup basmati rice', 'Mixed veggies: peas, carrot, corn', 'Whole spices: bay, cardamom, cumin', '2 tbsp ghee, salt', 'Raita: curd, cucumber, cumin, salt'],
@@ -716,7 +733,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'sama-rice-khichdi',
       name: 'Sama Rice Khichdi',
       desc: 'Vrat barnyard millet one-pot with potato — fasting dinner sorted.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 300, protein: 6, carbs: 52, fat: 4, fiber: 4, time: 20, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['½ cup sama rice (barnyard millet)', '1 potato cubed', '1 tsp cumin seeds', 'Green chilli', 'Sendha namak, ghee', 'Coriander'],
@@ -727,7 +744,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'arbi-curry-phulka',
       name: 'Arbi Curry & Phulka',
       desc: 'Colocasia in spiced tomato curry with light phulkas — monsoon special.',
-      sattvic: true, kids: false, seasons: [7,8,9,10],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [7,8,9,10],
       kcal: 280, protein: 6, carbs: 46, fat: 6, fiber: 5, time: 30, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['500g arbi boiled & peeled', '1 tomato pureed', '1 tsp cumin seeds', 'Coriander powder, turmeric', 'Garam masala, salt', 'Oil, fresh coriander'],
@@ -738,7 +755,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'makhana-paneer',
       name: 'Makhana & Paneer',
       desc: 'Fox nuts and paneer in creamy tomato-cashew gravy — indulgent and sattvic.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 380, protein: 18, carbs: 28, fat: 16, fiber: 3, time: 25, easy: true, oilFree: false, serves: '3',
       recipe: {
         ingredients: ['½ cup makhana', '200g paneer cubed', '2 tomatoes blended', 'Cashew paste 2 tbsp', 'Garam masala, cream', 'Cumin seeds, salt, ghee'],
@@ -749,7 +766,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'sabudana-kheer',
       name: 'Sabudana Kheer',
       desc: 'Tapioca pearl pudding in fragrant saffron milk — sweet vrat dessert-dinner.',
-      sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: true, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 320, protein: 8, carbs: 58, fat: 8, fiber: 2, time: 20, easy: true, oilFree: false, serves: '2-3',
       recipe: {
         ingredients: ['½ cup sabudana soaked 2 hrs', '500ml full cream milk', '3 tbsp sugar', 'Cardamom powder', 'Saffron few strands', 'Cashews and raisins'],
@@ -760,7 +777,7 @@ export const DISHES: Record<string, Dish[]> = {
       id: 'kuttu-roti-aloo',
       name: 'Kuttu Roti & Aloo',
       desc: 'Buckwheat roti with simple vrat-style potato — rustic fasting dinner.',
-      sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
+      region: 'North Indian', sattvic: true, kids: false, seasons: [1,2,3,4,5,6,7,8,9,10,11,12],
       kcal: 340, protein: 8, carbs: 58, fat: 8, fiber: 4, time: 25, easy: true, oilFree: false, serves: '2',
       recipe: {
         ingredients: ['1 cup kuttu (buckwheat) flour', '1 potato boiled & mashed (add to bind)', 'Sendha namak', 'Ghee for cooking', 'Aloo sabzi: boiled potatoes, cumin, sendha namak, coriander'],

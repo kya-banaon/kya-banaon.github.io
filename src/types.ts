@@ -3,6 +3,7 @@ export type TabType = 'weekly' | 'random' | 'seasonal';
 export type SeasonKey = 'win' | 'spr' | 'sum' | 'mon' | 'aut';
 export type ThemeKey = 'dark' | 'light';
 export type FilterKey = 'sat' | 'kids' | 'seas' | 'quick' | 'easy' | 'oilFree';
+export type RegionType = 'North Indian' | 'South Indian' | 'Indo-Chinese' | 'Maharashtrian' | 'Gujarati' | 'Continental' | 'Other';
 
 export interface Recipe {
   ingredients: string[];
@@ -13,6 +14,7 @@ export interface Dish {
   id: string;
   name: string;
   desc: string;
+  region: RegionType;
   sattvic: boolean;
   kids: boolean;
   seasons: number[];
@@ -26,6 +28,7 @@ export interface Dish {
   oilFree: boolean;
   serves: string;
   recipe: Recipe;
+  _type?: MealType;
 }
 
 export interface Filters {
