@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg', 'robots.txt', 'sitemap.xml', 'images/*.png'],
+      includeAssets: ['favicon.svg', 'robots.txt', 'sitemap.xml', 'images/*.png'],
       manifest: {
         name: 'Kya Banaon',
         short_name: 'KyaBanaon',
@@ -18,7 +18,7 @@ export default defineConfig({
         orientation: 'portrait',
         icons: [
           {
-            src: 'icon.svg',
+            src: 'favicon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any maskable'
