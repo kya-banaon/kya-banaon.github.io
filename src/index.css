@@ -6,8 +6,8 @@
 :root {
   /* Dark theme (default) */
   --bg:        #0C0907;
-  --surface:   rgba(28, 23, 20, 0.85);
-  --surface2:  rgba(36, 30, 26, 0.85);
+  --surface:   #1C1714;
+  --surface2:  #241E1A;
   --border:    #32210F;
   --border2:   #453018;
   --text:      #F0E4D0;
@@ -24,8 +24,8 @@
 
 html.light {
   --bg:       #F8F5F0;
-  --surface:  rgba(255, 255, 255, 0.85);
-  --surface2: rgba(244, 239, 232, 0.85);
+  --surface:  #FFFFFF;
+  --surface2: #F4EFE8;
   --border:   #E2D5C4;
   --border2:  #CFC0A8;
   --text:     #1E110A;
