@@ -4,6 +4,7 @@ import type { Filters, Preferences, WeekPlan, TabType, ModalState, SeasonKey, Th
 interface AppState {
   isReady: boolean;
   theme: ThemeKey;
+  fontScale: 'normal' | 'large' | 'xlarge';
   lang: Lang;
   filters: Filters;
   weekPlan: WeekPlan | null;
@@ -21,6 +22,7 @@ interface AppState {
 
   initializeApp: () => Promise<void>;
   setTheme: (t: ThemeKey) => void;
+  setFontScale: (f: 'normal' | 'large' | 'xlarge') => void;
   setLang: (l: Lang) => void;
   toggleFilter: (key: keyof Filters) => void;
   setWeekPlan: (plan: WeekPlan) => void;
@@ -61,6 +63,7 @@ const save = (key: string, val: unknown) => { try { localStorage.setItem(key, JS
 export const useStore = create<AppState>((set, get) => ({
   isReady: false,
   theme: load('kb_theme', 'light') as ThemeKey,
+  fontScale: load('kb_font', 'normal') as 'normal' | 'large' | 'xlarge',
   lang: 'en', // Disabled translation flow for now
   filters: load('kb_filters', { sat: false, kids: false, seas: false, quick: false, easy: false, oilFree: false }),
   weekPlan: load('kb_week', null),
@@ -122,6 +125,11 @@ export const useStore = create<AppState>((set, get) => ({
     save('kb_theme', t);
     document.documentElement.classList.toggle('light', t === 'light');
     document.documentElement.classList.toggle('dark', t === 'dark');
+  },
+
+  setFontScale: (f) => {
+    set({ fontScale: f });
+    save('kb_font', f);
   },
 
   setLang: (l) => {

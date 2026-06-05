@@ -21,7 +21,7 @@ const TAB_ICONS: Record<TabType, string> = { weekly: '📅', random: '🎲', sea
 const TAB_LABEL_KEYS: Record<TabType, string> = { weekly: 'tab.weekly', random: 'tab.random', seasonal: 'tab.seasonal', groceries: 'tab.groceries', saved: 'tab.saved' };
 
 export default function App() {
-  const { currentTab, setTab, theme, isReady, initializeApp, hasOnboarded } = useStore();
+  const { currentTab, setTab, theme, fontScale, isReady, initializeApp, hasOnboarded } = useStore();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -29,9 +29,12 @@ export default function App() {
   }, [initializeApp]);
 
   useEffect(() => {
-    document.documentElement.classList.toggle('light', theme === 'light');
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]);
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+    
+    document.documentElement.classList.remove('font-normal', 'font-large', 'font-xlarge');
+    document.documentElement.classList.add(`font-${fontScale}`);
+  }, [theme, fontScale]);
 
   if (!isReady) {
     return (

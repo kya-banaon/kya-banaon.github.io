@@ -29,15 +29,18 @@ html.light {
   --border:   #E2D5C4;
   --border2:  #CFC0A8;
   --text:     #1E110A;
-  --sub:      #7A5840;
-  --muted:    #BFA890;
-  --primary:        #D4700A;
-  --primary-dim:    rgba(212,112,10,0.12);
-  --primary-glow:   rgba(212,112,10,0.35);
+  --sub:      #6B5E50;
+  --primary:  #F57C00;
+  --primary-glow: rgba(245,124,0,0.3);
   --c-b:   #D4700A; --c-b-dim: rgba(212,112,10,0.12);
-  --c-l:   #2D7A4F; --c-l-dim: rgba(45,122,79,0.12);
+  --c-l:   #FFCC80; --c-l-dim: rgba(45,122,79,0.12);
   --c-d:   #5555CC; --c-d-dim: rgba(85,85,204,0.12);
 }
+
+/* Accessibility Font Scaling */
+html.font-normal { font-size: 100%; /* 16px */ }
+html.font-large { font-size: 112.5%; /* 18px */ }
+html.font-xlarge { font-size: 125%; /* 20px */ }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }

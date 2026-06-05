@@ -4,7 +4,7 @@ import { useTranslation } from '../i18n';
 
 
 export default function AppBar() {
-  const { theme, setTheme, resetOnboarding, showToast } = useStore();
+  const { theme, setTheme, fontScale, setFontScale, resetOnboarding, showToast } = useStore();
   const { t } = useTranslation();
   const [showPanel, setShowPanel] = useState(false);
 
@@ -57,6 +57,17 @@ export default function AppBar() {
             className="w-9 h-9 rounded-full text-base flex items-center justify-center transition-all active:scale-90"
             style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)' }}>
             ⚙️
+          </button>
+          <button onClick={() => {
+            const nextMap: Record<string, 'normal'|'large'|'xlarge'> = { normal:'large', large:'xlarge', xlarge:'normal' };
+            const next = nextMap[fontScale];
+            setFontScale(next);
+            showToast(`Text Size: ${next.charAt(0).toUpperCase() + next.slice(1)}`);
+          }}
+            className="w-9 h-9 rounded-full text-sm font-bold flex items-center justify-center transition-all active:scale-90"
+            style={{ background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.2)', color: '#fff' }}
+            title="Toggle Text Size">
+            Aa
           </button>
           <button onClick={() => setShowPanel(v => !v)}
             className="w-9 h-9 rounded-full text-base flex items-center justify-center transition-all active:scale-90"
