@@ -44,14 +44,21 @@ export default function App() {
     );
   }
 
+  const currentHour = new Date().getHours();
+  let bgPhase = 'bg_lunch';
+  if (currentHour >= 5 && currentHour < 11) bgPhase = 'bg_breakfast';
+  else if (currentHour >= 17 || currentHour < 5) bgPhase = 'bg_dinner';
+
   return (
-    <div className="max-w-2xl mx-auto min-h-dvh relative flex flex-col" style={{ background:'var(--bg)' }}>
+    <div className="max-w-2xl mx-auto min-h-dvh relative flex flex-col bg-cover bg-fixed bg-center" 
+         style={{ backgroundImage: `url('/images/${bgPhase}.png')`, backgroundColor: 'var(--bg)' }}>
       <AppBar />
       <PwaBanner />
       {['weekly','random','seasonal'].includes(currentTab) && <FilterBar />}
 
       {/* Desktop tab nav */}
-      <div className="hidden sm:flex border-b sticky z-40 overflow-x-auto hide-scrollbar" style={{ top:'112px', background:'var(--surface)', borderColor:'var(--border)' }}>
+      <div className="hidden sm:flex border-b sticky z-40 overflow-x-auto hide-scrollbar backdrop-blur-md" 
+           style={{ top:'112px', background:'var(--surface)', borderColor:'var(--border)' }}>
         {(['weekly','random','seasonal','groceries','saved'] as TabType[]).map(tab => (
           <button key={tab} onClick={() => setTab(tab)}
             className="px-6 py-3 text-sm font-bold transition-all border-b-2 whitespace-nowrap"

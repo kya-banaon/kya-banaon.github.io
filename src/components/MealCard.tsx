@@ -38,7 +38,7 @@ export default function MealCard({ dish: rawDish, mealType, dayIdx, animDelay = 
   if (dish.oilFree) tags.push('💧');
 
   return (
-    <div className="rounded-lg overflow-hidden cursor-pointer active:scale-[.978] transition-transform animate-slide-up"
+    <div className="rounded-lg overflow-hidden cursor-pointer active:scale-[.978] transition-transform animate-slide-up backdrop-blur-md"
       style={{ background:'var(--surface)', border:'1px solid var(--border)',
         boxShadow:'0 4px 24px rgba(0,0,0,0.3)', animationDelay:`${animDelay}ms` }}
       onClick={() => openModal({ dish, mealType })}>
