@@ -409,6 +409,41 @@ main { max-width: 1280px; margin: 0 auto; padding: 20px; z-index: 1; position: r
   #mobile-nav, #day-selector-wrap, #mobile-day-meals, #today-hero { display: none; }
   #week-grid-wrap { display: block; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   THEME PALETTE SCHEMES
+════════════════════════════════════════════════════════════ */
+[data-theme="saffron"] {
+  --bg-app: #F8F4EE; --bg-card: #FFFFFF; --bg-card-subtle: #F4EFE6;
+  --border-color: rgba(140, 94, 60, 0.14); --text-main: #1F150C; --text-sub: #6E533C;
+  --primary: #C86000; --primary-gradient: linear-gradient(135deg, #893200 0%, #B84A00 50%, #DC6F00 100%);
+  --primary-subtle: rgba(200, 96, 0, 0.08);
+}
+[data-theme="mint"] {
+  --bg-app: #F1F7F3; --bg-card: #FFFFFF; --bg-card-subtle: #E4F0E8;
+  --border-color: rgba(45, 122, 79, 0.16); --text-main: #0F2417; --text-sub: #2D523A;
+  --primary: #1E6F46; --primary-gradient: linear-gradient(135deg, #0D4828 0%, #175C39 50%, #2E935C 100%);
+  --primary-subtle: rgba(30, 111, 70, 0.08);
+}
+[data-theme="jaipur"] {
+  --bg-app: #FDF5F6; --bg-card: #FFFFFF; --bg-card-subtle: #F9E6E9;
+  --border-color: rgba(179, 57, 95, 0.16); --text-main: #2D0B14; --text-sub: #692236;
+  --primary: #B3395F; --primary-gradient: linear-gradient(135deg, #6E1E36 0%, #992B4E 50%, #D9534F 100%);
+  --primary-subtle: rgba(179, 57, 95, 0.08);
+}
+[data-theme="indigo"] {
+  --bg-app: #F5F3FB; --bg-card: #FFFFFF; --bg-card-subtle: #EAE6F7;
+  --border-color: rgba(74, 62, 133, 0.16); --text-main: #15102A; --text-sub: #3B326B;
+  --primary: #4A3E85; --primary-gradient: linear-gradient(135deg, #2A1F56 0%, #3D3273 50%, #6B5BB0 100%);
+  --primary-subtle: rgba(74, 62, 133, 0.08);
+}
+[data-theme="dark"] {
+  --bg-app: #120A04; --bg-card: #1E1208; --bg-card-subtle: #28180B;
+  --border-color: rgba(230, 180, 140, 0.12); --text-main: #F4E8DB; --text-sub: #B89B84;
+  --primary: #EA7B10; --primary-gradient: linear-gradient(135deg, #2E1605 0%, #3D1F08 50%, #5E2F0A 100%);
+  --primary-subtle: rgba(234, 123, 16, 0.15);
+}
+
 </style>
 </head>
 <body>
@@ -456,11 +491,19 @@ main { max-width: 1280px; margin: 0 auto; padding: 20px; z-index: 1; position: r
   <span class="ticker-text" id="ticker-text">🥦 January: Gobi at its peak — try Aloo Gobi or Gobi Paratha this week!</span>
 </div>
 
+
 <!-- THEME PANEL -->
-<div id="theme-panel" style="position:fixed;top:70px;right:20px;background:var(--bg-card);border:1.5px solid var(--border-color);border-radius:16px;padding:16px;box-shadow:var(--shadow-lg);z-index:400;display:none;min-width:220px">
-  <h4 style="font-size:0.75rem;font-weight:800;text-transform:uppercase;color:var(--text-sub);margin-bottom:10px">Theme Presets</h4>
-  <div id="theme-swatches" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+<div id="theme-panel" style="position:fixed;top:70px;right:20px;background:var(--bg-card);border:1.5px solid var(--border-color);border-radius:16px;padding:16px;box-shadow:var(--shadow-lg);z-index:400;display:none;min-width:240px">
+  <h4 style="font-size:0.75rem;font-weight:800;text-transform:uppercase;color:var(--text-sub);margin-bottom:10px">Color Schemes & Themes</h4>
+  <div style="display:flex;flex-direction:column;gap:8px" id="theme-swatches">
+    <button class="native-btn" style="background:#C86000;color:#FFF;justify-content:flex-start" onclick="setTheme('saffron')">🧡 Royal Saffron (Default)</button>
+    <button class="native-btn" style="background:#1E6F46;color:#FFF;justify-content:flex-start" onclick="setTheme('mint')">🌿 Spiced Mint & Forest</button>
+    <button class="native-btn" style="background:#B3395F;color:#FFF;justify-content:flex-start" onclick="setTheme('jaipur')">🌅 Jaipur Terracotta</button>
+    <button class="native-btn" style="background:#4A3E85;color:#FFF;justify-content:flex-start" onclick="setTheme('indigo')">🫐 Royal Indigo & Masala</button>
+    <button class="native-btn" style="background:#1E1208;color:#F4E8DB;border:1px solid rgba(255,255,255,0.2);justify-content:flex-start" onclick="setTheme('dark')">🌙 Midnight Charcoal</button>
+  </div>
 </div>
+
 
 <!-- FILTER BAR WITH DIETARY PRESETS -->
 <div id="filter-bar">
@@ -1404,6 +1447,24 @@ function initThemePanel(){
   btn.addEventListener('click',e=>{ e.stopPropagation(); panel.style.display=panel.style.display==='block'?'none':'block'; });
   document.addEventListener('click',e=>{ if(!panel.contains(e.target)&&e.target!==btn) panel.style.display='none'; });
 }
+
+
+let currentTheme='saffron';
+
+function setTheme(themeName){
+  currentTheme=themeName;
+  document.documentElement.setAttribute('data-theme', themeName);
+  try{ localStorage.setItem('kb_theme', themeName); }catch(e){}
+  showToast(`🎨 Color Theme changed to "${themeName.charAt(0).toUpperCase()+themeName.slice(1)}"!`);
+  document.getElementById('theme-panel').style.display='none';
+}
+
+(function initTheme(){
+  try{
+    const saved = localStorage.getItem('kb_theme');
+    if(saved) setTheme(saved);
+  }catch(e){}
+})();
 
 loadState();
 initPantryChef();
