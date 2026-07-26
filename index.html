@@ -444,6 +444,15 @@ main { max-width: 1280px; margin: 0 auto; padding: 20px; z-index: 1; position: r
   --primary-subtle: rgba(234, 123, 16, 0.15);
 }
 
+
+.theme-chip-btn {
+  border: 1.5px solid var(--border-color); border-radius: var(--radius-pill);
+  padding: 4px 12px; cursor: pointer; font-size: 0.75rem; font-weight: 700;
+  background: var(--bg-card); color: var(--text-sub); transition: all 0.2s var(--ease-bounce); flex-shrink: 0;
+}
+.theme-chip-btn:hover { border-color: var(--primary); color: var(--primary); }
+.theme-chip-btn.active { background: var(--primary); color: #FFF; border-color: transparent; }
+
 </style>
 </head>
 <body>
@@ -504,6 +513,17 @@ main { max-width: 1280px; margin: 0 auto; padding: 20px; z-index: 1; position: r
   </div>
 </div>
 
+
+
+<!-- THEME CHIP BAR -->
+<div id="theme-chip-bar" style="background:var(--bg-card-subtle);border-bottom:1px solid var(--border-color);padding:8px 20px;display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:none;">
+  <span style="font-size:0.72rem;font-weight:800;text-transform:uppercase;color:var(--text-sub);margin-right:4px;flex-shrink:0">🎨 Theme:</span>
+  <button class="theme-chip-btn active" data-t="saffron" onclick="setTheme('saffron')">🧡 Saffron</button>
+  <button class="theme-chip-btn" data-t="mint" onclick="setTheme('mint')">🌿 Mint</button>
+  <button class="theme-chip-btn" data-t="jaipur" onclick="setTheme('jaipur')">🌅 Jaipur</button>
+  <button class="theme-chip-btn" data-t="indigo" onclick="setTheme('indigo')">🫐 Indigo</button>
+  <button class="theme-chip-btn" data-t="dark" onclick="setTheme('dark')">🌙 Midnight</button>
+</div>
 
 <!-- FILTER BAR WITH DIETARY PRESETS -->
 <div id="filter-bar">
@@ -1451,10 +1471,17 @@ function initThemePanel(){
 
 let currentTheme='saffron';
 
+
 function setTheme(themeName){
   currentTheme=themeName;
   document.documentElement.setAttribute('data-theme', themeName);
   try{ localStorage.setItem('kb_theme', themeName); }catch(e){}
+  document.querySelectorAll('.theme-chip-btn').forEach(b=>b.classList.toggle('active', b.dataset.t===themeName));
+  showToast(`🎨 Color Theme changed to "${themeName.charAt(0).toUpperCase()+themeName.slice(1)}"!`);
+  const panel = document.getElementById('theme-panel');
+  if(panel) panel.style.display='none';
+}
+catch(e){}
   showToast(`🎨 Color Theme changed to "${themeName.charAt(0).toUpperCase()+themeName.slice(1)}"!`);
   document.getElementById('theme-panel').style.display='none';
 }
