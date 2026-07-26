@@ -464,8 +464,9 @@ main { max-width: 1280px; margin: 0 auto; padding: 20px; z-index: 1; position: r
       <div class="brand-title">🍽 Kya Banaon?</div>
       <div style="font-size:0.68rem;opacity:0.85;margin-top:2px;font-weight:500;">Hindu Vegetarian Family Meal Planner</div>
     </div>
-    <span class="badge-version">v2.2 · Ultimate</span>
+    <span class="badge-version">v2.5 · 300 Recipes</span>
   </div>
+  
   <div class="header-controls">
     <!-- FAMILY PORTION SCALER -->
     <div class="servings-select-wrap" title="Family Portion Scaler">
@@ -479,10 +480,12 @@ main { max-width: 1280px; margin: 0 auto; padding: 20px; z-index: 1; position: r
         <option value="8">8 Persons</option>
       </select>
     </div>
+    <button class="native-btn" onclick="generateWeek(); renderWeek(); showToast('🔄 Fresh 7-Day Plan Generated!')" title="Regenerate Full 7-Day Meal Plan">🔄 Regenerate</button>
     <button class="native-btn" onclick="togglePantryDrawer()">🥘 Fridge</button>
     <button class="native-btn" onclick="openGroceryModal()">🛒 Grocery</button>
-    <button class="native-btn" id="theme-toggle-btn" style="padding:6px 10px;">🎨</button>
+    <button class="native-btn" id="theme-toggle-btn" style="padding:6px 10px;" title="Color Schemes">🎨</button>
   </div>
+
 </header>
 
 <!-- PANTRY CHEF DRAWER ("WHAT'S IN MY FRIDGE?") -->
